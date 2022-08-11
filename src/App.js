@@ -1,9 +1,21 @@
 import './App.css';
-import Hero from './components/Hero';
+import { Route, Routes } from 'react-router-dom';
+import Home from './components/Home';
+import Contact from './components/Contact';
+import Projects from './components/Projects';
+import Footer from './components/Footer';
+
 
 function App() {
   return (
-    <Hero />
+    <>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+      <Footer />
+    </>
   );
 }
 
