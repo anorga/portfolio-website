@@ -6,6 +6,8 @@ Hosted on:
 
 https://anorga.xyz/
 
+<img width="1361" alt="portfolio" src="https://user-images.githubusercontent.com/16889754/184074107-5e1c2325-3808-4841-9dc7-b0a3c79b1c84.png">
+
 ## Available Scripts
 
 In the project directory, you can run:
