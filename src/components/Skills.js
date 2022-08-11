@@ -1,4 +1,10 @@
 import { Fragment } from "react"
+import ReactLogo from './assets/react_bw.png'
+import HTML5Logo from './assets/html.png'
+import CSS3Logo from './assets/css.png'
+import JSLogo from './assets/js3png.png'
+import NodeLogo from './assets/node.png'
+import TailwindLogo from './assets/tailwind.png'
 
 export default function Skills() {
   return (
@@ -22,32 +28,38 @@ export default function Skills() {
             <div className="col-span-1 flex justify-center py-8 px-8 bg-gray-50">
               <img
                 className="max-h-12"
-                src="https://tailwindui.com/img/logos/transistor-logo-gray-400.svg"
-                alt="Workcation"
+                src={ReactLogo}
+                alt="React"
               />
+              <div className="pl-2 pt-2 text-3xl font-bold text-gray-400">React</div>
             </div>
             <div className="col-span-1 flex justify-center py-8 px-8 bg-gray-50">
-              <img className="max-h-12" src="https://tailwindui.com/img/logos/mirage-logo-gray-400.svg" alt="Mirage" />
+              <img className="max-h-12" src={HTML5Logo} alt="HTML" />
+              <div className="pl-2 pt-2 text-3xl font-bold text-gray-400">HTML</div>
             </div>
             <div className="col-span-1 flex justify-center py-8 px-8 bg-gray-50">
-              <img className="max-h-12" src="https://tailwindui.com/img/logos/tuple-logo-gray-400.svg" alt="Tuple" />
+              <img className="max-h-12" src={CSS3Logo} alt="CSS" />
+              <div className="pl-2 pt-2 text-3xl font-bold text-gray-400">CSS</div>
             </div>
             <div className="col-span-1 flex justify-center py-8 px-8 bg-gray-50">
-              <img className="max-h-12" src="https://tailwindui.com/img/logos/laravel-logo-gray-400.svg" alt="Laravel" />
+              <img className="max-h-12" src={JSLogo} alt="JavaScript" />
+              <div className="pl-2 pt-2 text-3xl font-bold text-gray-400">JS</div>
             </div>
             <div className="col-span-1 flex justify-center py-8 px-8 bg-gray-50">
               <img
                 className="max-h-12"
-                src="https://tailwindui.com/img/logos/statickit-logo-gray-400.svg"
-                alt="StaticKit"
+                src={NodeLogo}
+                alt="Node"
               />
+              <div className="pl-2 pt-2 text-3xl font-bold text-gray-400">Node.js</div>
             </div>
             <div className="col-span-1 flex justify-center py-8 px-8 bg-gray-50">
               <img
-                className="max-h-12"
-                src="https://tailwindui.com/img/logos/statamic-logo-gray-400.svg"
-                alt="Statamic"
+                className="max-h-8 mt-2"
+                src={TailwindLogo}
+                alt="Tailwind"
               />
+              <div className="pl-2 pt-2 text-3xl font-bold text-gray-400">Tailwind</div>
             </div>
           </div>
         </div>
