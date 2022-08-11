@@ -4,6 +4,7 @@ import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import glasses from './assets/glasses.png'
 import Skills from './Skills'
 import { Link } from 'react-router-dom'
+import ResumePDF from './assets/pdf/resume.pdf'
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -151,7 +152,9 @@ export default function Home() {
               <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
                 <div className="rounded-md shadow">
                   <a
-                    href="#"
+                    href={ResumePDF} 
+                    target="_blank" 
+                    rel="noreferrer" 
                     className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 md:py-4 md:text-lg md:px-10"
                   >
                     Resume
