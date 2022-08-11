@@ -187,7 +187,7 @@ export default function Projects() {
                                 <div className="text-center">
                                     <h2 className="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl">Projects</h2>
                                     <p className="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
-                                        This is a list of some personal and professional projects that I have worked on. Links to hosted application and repository are provided.
+                                        This is a list of personal projects that I have worked on. Links to hosted web app and repository are provided.
                                     </p>
                                 </div>
                                 <div className="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
