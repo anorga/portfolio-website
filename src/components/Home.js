@@ -77,6 +77,9 @@ export default function Home() {
                         alt="logo"
                       />
                     </Link>
+                    <div className="items-center justify-center sm:hidden px-3 py-2 text-base font-medium text-gray-700">
+                      <h1>Portfolio</h1>
+                    </div>
                     <div className="-mr-2 flex items-center md:hidden">
                       <Popover.Button className="bg-gray-50 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500">
                         <span className="sr-only">Open main menu</span>
@@ -108,13 +111,13 @@ export default function Home() {
                 focus
                 className="absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden"
               >
-                <div className="rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden">
+                <div className="rounded-lg shadow-md bg-gray-50 ring-1 ring-black ring-opacity-5 overflow-hidden">
                   <div className="px-5 pt-4 flex items-center justify-between">
                     <div>
                       <img
-                        className="h-0 w-auto"
-                        src=""
-                        alt=""
+                        className="h-12 w-auto"
+                        src={glasses}
+                        alt="logo"
                       />
                     </div>
                     <div className="-mr-2">
@@ -129,7 +132,7 @@ export default function Home() {
                       <Link
                         key={item.name}
                         to={item.href}
-                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100"
                       >
                         {item.name}
                       </Link>
@@ -152,9 +155,9 @@ export default function Home() {
               <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
                 <div className="rounded-md shadow">
                   <a
-                    href={ResumePDF} 
-                    target="_blank" 
-                    rel="noreferrer" 
+                    href={ResumePDF}
+                    target="_blank"
+                    rel="noreferrer"
                     className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 md:py-4 md:text-lg md:px-10"
                   >
                     Resume
