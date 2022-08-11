@@ -77,7 +77,7 @@ export default function Home() {
                         alt="logo"
                       />
                     </Link>
-                    <div className="items-center pr-10 sm:hidden text-base font-bold text-gray-700">
+                    <div className="items-center pr-12 sm:hidden text-lg font-bold text-gray-700">
                       <h1>Portfolio</h1>
                     </div>
                     <div className="-mr-2 flex items-center md:hidden">
