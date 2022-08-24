@@ -15,7 +15,7 @@ export default function About() {
                         </div>
                     </div>
                     <p className="mt-6 max-w-5xl mx-auto sm:text-lg md:text-xl md:leading-8 text-gray-500">
-                        Hello World. I am a front-end developer with a passion for building web applications and a deep love for JavaScript, React, and everything related to web development. The endless combination of technology and creativity in this field is what drives my passion and excitement to keep learning and building. Please refer to the Projects section for a recent list of applications I have worked on. I spend my time reading and keeping fit when I'm not at my computer.
+                        I am a front-end developer with a passion for building web applications and a deep love for JavaScript, React, and everything related to web development. The endless combination of technology and creativity in this field is what drives my passion and excitement to keep learning and building. Please refer to the Projects section for a recent list of applications I have worked on. I spend my time reading and keeping fit when I'm not at my computer.
                     </p>
                 </div>
 
