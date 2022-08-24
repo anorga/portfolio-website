@@ -3,6 +3,7 @@ import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import glasses from './assets/glasses.png'
 import Skills from './Skills'
+import About from './About'
 import { Link } from 'react-router-dom'
 import ResumePDF from './assets/pdf/resume.pdf'
 
@@ -177,6 +178,7 @@ export default function Home() {
           </main>
         </div>
       </div>
+      <About />
       <Skills />
     </Fragment>
   )
