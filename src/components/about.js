@@ -14,8 +14,8 @@ export default function About() {
                             <span className="px-3 bg-white text-xl font-semibold uppercase text-gray-600">About Me</span>
                         </div>
                     </div>
-                    <p className="mt-6 max-w-4xl mx-auto text-gray-500">
-                        I am a full stack developer with a passion for building web applications. I have a background in.This is a list of personal projects that I have worked on. Links to hosted web app and repository are provided.This is a list of personal projects that I have worked on. Links to hosted web app and repository are provided.This is a list of personal projects that I have worked on. Links to hosted web app and repository are provided.
+                    <p className="mt-6 max-w-5xl mx-auto sm:text-lg md:text-xl md:leading-8 text-gray-500">
+                        Hello World. My name is Christian Anorga.  I am a front-end developer with a passion for building web applications. I'm a front-end web developer with a deep passion for JavaScript, React, and all things web development. The endless combination of technology and creativity in this field are what drives my passion and excitement for web development. When I'm not at my computer I like to spend my time reading and keeping fit.
                    </p>
                 </div>
                 
