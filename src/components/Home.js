@@ -150,7 +150,7 @@ export default function Home() {
               <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
                 <span className="block text-red-600 xl:inline">Christian Anorga</span>{' '}
                 <TypeAnimation
-                sequence={['Front-End Web Developer', 1000, 'Front-End Web', 1000, 'Front-End', 1000, '', 500 ]}
+                sequence={['Frontend Developer', 1000, '', 500 ]}
                 className="block xl:block my-5"
                 wrapper="span"
                 repeat={Infinity}
