@@ -3,9 +3,9 @@ import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import glasses from './assets/glasses.png'
 import { Link } from 'react-router-dom'
-import readmangas from './assets/readmangas.xyz.png'
-import weatherapp from './assets/weatherapp.png'
-import portfolio from './assets/portfolio.png'
+import readmangas from './assets/readmangas.xyz.jpeg'
+import weatherapp from './assets/weatherapp.jpeg'
+import portfolio from './assets/portfolio.jpeg'
 
 
 const navigation = [
