@@ -87,9 +87,9 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-                <div className="hidden md:flex md:space-x-10">
+                <div className="hidden md:flex md:space-x-12">
                   {navigation.map((item) => (
-                    <Link key={item.name} to={item.href} className="font-medium text-gray-500 hover:text-gray-900">
+                    <Link key={item.name} to={item.href} className="font-large font-bold text-lg text-gray-500 hover:text-gray-900">
                       {item.name}
                     </Link>
                   ))}
