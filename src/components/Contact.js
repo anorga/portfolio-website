@@ -269,7 +269,7 @@ export default function Home() {
                     </dl>
                     <ul role="list" className="mt-8 flex space-x-12">
                       <li>
-                        <a className="text-white hover:text-red-100" href="https://github.com/anorga" target="_blank">
+                        <a className="text-white hover:text-red-100 flex" href="https://github.com/anorga" target="_blank">
                           <span className="sr-only">GitHub</span>
                           <svg
                             width={24}
@@ -285,9 +285,10 @@ export default function Home() {
                               fill="currentColor"
                             />
                           </svg>
+                          <span className="pl-3">Github</span>
                         </a>
                       </li>
-                      <li>
+                      {/* <li>
                         <a className="text-white hover:text-red-100" href="#">
                           <span className="sr-only">Twitter</span>
                           <svg
@@ -305,7 +306,7 @@ export default function Home() {
                             />
                           </svg>
                         </a>
-                      </li>
+                      </li> */}
                     </ul>
                   </div>
 
