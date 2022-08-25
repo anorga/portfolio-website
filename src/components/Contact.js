@@ -285,7 +285,7 @@ export default function Home() {
                               fill="currentColor"
                             />
                           </svg>
-                          <span className="pl-3">Github</span>
+                          <span className="pl-3">github.com/anorga</span>
                         </a>
                       </li>
                       {/* <li>
