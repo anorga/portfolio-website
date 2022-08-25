@@ -185,9 +185,9 @@ export default function Projects() {
                             </div>
                             <div className="relative max-w-7xl mx-auto">
                                 <div className="text-center">
-                                    <h2 className="text-3xl tracking-tight font-extrabold text-white sm:text-5xl animate-bounce">Projects</h2>
+                                    <h2 className="text-3xl tracking-tight font-extrabold text-white sm:text-5xl">Projects</h2>
                                     <p className="mt-3 max-w-2xl mx-auto text-xl text-white sm:mt-4">
-                                        This is a list of personal projects that I have worked on. Links to hosted web app and repository are provided.
+                                        This is a list of personal projects that I have worked on. Links to hosted web application and repository are provided.
                                     </p>
                                 </div>
                                 <div className="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
@@ -199,7 +199,7 @@ export default function Projects() {
                                             <div className="flex-1 bg-white p-6 flex flex-col justify-between">
                                                 <div className="flex-1">
                                                     <p className="text-base font-medium text-red-600">
-                                                        <a href={post.category.href} target={post.target} className="hover:text-red-800">
+                                                        <a href={post.category.href} target={post.target} className="hover:text-red-800 animate-pulse">
                                                             {post.category.name}
                                                         </a>
                                                     </p>
