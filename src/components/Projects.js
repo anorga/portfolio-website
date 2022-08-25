@@ -185,7 +185,7 @@ export default function Projects() {
                             </div>
                             <div className="relative max-w-7xl mx-auto">
                                 <div className="text-center">
-                                    <h2 className="mb-5 text-3xl tracking-tight font-extrabold text-white sm:text-5xl animate-bounce md:animate-none">Projects</h2>
+                                    <h2 className="mb-5 text-3xl tracking-tight font-extrabold text-white sm:text-5xl animate-bounce md:animate-bounce">Projects</h2>
                                     <p className="mt-3 max-w-2xl mx-auto text-xl text-white sm:mt-4">
                                         This is a list of personal projects that I have worked on. Links to hosted web application and repository are provided.
                                     </p>

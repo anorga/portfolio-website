@@ -6,6 +6,7 @@ import Skills from './Skills'
 import About from './About'
 import { Link } from 'react-router-dom'
 import ResumePDF from './assets/pdf/resume.pdf'
+import { TypeAnimation } from 'react-type-animation';
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -148,7 +149,12 @@ export default function Home() {
             <div className="text-center">
               <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
                 <span className="block text-red-600 xl:inline">Christian Anorga</span>{' '}
-                <span className="block xl:block">Front-End Web Developer</span>
+                <TypeAnimation
+                sequence={['Front-End Web Developer', 1000, 'Front-End Web', 1000, 'Front-End', 1000, '', 500 ]}
+                className="block xl:block"
+                wrapper="span"
+                repeat={Infinity}
+              />
               </h1>
               <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
                 Welcome to my portfolio website.
