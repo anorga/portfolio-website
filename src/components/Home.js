@@ -151,13 +151,13 @@ export default function Home() {
                 <span className="block text-red-600 xl:inline">Christian Anorga</span>{' '}
                 <TypeAnimation
                 sequence={['Front-End Web Developer', 1000, 'Front-End Web', 1000, 'Front-End', 1000, '', 500 ]}
-                className="block xl:block"
+                className="block xl:block my-5"
                 wrapper="span"
                 repeat={Infinity}
               />
               </h1>
               <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-                Welcome to my portfolio website.
+                Welcome to my portfolio website
               </p>
               <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
                 <div className="rounded-md shadow">
