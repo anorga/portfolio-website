@@ -6,7 +6,7 @@ Hosted on:
 
 https://anorga.xyz/
 
-<img width="1400" alt="portfolio" src="https://user-images.githubusercontent.com/16889754/184075655-9ace2589-677f-4bbc-85bd-3dbcf7b7f320.png">
+<img width="1732" alt="Screen Shot 2022-08-24 at 10 37 52 PM" src="https://user-images.githubusercontent.com/16889754/186583842-e32075bd-97fe-490b-ab96-9edfae437601.png">
 
 
 ## Available Scripts
