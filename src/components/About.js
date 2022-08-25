@@ -15,10 +15,11 @@ export default function About() {
                             <span className="px-3 bg-white sm:text-lg md:text-xl font-semibold uppercase text-gray-600">About Me</span>
                         </div>
                     </div>
-                    <p className="mt-6 max-w-5xl mx-auto sm:text-lg md:text-xl md:leading-8 text-gray-500">
-                        I am a frontend developer with a passion for building web applications and a deep love for JavaScript, React, and everything related to web development. The endless combination of technology and creativity in this field is what drives my passion and excitement to keep learning and building. Please refer to the <Link to={'/Projects'} className="hover:text-red-700 animate-pulse">Projects</Link> section for a recent list of applications I have worked on. When I am not at my computer, I spend my time reading, watching my favorite tv shows, and keeping fit.
-                    </p>
-
+                    <div className="bg-gray-50 mt-7 pt-1 pb-8 px-5">
+                        <p className="mt-6 max-w-5xl mx-auto sm:text-lg md:text-xl leading-7 md:leading-8 text-gray-500">
+                            I am a frontend developer with a passion for building web applications and a deep love for JavaScript, React, and everything related to web development. The endless combination of technology and creativity in this field is what drives my passion and excitement to keep learning and building. Please refer to the <Link to={'/Projects'} className="hover:text-red-700 animate-pulse">Projects</Link> section for a recent list of applications I have worked on. When I am not at my computer, I spend my time reading, watching my favorite tv shows, and keeping fit.
+                        </p>
+                    </div>
                 </div>
             </div>
         </Fragment>
