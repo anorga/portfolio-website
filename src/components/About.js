@@ -12,7 +12,7 @@ export default function About() {
                             <div className="w-full border-t border-gray-300" />
                         </div>
                         <div className="relative flex justify-center">
-                            <span className="px-3 bg-white text-xl font-semibold uppercase text-gray-600">About Me</span>
+                            <span className="px-3 bg-white sm:text-lg md:text-xl font-semibold uppercase text-gray-600">About Me</span>
                         </div>
                     </div>
                     <p className="mt-6 max-w-5xl mx-auto sm:text-lg md:text-xl md:leading-8 text-gray-500">
