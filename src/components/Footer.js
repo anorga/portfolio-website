@@ -19,7 +19,7 @@ const navigation = {
       // },
       {
         name: 'GitHub',
-        href: 'https://github.com/anorga',
+        href: 'mailto:anorga2990@gmail.com',
         target: '_blank',
         icon: (props) => (
           <img src={email} alt="Email" {...props} />
