@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import email from './assets/email.png'
 
 const navigation = {
     main: [
@@ -16,6 +17,14 @@ const navigation = {
       //     </svg>
       //   ),
       // },
+      {
+        name: 'GitHub',
+        href: 'https://github.com/anorga',
+        target: '_blank',
+        icon: (props) => (
+          <img src={email} alt="Email" {...props} />
+        ),
+      },
       {
         name: 'GitHub',
         href: 'https://github.com/anorga',
