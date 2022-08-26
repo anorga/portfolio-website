@@ -17,11 +17,11 @@ const navigation = [
 export default function Home() {
   return (
     <Fragment>
-      <div className="relative bg-gray-50 overflow-hidden">
+      <div className="relative overflow-hidden bg-gray-50">
         <div className="hidden sm:block sm:absolute sm:inset-y-0 sm:h-full sm:w-full" aria-hidden="true">
-          <div className="relative h-full max-w-7xl mx-auto">
+          <div className="relative h-full mx-auto max-w-7xl">
             <svg
-              className="absolute right-full transform translate-y-1/4 translate-x-1/4 lg:translate-x-1/2"
+              className="absolute transform right-full translate-y-1/4 translate-x-1/4 lg:translate-x-1/2"
               width={404}
               height={784}
               fill="none"
@@ -42,7 +42,7 @@ export default function Home() {
               <rect width={404} height={784} fill="url(#f210dbf6-a58d-4871-961e-36d5016a0f49)" />
             </svg>
             <svg
-              className="absolute left-full transform -translate-y-3/4 -translate-x-1/4 md:-translate-y-1/2 lg:-translate-x-1/2"
+              className="absolute transform left-full -translate-y-3/4 -translate-x-1/4 md:-translate-y-1/2 lg:-translate-x-1/2"
               width={404}
               height={784}
               fill="none"
@@ -67,32 +67,32 @@ export default function Home() {
 
         <div className="relative pt-6 pb-16 sm:pb-24">
           <Popover>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="px-4 mx-auto max-w-7xl sm:px-6">
               <nav className="relative flex items-center justify-between sm:h-10 md:justify-center" aria-label="Global">
                 <div className="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
                   <div className="flex items-center justify-between w-full md:w-auto">
                     <Link to="/">
                       <span className="sr-only">Workflow</span>
                       <img
-                        className="h-12 w-auto sm:h-14"
+                        className="w-auto h-12 sm:h-14"
                         src={glasses}
                         alt="logo"
                       />
                     </Link>
-                    <div className="items-center pr-12 sm:hidden text-lg font-bold text-gray-700">
+                    <div className="items-center pr-12 text-lg font-bold text-gray-700 sm:hidden">
                       <h1>Portfolio</h1>
                     </div>
-                    <div className="-mr-2 flex items-center md:hidden">
-                      <Popover.Button className="bg-gray-50 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500">
+                    <div className="flex items-center -mr-2 md:hidden">
+                      <Popover.Button className="inline-flex items-center justify-center p-2 text-gray-400 rounded-md bg-gray-50 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500">
                         <span className="sr-only">Open main menu</span>
-                        <MenuIcon className="h-6 w-6" aria-hidden="true" />
+                        <MenuIcon className="w-6 h-6" aria-hidden="true" />
                       </Popover.Button>
                     </div>
                   </div>
                 </div>
                 <div className="hidden md:flex md:space-x-12">
                   {navigation.map((item) => (
-                    <Link key={item.name} to={item.href} className="font-large font-bold text-lg text-gray-500 hover:text-gray-900">
+                    <Link key={item.name} to={item.href} className="text-lg font-bold text-gray-500 font-large hover:text-gray-900">
                       {item.name}
                     </Link>
                   ))}
@@ -111,21 +111,21 @@ export default function Home() {
             >
               <Popover.Panel
                 focus
-                className="absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden"
+                className="absolute inset-x-0 top-0 z-10 p-2 transition origin-top-right transform md:hidden"
               >
-                <div className="rounded-lg shadow-md bg-gray-50 ring-1 ring-black ring-opacity-5 overflow-hidden">
-                  <div className="px-5 pt-4 flex items-center justify-between">
+                <div className="overflow-hidden rounded-lg shadow-md bg-gray-50 ring-1 ring-black ring-opacity-5">
+                  <div className="flex items-center justify-between px-5 pt-4">
                     <div>
                       <img
-                        className="h-12 w-auto"
+                        className="w-auto h-12"
                         src={glasses}
                         alt="logo"
                       />
                     </div>
                     <div className="-mr-2">
-                      <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500">
+                      <Popover.Button className="inline-flex items-center justify-center p-2 text-gray-400 bg-white rounded-md hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500">
                         <span className="sr-only">Close menu</span>
-                        <XIcon className="h-6 w-6" aria-hidden="true" />
+                        <XIcon className="w-6 h-6" aria-hidden="true" />
                       </Popover.Button>
                     </div>
                   </div>
@@ -134,7 +134,7 @@ export default function Home() {
                       <Link
                         key={item.name}
                         to={item.href}
-                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+                        className="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-gray-900 hover:bg-gray-100"
                       >
                         {item.name}
                       </Link>
@@ -145,27 +145,27 @@ export default function Home() {
             </Transition>
           </Popover>
 
-          <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
+          <main className="px-4 mx-auto mt-16 max-w-7xl sm:mt-24">
             <div className="text-center">
-              <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+              <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
                 <span className="block text-red-600 xl:inline">Christian Anorga</span>{' '}
                 <TypeAnimation
-                sequence={['Frontend Developer', 1000, '', 500 ]}
-                className="block xl:block my-5"
+                sequence={['Web Developer', 1000, '', 500, 'Frontend Developer', 1000, '', 500 ]}
+                className="block my-5 xl:block"
                 wrapper="span"
                 repeat={Infinity}
               />
               </h1>
-              <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+              <p className="max-w-md mx-auto mt-3 text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
                 Welcome to my portfolio website
               </p>
-              <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
+              <div className="max-w-md mx-auto mt-5 sm:flex sm:justify-center md:mt-8">
                 <div className="rounded-md shadow">
                   <a
                     href={ResumePDF}
                     target="_blank"
                     rel="noreferrer"
-                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 md:py-4 md:text-lg md:px-10"
+                    className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 md:py-4 md:text-lg md:px-10"
                   >
                     Resume
                   </a>
@@ -174,7 +174,7 @@ export default function Home() {
                   <a
                     href="https://github.com/anorga"
                     target="_blank"
-                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-red-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10"
+                    className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-red-600 bg-white border border-transparent rounded-md hover:bg-gray-50 md:py-4 md:text-lg md:px-10"
                   >
                     Github
                   </a>
