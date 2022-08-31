@@ -14,11 +14,11 @@ const navigation = [
 export default function Home() {
   return (
     <Fragment>
-      <div className="relative bg-gray-50 overflow-hidden">
+      <div className="relative overflow-hidden bg-gray-50">
         <div className="hidden sm:block sm:absolute sm:inset-y-0 sm:h-full sm:w-full" aria-hidden="true">
-          <div className="relative h-full max-w-7xl mx-auto">
+          <div className="relative h-full mx-auto max-w-7xl">
             <svg
-              className="absolute right-full transform translate-y-1/4 translate-x-1/4 lg:translate-x-1/2"
+              className="absolute transform right-full translate-y-1/4 translate-x-1/4 lg:translate-x-1/2"
               width={404}
               height={784}
               fill="none"
@@ -39,7 +39,7 @@ export default function Home() {
               <rect width={404} height={784} fill="url(#f210dbf6-a58d-4871-961e-36d5016a0f49)" />
             </svg>
             <svg
-              className="absolute left-full transform -translate-y-3/4 -translate-x-1/4 md:-translate-y-1/2 lg:-translate-x-1/2"
+              className="absolute transform left-full -translate-y-3/4 -translate-x-1/4 md:-translate-y-1/2 lg:-translate-x-1/2"
               width={404}
               height={784}
               fill="none"
@@ -64,32 +64,32 @@ export default function Home() {
 
         <div className="relative pt-6 pb-16 sm:pb-24">
           <Popover>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="px-4 mx-auto max-w-7xl sm:px-6">
               <nav className="relative flex items-center justify-between sm:h-10 md:justify-center" aria-label="Global">
                 <div className="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
                   <div className="flex items-center justify-between w-full md:w-auto">
                     <Link to="/">
                       <span className="sr-only">Workflow</span>
                       <img
-                        className="h-12 w-auto sm:h-14"
+                        className="w-auto h-12 sm:h-14"
                         src={glasses}
                         alt="logo"
                       />
                     </Link>
-                    <div className="items-center pr-12 sm:hidden text-lg font-bold text-gray-700">
+                    <div className="items-center pr-12 text-lg font-bold text-gray-700 sm:hidden">
                       <h1>Portfolio</h1>
                     </div>
-                    <div className="-mr-2 flex items-center md:hidden">
-                      <Popover.Button className="bg-gray-50 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500">
+                    <div className="flex items-center -mr-2 md:hidden">
+                      <Popover.Button className="inline-flex items-center justify-center p-2 text-gray-400 rounded-md bg-gray-50 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500">
                         <span className="sr-only">Open main menu</span>
-                        <MenuIcon className="h-6 w-6" aria-hidden="true" />
+                        <MenuIcon className="w-6 h-6" aria-hidden="true" />
                       </Popover.Button>
                     </div>
                   </div>
                 </div>
                 <div className="hidden md:flex md:space-x-12">
                   {navigation.map((item) => (
-                    <Link key={item.name} to={item.href} className="font-large font-bold text-lg text-gray-500 hover:text-gray-900">
+                    <Link key={item.name} to={item.href} className="text-lg font-bold text-gray-500 font-large hover:text-gray-900">
                       {item.name}
                     </Link>
                   ))}
@@ -108,21 +108,21 @@ export default function Home() {
             >
               <Popover.Panel
                 focus
-                className="absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden"
+                className="absolute inset-x-0 top-0 z-10 p-2 transition origin-top-right transform md:hidden"
               >
-                <div className="rounded-lg shadow-md bg-gray-50 ring-1 ring-black ring-opacity-5 overflow-hidden">
-                  <div className="px-5 pt-4 flex items-center justify-between">
+                <div className="overflow-hidden rounded-lg shadow-md bg-gray-50 ring-1 ring-black ring-opacity-5">
+                  <div className="flex items-center justify-between px-5 pt-4">
                     <div>
                       <img
-                        className="h-12 w-auto"
+                        className="w-auto h-12"
                         src= {glasses}
                         alt="logo"
                       />
                     </div>
                     <div className="-mr-2">
-                      <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500">
+                      <Popover.Button className="inline-flex items-center justify-center p-2 text-gray-400 bg-white rounded-md hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500">
                         <span className="sr-only">Close menu</span>
-                        <XIcon className="h-6 w-6" aria-hidden="true" />
+                        <XIcon className="w-6 h-6" aria-hidden="true" />
                       </Popover.Button>
                     </div>
                   </div>
@@ -131,7 +131,7 @@ export default function Home() {
                       <Link
                         key={item.name}
                         to={item.href}
-                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+                        className="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-gray-900 hover:bg-gray-100"
                       >
                         {item.name}
                       </Link>
@@ -144,13 +144,13 @@ export default function Home() {
 
           {/* Contact Form */}
           <div>
-            <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+            <div className="px-4 py-16 mx-auto max-w-7xl sm:py-24 sm:px-6 lg:px-8">
               <div className="relative bg-white shadow-xl">
                 <h2 className="sr-only">Contact us</h2>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3">
                   {/* Contact information */}
-                  <div className="relative overflow-hidden py-10 px-6 bg-red-700 sm:px-10 xl:p-12">
+                  <div className="relative px-6 py-10 overflow-hidden bg-red-700 sm:px-10 xl:p-12">
                     <div className="absolute inset-0 pointer-events-none sm:hidden" aria-hidden="true">
                       <svg
                         className="absolute inset-0 w-full h-full"
@@ -182,7 +182,7 @@ export default function Home() {
                       </svg>
                     </div>
                     <div
-                      className="hidden absolute top-0 right-0 bottom-0 w-1/2 pointer-events-none sm:block lg:hidden"
+                      className="absolute top-0 bottom-0 right-0 hidden w-1/2 pointer-events-none sm:block lg:hidden"
                       aria-hidden="true"
                     >
                       <svg
@@ -215,7 +215,7 @@ export default function Home() {
                       </svg>
                     </div>
                     <div
-                      className="hidden absolute top-0 right-0 bottom-0 w-1/2 pointer-events-none lg:block"
+                      className="absolute top-0 bottom-0 right-0 hidden w-1/2 pointer-events-none lg:block"
                       aria-hidden="true"
                     >
                       <svg
@@ -248,7 +248,7 @@ export default function Home() {
                       </svg>
                     </div>
                     <h3 className="text-lg font-medium text-white">Contact information</h3>
-                    <p className="mt-6 text-base text-white max-w-3xl">
+                    <p className="max-w-3xl mt-6 text-base text-white">
                     Have a question or want to work together? Send me a message and I'll get back to you as soon as possible.
                     </p>
                     <dl className="mt-8 space-y-6">
@@ -267,9 +267,9 @@ export default function Home() {
                         <span className="ml-3">anorga2990@gmail.com</span>
                       </dd>
                     </dl>
-                    <ul role="list" className="mt-8 flex space-x-12">
+                    <ul role="list" className="flex mt-8 space-x-12">
                       <li>
-                        <a className="text-white hover:text-red-100 flex" href="https://github.com/anorga" target="_blank">
+                        <a className="flex text-white hover:text-red-100" href="https://github.com/anorga" target="_blank">
                           <span className="sr-only">GitHub</span>
                           <svg
                             width={24}
@@ -311,9 +311,9 @@ export default function Home() {
                   </div>
 
                   {/* Contact form */}
-                  <div className="py-10 px-6 sm:px-10 lg:col-span-2 xl:p-12">
-                    <h3 className="text-lg font-medium text-gray-900">Send a message</h3>
-                    <form action="https://formspree.io/f/xrgjnkaz"  method="POST" className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8">
+                  <div className="px-6 py-10 sm:px-10 lg:col-span-2 xl:p-12">
+                    <h3 className="text-xl font-medium text-gray-900">Send a message</h3>
+                    <form action="https://formspree.io/f/xrgjnkaz"  method="POST" className="grid grid-cols-1 mt-6 gap-y-6 sm:grid-cols-2 sm:gap-x-8">
                       <div>
                         <label htmlFor="first-name" className="block text-sm font-medium text-gray-900">
                           First name
@@ -324,7 +324,7 @@ export default function Home() {
                             name="first-name"
                             id="first-name"
                             autoComplete="given-name"
-                            className="py-3 px-4 block w-full shadow-sm text-gray-900 focus:ring-red-500 focus:border-red-500 border-gray-300 rounded-md"
+                            className="block w-full px-4 py-3 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
                           />
                         </div>
                       </div>
@@ -338,7 +338,7 @@ export default function Home() {
                             name="last-name"
                             id="last-name"
                             autoComplete="family-name"
-                            className="py-3 px-4 block w-full shadow-sm text-gray-900 focus:ring-red-500 focus:border-red-500 border-gray-300 rounded-md"
+                            className="block w-full px-4 py-3 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
                           />
                         </div>
                       </div>
@@ -352,7 +352,7 @@ export default function Home() {
                             name="email"
                             type="email"
                             autoComplete="email"
-                            className="py-3 px-4 block w-full shadow-sm text-gray-900 focus:ring-red-500 focus:border-red-500 border-gray-300 rounded-md"
+                            className="block w-full px-4 py-3 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
                           />
                         </div>
                       </div>
@@ -371,7 +371,7 @@ export default function Home() {
                             name="phone"
                             id="phone"
                             autoComplete="tel"
-                            className="py-3 px-4 block w-full shadow-sm text-gray-900 focus:ring-red-500 focus:border-red-500 border-gray-300 rounded-md"
+                            className="block w-full px-4 py-3 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
                             aria-describedby="phone-optional"
                           />
                         </div>
@@ -385,7 +385,7 @@ export default function Home() {
                             type="text"
                             name="subject"
                             id="subject"
-                            className="py-3 px-4 block w-full shadow-sm text-gray-900 focus:ring-red-500 focus:border-red-500 border-gray-300 rounded-md"
+                            className="block w-full px-4 py-3 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
                           />
                         </div>
                       </div>
@@ -403,7 +403,7 @@ export default function Home() {
                             id="message"
                             name="message"
                             rows={4}
-                            className="py-3 px-4 block w-full shadow-sm text-gray-900 focus:ring-red-500 focus:border-red-500 border border-gray-300 rounded-md"
+                            className="block w-full px-4 py-3 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
                             aria-describedby="message-max"
                             defaultValue={''}
                           />
@@ -412,7 +412,7 @@ export default function Home() {
                       <div className="sm:col-span-2 sm:flex sm:justify-end">
                         <button
                           type="submit"
-                          className="mt-2 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto"
+                          className="inline-flex items-center justify-center w-full px-6 py-3 mt-2 text-base font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto"
                         >
                           Submit
                         </button>
