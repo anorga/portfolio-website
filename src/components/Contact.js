@@ -247,7 +247,7 @@ export default function Home() {
                         </defs>
                       </svg>
                     </div>
-                    <h3 className="text-lg font-medium text-white">Contact information</h3>
+                    <h3 className="text-xl font-medium text-white">Contact information</h3>
                     <p className="max-w-3xl mt-6 text-base text-white">
                     Have a question or want to work together? Send me a message and I'll get back to you as soon as possible.
                     </p>
