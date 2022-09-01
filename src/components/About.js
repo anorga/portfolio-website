@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 export default function About() {
     return (
         <Fragment>
-            <div className="bg-white">
+            <div className="bg-gray-50">
                 <div className="px-4 py-12 mx-auto max-w-7xl sm:px-6 lg:py-16 lg:px-8">
 
                     <div className="relative">
