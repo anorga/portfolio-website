@@ -35,15 +35,15 @@ export default function Skills() {
             </div>
             <div className="flex justify-center col-span-1 px-8 py-8 bg-red-600">
               <img className="max-h-12" src={HTML5Logo} alt="HTML" />
-              <div className="pt-2 pl-2 text-3xl font-bold text-gray-400">HTML</div>
+              <div className="pt-2 pl-2 text-3xl font-bold text-white">HTML</div>
             </div>
             <div className="flex justify-center col-span-1 px-8 py-8 bg-red-600">
               <img className="max-h-12" src={CSS3Logo} alt="CSS" />
-              <div className="pt-2 pl-2 text-3xl font-bold text-gray-400">CSS</div>
+              <div className="pt-2 pl-2 text-3xl font-bold text-white">CSS</div>
             </div>
             <div className="flex justify-center col-span-1 px-8 py-8 bg-red-600">
               <img className="max-h-12" src={JSLogo} alt="JavaScript" />
-              <div className="pt-2 pl-2 text-3xl font-bold text-gray-400">JS</div>
+              <div className="pt-2 pl-2 text-3xl font-bold text-white">JS</div>
             </div>
             <div className="flex justify-center col-span-1 px-8 py-8 bg-red-600">
               <img
@@ -51,7 +51,7 @@ export default function Skills() {
                 src={NodeLogo}
                 alt="Node"
               />
-              <div className="pt-2 pl-2 text-3xl font-bold text-gray-400">Node.js</div>
+              <div className="pt-2 pl-2 text-3xl font-bold text-white">Node.js</div>
             </div>
             <div className="flex justify-center col-span-1 px-8 py-8 bg-red-600">
               <img
@@ -59,7 +59,7 @@ export default function Skills() {
                 src={TailwindLogo}
                 alt="Tailwind"
               />
-              <div className="pt-2 pl-2 text-3xl font-bold text-gray-400">Tailwind</div>
+              <div className="pt-2 pl-2 text-3xl font-bold text-white">Tailwind</div>
             </div>
           </div>
         </div>
