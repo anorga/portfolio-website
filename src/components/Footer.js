@@ -19,6 +19,14 @@ const navigation = {
       // },
       {
         name: 'GitHub',
+        href: 'mailto:anorga2990@gmail.com',
+        target: '_blank',
+        icon: (props) => (
+          <img src={email} alt="Email" className="w-5 mt-0.5" />
+        ),
+      },
+      {
+        name: 'GitHub',
         href: 'https://github.com/anorga',
         target: '_blank',
         icon: (props) => (
@@ -29,14 +37,6 @@ const navigation = {
               clipRule="evenodd"
             />
           </svg>
-        ),
-      },
-      {
-        name: 'GitHub',
-        href: 'mailto:anorga2990@gmail.com',
-        target: '_blank',
-        icon: (props) => (
-          <img src={email} alt="Email" {...props} />
         ),
       },
     ],
