@@ -22,7 +22,7 @@ const navigation = {
         href: 'mailto:anorga2990@gmail.com',
         target: '_blank',
         icon: (props) => (
-          <img src={email} alt="Email" className="w-5 mt-0.5" />
+          <img src={email} alt="Email" className="w-5 mt-0.5 hover:animate-pulse" />
         ),
       },
       {
