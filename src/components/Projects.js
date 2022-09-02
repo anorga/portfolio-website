@@ -16,13 +16,13 @@ const navigation = [
 
 const posts = [
     {
-        title: 'Portfolio Repository',
-        href: 'https://github.com/anorga/portfolio-website',
-        category: { name: 'This Website', href: 'https://anorga.xyz/' },
+        title: 'Read Manga App Repository',
+        href: 'https://github.com/anorga/manga-react-app',
+        category: { name: 'Live App', href: 'https://readmangas.xyz/' },
         description:
-            'Current porfolio website used to host personal projects. Built with React, React-Router, and TailWindUI.',
+            'Application for manga enthusiasts. This application aggregates external links to read popular manga. Links are constantly updated. This application was built using React, React-Router, and Bootstrap. Best viewed on mobile.',
         imageUrl:
-            `${portfolio}`,
+            `${readmangas}`,
         target: '_blank',
     },
     {
@@ -36,13 +36,13 @@ const posts = [
         target: '_blank',
     },
     {
-        title: 'Read Manga App Repository',
-        href: 'https://github.com/anorga/manga-react-app',
-        category: { name: 'Live App', href: 'https://readmangas.xyz/' },
+        title: 'Portfolio Repository',
+        href: 'https://github.com/anorga/portfolio-website',
+        category: { name: 'This Website', href: 'https://anorga.xyz/' },
         description:
-            'Application for manga enthusiasts. This application aggregates external links to read popular manga. Links will be constantly updated. This application was built using React and Bootstrap. Best viewed on mobile.',
+            'Current porfolio website used to host personal projects. Built with React, React-Router, and TailWindUI.',
         imageUrl:
-            `${readmangas}`,
+            `${portfolio}`,
         target: '_blank',
     },
 ]
