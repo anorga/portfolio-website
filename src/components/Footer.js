@@ -19,14 +19,6 @@ const navigation = {
       // },
       {
         name: 'GitHub',
-        href: 'mailto:anorga2990@gmail.com',
-        target: '_blank',
-        icon: (props) => (
-          <img src={email} alt="Email" {...props} />
-        ),
-      },
-      {
-        name: 'GitHub',
         href: 'https://github.com/anorga',
         target: '_blank',
         icon: (props) => (
@@ -39,14 +31,22 @@ const navigation = {
           </svg>
         ),
       },
+      {
+        name: 'GitHub',
+        href: 'mailto:anorga2990@gmail.com',
+        target: '_blank',
+        icon: (props) => (
+          <img src={email} alt="Email" {...props} />
+        ),
+      },
     ],
   }
   
   export default function Footer() {
     return (
       <footer className="bg-white">
-        <div className="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
-          <nav className="-mx-5 -my-2 flex flex-wrap justify-center" aria-label="Footer">
+        <div className="px-4 py-12 mx-auto overflow-hidden max-w-7xl sm:px-6 lg:px-8">
+          <nav className="flex flex-wrap justify-center -mx-5 -my-2" aria-label="Footer">
             {navigation.main.map((item) => (
               <div key={item.name} className="px-5 py-2">
                 <Link to={item.href} className="text-base text-gray-500 hover:text-gray-900">
@@ -55,15 +55,15 @@ const navigation = {
               </div>
             ))}
           </nav>
-          <div className="mt-8 flex justify-center space-x-6">
+          <div className="flex justify-center mt-8 space-x-6">
             {navigation.social.map((item) => (
               <a key={item.name} href={item.href} target="{item.target}" className="text-gray-400 hover:text-gray-500">
                 <span className="sr-only">{item.name}</span>
-                <item.icon className="h-6 w-6" aria-hidden="true" />
+                <item.icon className="h-6 w-7" aria-hidden="true" />
               </a>
             ))}
           </div>
-          <p className="mt-8 text-center text-base text-gray-400">&copy; 2022 Chris Anorga. All rights reserved.</p>
+          <p className="mt-8 text-base text-center text-gray-400">&copy; 2022 Chris Anorga. All rights reserved.</p>
         </div>
       </footer>
     )
