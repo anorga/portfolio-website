@@ -38,7 +38,7 @@ export default function Skills() {
               <div className="pt-2 pl-2 text-3xl font-bold text-white">HTML</div>
             </div>
             <div className="flex justify-center col-span-1 px-8 py-8 bg-red-600">
-              <img className="max-h-12" src={CSS3Logo} alt="CSS" />
+              <img className="max-h-14" src={CSS3Logo} alt="CSS" />
               <div className="pt-2 pl-2 text-3xl font-bold text-white">CSS</div>
             </div>
             <div className="flex justify-center col-span-1 px-8 py-8 bg-red-600">
