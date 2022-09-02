@@ -37,11 +37,11 @@ export default function Skills() {
               <img className="max-h-12" src={HTML5Logo} alt="HTML" />
               <div className="pt-2 pl-2 text-3xl font-bold text-gray-400">HTML</div>
             </div>
-            <div className="flex justify-center col-span-1 px-8 py-8 bg-gray-100">
+            <div className="flex justify-center col-span-1 px-8 py-8 bg-gray-200">
               <img className="max-h-12" src={CSS3Logo} alt="CSS" />
               <div className="pt-2 pl-2 text-3xl font-bold text-gray-400">CSS</div>
             </div>
-            <div className="flex justify-center col-span-1 px-8 py-8 bg-gray-100">
+            <div className="flex justify-center col-span-1 px-8 py-8 bg-gray-200">
               <img className="max-h-12" src={JSLogo} alt="JavaScript" />
               <div className="pt-2 pl-2 text-3xl font-bold text-gray-400">JS</div>
             </div>
