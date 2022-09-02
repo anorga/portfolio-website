@@ -15,7 +15,7 @@ export default function About() {
                             <span className="px-3 font-semibold text-gray-600 uppercase bg-gray-50 sm:text-lg md:text-xl">About Me</span>
                         </div>
                     </div>
-                    <div className="px-5 pt-1 pb-8 bg-gray-50 mt-7">
+                    <div className="px-5 pt-1 pb-8 bg-gray-100 mt-7">
                         <p className="max-w-5xl mx-auto mt-6 leading-7 text-gray-500 sm:text-lg md:text-xl md:leading-9">
                             I am a front end developer with a passion for building web applications and a deep love for JavaScript, React, and everything related to web development. The endless combination of technology and creativity in this field is what drives my passion and excitement to keep learning and building. Please refer to the <Link to={'/Projects'} className="hover:text-red-700 animate-pulse">Projects</Link> section for a recent list of applications I have worked on. When I am not at my computer, I spend my time reading, watching my favorite tv shows, and keeping fit.
                         </p>
