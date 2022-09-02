@@ -40,7 +40,7 @@ const posts = [
         href: 'https://github.com/anorga/manga-react-app',
         category: { name: 'Live App', href: 'https://readmangas.xyz/' },
         description:
-            `Application for manga enthusiasts. This application aggregates external links to read popular manga. Links will be constantly updated. This application was built using React and Bootstrap. Best viewed on mobile.`,
+            'Application for manga enthusiasts. This application aggregates external links to read popular manga. Links will be constantly updated. This application was built using React and Bootstrap. Best viewed on mobile.',
         imageUrl:
             `${readmangas}`,
         target: '_blank',
