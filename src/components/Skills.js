@@ -31,7 +31,7 @@ export default function Skills() {
                 src={ReactLogo}
                 alt="React"
               />
-              <div className="pt-2 pl-2 text-3xl font-bold text-white">React</div>
+              <div className="pt-2 pl-2 text-3xl font-bold text-white rounded-md">React</div>
             </div>
             <div className="flex justify-center col-span-1 px-8 py-8 bg-red-600">
               <img className="max-h-12" src={HTML5Logo} alt="HTML" />
