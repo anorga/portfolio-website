@@ -33,19 +33,19 @@ export default function Skills() {
               />
               <div className="pt-2 pl-2 text-3xl font-bold text-white">React</div>
             </div>
-            <div className="flex justify-center col-span-1 px-8 py-8 bg-red-600">
+            <div className="flex justify-center col-span-1 px-8 py-8 bg-red-600 rounded-md">
               <img className="max-h-12" src={HTML5Logo} alt="HTML" />
               <div className="pt-2 pl-2 text-3xl font-bold text-white">HTML</div>
             </div>
-            <div className="flex justify-center col-span-1 px-8 py-8 bg-red-600">
+            <div className="flex justify-center col-span-1 px-8 py-8 bg-red-600 rounded-md">
               <img className="max-h-14" src={CSS3Logo} alt="CSS" />
               <div className="pt-2 pl-2 text-3xl font-bold text-white">CSS</div>
             </div>
-            <div className="flex justify-center col-span-1 px-8 py-8 bg-red-600">
+            <div className="flex justify-center col-span-1 px-8 py-8 bg-red-600 rounded-md">
               <img className="max-h-12" src={JSLogo} alt="JavaScript" />
               <div className="pt-2 pl-2 text-3xl font-bold text-white">JS</div>
             </div>
-            <div className="flex justify-center col-span-1 px-8 py-8 bg-red-600">
+            <div className="flex justify-center col-span-1 px-8 py-8 bg-red-600 rounded-md">
               <img
                 className="max-h-12"
                 src={NodeLogo}
@@ -53,7 +53,7 @@ export default function Skills() {
               />
               <div className="pt-2 pl-2 text-3xl font-bold text-white">Node.js</div>
             </div>
-            <div className="flex justify-center col-span-1 px-8 py-8 bg-red-600">
+            <div className="flex justify-center col-span-1 px-8 py-8 bg-red-600 rounded-md">
               <img
                 className="mt-2 max-h-8"
                 src={TailwindLogo}
