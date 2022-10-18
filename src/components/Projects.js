@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import readmangas from './assets/readmangas.xyz.jpeg'
 import weatherapp from './assets/weatherapp.jpeg'
 import portfolio from './assets/portfolio.jpeg'
-
+import pokedex from './assets/pokedexApp.png'
 
 const navigation = [
     { name: 'Home', href: '/' },
@@ -15,6 +15,16 @@ const navigation = [
 ]
 
 const posts = [
+    {
+        title: 'Pokedex App Repository',
+        href: 'https://github.com/anorga/pokedex',
+        category: { name: 'Live App', href: 'https://pokedex-navy-delta.vercel.app/' },
+        description:
+            'WORK IN PROGRESS - EARLY STAGES Pokedex web application built using data from PokeAPI, React, React-Router, and Tailwind UI.',
+        imageUrl:
+            `${pokedex}`,
+        target: '_blank',
+    },
     {
         title: 'Read Manga App Repository',
         href: 'https://github.com/anorga/manga-react-app',
