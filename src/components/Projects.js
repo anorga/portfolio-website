@@ -20,7 +20,7 @@ const posts = [
         href: 'https://github.com/anorga/pokedex',
         category: { name: 'Live App', href: 'https://pokedex-navy-delta.vercel.app/' },
         description:
-            'WORK IN PROGRESS - EARLY STAGES Pokedex web application built using data from PokeAPI, React, React-Router, and Tailwind UI.',
+            'WORK IN PROGRESS - Pokedex web application built using data from PokeAPI, React, React-Router, and Tailwind UI. Search for any pokemon to see base stats and type information.',
         imageUrl:
             `${pokedex}`,
         target: '_blank',
