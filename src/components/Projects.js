@@ -203,9 +203,11 @@ export default function Projects() {
                                 <div className="grid max-w-lg gap-5 mx-auto mt-12 lg:grid-cols-3 lg:max-w-none">
                                     {posts.map((post) => (
                                         <div key={post.title} className="flex flex-col overflow-hidden rounded-lg shadow-lg">
-                                            <div className="flex-shrink-0">
-                                                <img className="object-cover w-full h-48" src={post.imageUrl} alt="project" />
-                                            </div>
+                                            <a href={post.category.href} target={post.target}> 
+                                                <div className="flex-shrink-0">
+                                                    <img className="object-cover w-full h-48" src={post.imageUrl} alt="project" />
+                                                </div>
+                                            </a>
                                             <div className="flex flex-col justify-between flex-1 p-6 bg-white">
                                                 <div className="flex-1">
                                                     <p className="text-base font-medium text-red-600">
@@ -215,8 +217,8 @@ export default function Projects() {
                                                     </p>
                                                     <a href={post.href} target={post.target} className="block mt-2">
                                                         <p className="text-xl font-semibold text-gray-900 hover:text-red-800">{post.title}</p>
-                                                        <p className="mt-3 text-base text-gray-500">{post.description}</p>
                                                     </a>
+                                                    <p className="mt-3 text-base text-gray-500">{post.description}</p>
                                                 </div>
                                             </div>
                                         </div>
