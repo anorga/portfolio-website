@@ -27,7 +27,6 @@ export default function About() {
                         <img src={portrait} alt="portrait" className="w-80 h-1/4 mx-10 mt-12 rounded-xl opacity-95 hidden lg:inline-block" />
                         <p className="mx-auto mt-6 px-3 leading-7 text-gray-500 max-w-7xl sm:text-lg md:text-xl md:leading-9">
                             I currently provide services to clients needing end-to-end web solutions for their organizations and deliver projects that frequently exceed expectations. Building web applications for different needs and experiences with languages, frameworks, and libraries, such as the MERN web stack, and content management systems such as WordPress.
->>>>>>> Stashed changes
                         </p>
                     </div>
                 </div>
