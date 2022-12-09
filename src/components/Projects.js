@@ -57,11 +57,11 @@ const posts = [
         target: '_blank',
     },
     {
-        title: 'Portfolio Repository',
-        href: 'https://github.com/anorga/portfolio-website',
-        category: { name: 'Live Website', href: 'https://anorga.xyz/' },
+        title: 'San Diego Auto Repaid & Collision Center',
+        href: 'https://sdautocenter.com/',
+        category: { name: 'Live Website', href: 'https://sdautocenter.com/' },
         description:
-            'Current porfolio website used to host personal projects. Built with React, React-Router, and TailWindUI.',
+            'Business website for a local auto repair shop. Built with WordPress.',
         imageUrl:
             `${sdauto}`,
         target: '_blank',
