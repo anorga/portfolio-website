@@ -57,7 +57,7 @@ const posts = [
         target: '_blank',
     },
     {
-        title: 'San Diego Auto Repaid & Collision Center',
+        title: 'San Diego Auto Repair & Collision Center',
         href: 'https://sdautocenter.com/',
         category: { name: 'Live Website', href: 'https://sdautocenter.com/' },
         description:
