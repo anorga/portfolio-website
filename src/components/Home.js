@@ -117,7 +117,7 @@ export default function Home() {
                   <div className="flex items-center justify-between px-5 pt-4">
                     <div>
                       <img
-                        className="w-auto h-12"
+                        className="w-auto h-12 hidden"
                         src={glasses}
                         alt="logo"
                       />
@@ -130,11 +130,16 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="px-2 pt-2 pb-3">
+                  <img
+                        className="w-auto h-12 mx-auto"
+                        src={glasses}
+                        alt="logo"
+                      />
                     {navigation.map((item) => (
                       <Link
                         key={item.name}
                         to={item.href}
-                        className="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-gray-900 hover:bg-gray-100 text-center"
+                        className="block px-3 py-2 font-medium text-gray-700 rounded-md hover:text-gray-900 hover:bg-gray-100 text-center text-lg"
                       >
                         {item.name}
                       </Link>
