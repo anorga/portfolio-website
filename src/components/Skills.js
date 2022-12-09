@@ -17,7 +17,7 @@ export default function Skills() {
               <div className="w-full border-t border-gray-300" />
             </div>
             <div className="relative flex justify-center">
-              <span className="px-3 font-semibold text-gray-600 uppercase bg-gray-50 sm:text-lg md:text-xl">Development Tools and Languages</span>
+              <span className="px-3 font-semibold text-gray-600 uppercase bg-gray-50 sm:text-lg md:text-2xl">Development Tools and Languages</span>
             </div>
           </div>
 
