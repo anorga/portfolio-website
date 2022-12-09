@@ -134,7 +134,7 @@ export default function Home() {
                       <Link
                         key={item.name}
                         to={item.href}
-                        className="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-gray-900 hover:bg-gray-100"
+                        className="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-gray-900 hover:bg-gray-100 text-center"
                       >
                         {item.name}
                       </Link>
