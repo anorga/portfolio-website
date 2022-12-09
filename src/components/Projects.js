@@ -133,7 +133,7 @@ export default function Projects() {
                                                 alt="logo"
                                             />
                                         </Link>
-                                        <div className="items-center pr-12 text-lg font-bold text-gray-700 sm:hidden">
+                                        <div className="items-center pr-12 text-lg font-bold text-gray-700 hidden">
                                             <h1>Portfolio</h1>
                                         </div>
                                         <div className="flex items-center -mr-2 md:hidden">
