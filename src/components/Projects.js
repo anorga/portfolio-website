@@ -7,6 +7,7 @@ import readmangas from './assets/readmangas.webp'
 import weatherapp from './assets/weatherapp.webp'
 import portfolio from './assets/portfolio.jpeg'
 import pokedex from './assets/pokedexApp.webp'
+import sdauto from './assets/sdauto.webp'
 
 const navigation = [
     { name: 'Home', href: '/' },
@@ -53,6 +54,16 @@ const posts = [
             'Current porfolio website used to host personal projects. Built with React, React-Router, and TailWindUI.',
         imageUrl:
             `${portfolio}`,
+        target: '_blank',
+    },
+    {
+        title: 'Portfolio Repository',
+        href: 'https://github.com/anorga/portfolio-website',
+        category: { name: 'Live Website', href: 'https://anorga.xyz/' },
+        description:
+            'Current porfolio website used to host personal projects. Built with React, React-Router, and TailWindUI.',
+        imageUrl:
+            `${sdauto}`,
         target: '_blank',
     },
 ]
