@@ -157,12 +157,12 @@ export default function Home() {
               />
               </h1>
               <p className="max-w-md mx-auto mt-3 text-black text-xl md:mt-10 md:text-2xl md:max-w-3xl">
-                Welcome to my portfolio website.
+                Welcome to my portfolio website
               </p>
               <div className="max-w-xs mx-auto mt-12 sm:flex sm:justify-center md:mt-8">
                 <div className="rounded-md shadow">
                   <a
-                    href={ResumePDF}
+                    href={""}
                     target="_blank"
                     rel="noreferrer"
                     className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 md:py-4 md:text-lg md:px-10"
