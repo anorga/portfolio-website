@@ -145,7 +145,7 @@ export default function Home() {
             </Transition>
           </Popover>
 
-          <main className="h-[500px] mx-auto pt-[50px] max-w-7xl mt-28">
+          <main className="h-[450px] md:h-[500px] mx-auto pt-[50px] max-w-7xl mt-28">
             <div className="text-center mt-10">
             <div className="text-red-600 text-4xl font-semibold md:text-[80px] md:mb-10">Chris Anorga</div>
               <h1 className="text-4xl font-semibold tracking-tight text-gray-900 md:text-[80px]">
