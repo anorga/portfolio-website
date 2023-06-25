@@ -145,9 +145,9 @@ export default function Home() {
             </Transition>
           </Popover>
 
-          <main className="h-[500px] mx-auto pt-[50px] max-w-7xl sm:mt-24">
+          <main className="h-[500px] mx-auto pt-[50px] max-w-7xl mt-24">
             <div className="text-center mt-10">
-              <h1 className="text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl md:text-7xl">
+              <h1 className="text-6xl font-semibold tracking-tight text-gray-900 md:text-[80px]">
                 <span className="block text-red-600 xl:inline">Chris Anorga</span>{' '}
                 <TypeAnimation
                 sequence={['Web Developer', 1000, '', 500, 'Front-End Developer', 1000, '', 500 ]}
@@ -156,7 +156,7 @@ export default function Home() {
                 repeat={Infinity}
               />
               </h1>
-              <p className="max-w-md mx-auto mt-3 text-base text-black sm:text-lg md:mt-5 md:text-2xl md:max-w-3xl">
+              <p className="max-w-md mx-auto mt-3 text-black text-xl md:mt-5 md:text-2xl md:max-w-3xl">
                 Welcome to my portfolio website
               </p>
               <div className="max-w-xs mx-auto mt-12 sm:flex sm:justify-center md:mt-8">

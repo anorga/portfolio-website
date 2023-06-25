@@ -13,7 +13,7 @@ export default function Skills() {
         <div className="px-4 py-12 mx-auto max-w-7xl sm:px-6 lg:py-16 lg:px-8">
 
           <div className="mb-16 mt-10 pl-10">
-            <div className="font-semibold text-black uppercase bg-gray-50 sm:text-lg md:text-[40px]">Development Tools and Languages</div>
+            <div className="font-semibold text-black uppercase bg-gray-50 text-3xl md:text-[35px]">Technologies</div>
           </div>
 
           {/* <p className="text-base font-semibold tracking-wider text-center text-gray-600 uppercase">

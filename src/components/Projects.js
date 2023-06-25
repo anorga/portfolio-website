@@ -206,7 +206,7 @@ export default function Projects() {
                             </div>
                             <div className="relative mx-auto max-w-7xl">
                                 <div className="text-center">
-                                    <h2 className="mb-5 text-4xl font-extrabold tracking-tight text-white sm:text-5xl animate-bounce md:animate-none">Projects</h2>
+                                    <h2 className="mb-5 md:mb-14 text-4xl font-medium tracking-tight text-white sm:text-5xl animate-bounce md:animate-none">Projects</h2>
                                     <p className="max-w-2xl mx-auto mt-3 text-xl text-white sm:mt-4">
                                         The following is a sample of the business pages and projects I have created.<span className="hidden md:inline"><br /></span> Links to hosted web applications and repositories are provided.
                                     </p>
