@@ -10,7 +10,7 @@ export default function About() {
 
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                            <div className="w-full border-t border-black" />
+                            <div className="w-full" />
                         </div>
                         <div className="relative flex justify-center">
                             <span className="px-3 font-semibold text-black uppercase bg-gray-50 sm:text-lg md:text-2xl">About Me</span>

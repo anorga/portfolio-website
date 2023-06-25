@@ -12,9 +12,9 @@ export default function Skills() {
       <div className="bg-gray-50">
         <div className="px-4 py-12 mx-auto max-w-7xl sm:px-6 lg:py-16 lg:px-8">
 
-          <div className="relative">
+          <div className="relative mb-14">
             <div className="absolute inset-0 flex items-center" aria-hidden="true">
-              <div className="w-full border-t border-black" />
+              <div className="w-full" />
             </div>
             <div className="relative flex justify-center">
               <span className="px-3 font-semibold text-black uppercase bg-gray-50 sm:text-lg md:text-2xl">Development Tools and Languages</span>
