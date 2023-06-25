@@ -157,7 +157,7 @@ export default function Home() {
               />
               </h1>
               <p className="max-w-md mx-auto mt-3 text-black text-xl md:mt-10 md:text-2xl md:max-w-3xl">
-                Welcome to my portfolio website
+                Welcome to my portfolio website.
               </p>
               <div className="max-w-xs mx-auto mt-12 sm:flex sm:justify-center md:mt-8">
                 <div className="rounded-md shadow">
