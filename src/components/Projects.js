@@ -146,7 +146,7 @@ export default function Projects() {
                                 </div>
                                 <div className="hidden md:flex md:space-x-12">
                                     {navigation.map((item) => (
-                                        <Link key={item.name} to={item.href} className="text-lg font-bold text-gray-500 font-large hover:text-gray-900">
+                                        <Link key={item.name} to={item.href} className="text-2xl font-medium text-black font-large hover:text-red-600">
                                             {item.name}
                                         </Link>
                                     ))}
