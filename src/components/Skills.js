@@ -19,7 +19,7 @@ export default function Skills() {
           {/* <p className="text-base font-semibold tracking-wider text-center text-gray-600 uppercase">
             Development Tools and Languages
           </p> */}
-          <div className="px-10 grid grid-cols-2 gap-0.5 md:grid-cols-3 lg:mt-8">
+          <div className="md:px-10 grid grid-cols-2 gap-0.5 md:grid-cols-3 lg:mt-8">
             <div className="flex justify-center col-span-1 px-8 py-8 rounded-lg bg-red-600">
               <img className="max-h-12" src={ReactLogo} alt="React" />
               <div className="pt-2 pl-2 text-3xl font-bold text-white">React</div>

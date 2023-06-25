@@ -147,7 +147,7 @@ export default function Home() {
 
           <main className="h-[500px] mx-auto pt-[50px] max-w-7xl mt-24">
             <div className="text-center mt-10">
-              <h1 className="text-6xl font-semibold tracking-tight text-gray-900 md:text-[80px]">
+              <h1 className="text-4xl font-semibold tracking-tight text-gray-900 md:text-[80px]">
                 <span className="block text-red-600 xl:inline">Chris Anorga</span>{' '}
                 <TypeAnimation
                 sequence={['Web Developer', 1000, '', 500, 'Front-End Developer', 1000, '', 500 ]}

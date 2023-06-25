@@ -7,8 +7,8 @@ export default function About() {
         <Fragment>
             <div className="bg-gray-50">
                 <div className="px-4 py-12 mx-auto max-w-7xl lg:py-16 lg:px-8">
-                    <div className="md:flex md:gap-40 md:pl-10">
-                        <img src={portrait} alt="portrait" className="w-96 h-auto md:w-96 md:h-full rounded-[60px] opacity-95 mx-auto block" />
+                    <div className="flex flex-col md:flex-row md:gap-40 md:pl-10">
+                        <div><img src={portrait} alt="portrait" className="w-72 h-auto md:w-96 md:h-full rounded-full md:rounded-[60px] opacity-95 mx-auto block" /></div>
                         <div className="my-auto mx-10 md:mx-0">
                             <div className="text-5xl md:text-[120px] mt-20 md:mt-0 font-medium md:font-normal">Hello!</div>
                             <div className="text-2xl md:text-5xl pt-10 md:pt-5">I'm Chris, a Web Developer based in San Diego.</div>
