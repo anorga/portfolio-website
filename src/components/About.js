@@ -22,7 +22,7 @@ export default function About() {
                             I am a front-end developer with a passion for building web applications and a deep interest in everything related to web development. The endless combination of technology and creativity in this field drives my passion and excitement to keep learning and building. Please refer to the <Link to={'/Projects'} className="hover:text-red-700 animate-pulse">Projects</Link> section for recent applications I have worked on.
                         </p>
                         <p className="mx-auto mt-6 px-3 md:pl-7 leading-7 text-black max-w-7xl text-lg md:text-2xl md:leading-9">
-                            I currently provide services to clients needing end-to-end web solutions for their organizations and deliver projects that frequently exceed expectations. Building web applications for different needs and experiences with languages, frameworks, and libraries, such as the MERN web stack, and content management systems such as WordPress...
+                            I currently provide services to clients needing end-to-end web solutions for their organizations and deliver projects that frequently exceed expectations. Building web applications for different needs and experiences with languages, frameworks, and libraries, such as the MERN web stack, and content management systems such as WordPress.
                         </p>
                     </div>
                 </div>
