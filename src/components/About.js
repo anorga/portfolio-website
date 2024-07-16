@@ -11,7 +11,7 @@ export default function About() {
                         <div className="order-1 md:order-first mt-20 md:mt-0"><img src={portrait} alt="portrait" className="w-72 h-auto md:w-96 md:h-full rounded-full md:rounded-[60px] opacity-95 mx-auto block" /></div>
                         <div className="my-auto mx-10 md:mx-0">
                             <div className="text-5xl md:text-[100px] mt-20 md:mt-0 font-medium md:font-normal">Hello!</div>
-                            <div className="text-2xl md:text-4xl pt-10 md:pt-5 md:leading-normal">I'm Chris, a Web Developer based in San Diego..</div>
+                            <div className="text-2xl md:text-4xl pt-10 md:pt-5 md:leading-normal">I'm Chris, a Web Developer based in San Diego</div>
                         </div>
                     </div>
                     <div className=" mt-32 md:mt-40 pl-10">
