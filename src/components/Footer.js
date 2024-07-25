@@ -63,7 +63,7 @@ const navigation = {
               </a>
             ))}
           </div>
-          <p className="mt-8 text-base text-center text-gray-400">&copy; 2022 Chris Anorga.. All rights reserved.</p>
+          <p className="mt-8 text-base text-center text-gray-400">&copy; 2022 Chris Anorga. All rights reserved.</p>
         </div>
       </footer>
     )
