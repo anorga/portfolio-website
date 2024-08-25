@@ -194,7 +194,7 @@ export default function Projects() {
                                 <div className="grid max-w-lg gap-5 mx-auto mt-12 lg:grid-cols-3 lg:max-w-none">
                                     {posts.map((post) => (
                                         <div key={post.title} className="flex flex-col overflow-hidden rounded-lg shadow-lg">
-                                            <a href={post.category.href} target={post.target}> 
+                                            <a href={post.category.href} target={post.target} className="block"> 
                                                 <div className="flex-shrink-0">
                                                     <img className="object-cover w-full h-48" src={post.imageUrl} alt="project" />
                                                 </div>
