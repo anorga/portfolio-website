@@ -21,7 +21,7 @@ const posts = [
         href: 'https://github.com/anorga/pokedex',
         category: { name: 'Live App', href: 'https://pokedex-navy-delta.vercel.app/' },
         description:
-            'WORK IN PROGRESS - Pokedex web application built using data from PokeAPI, React, React-Router, and Tailwind UI. Search for any pokemon to see base stats and type information.',
+            'Pokedex web application built using data from PokeAPI, React, React-Router, and Tailwind UI. Search for any pokemon to see base stats and type information.',
         imageUrl:
             `${pokedex}`,
         target: '_blank',
@@ -46,26 +46,6 @@ const posts = [
             `${weatherapp}`,
         target: '_blank',
     },
-    // {
-    //     title: 'Portfolio Repository',
-    //     href: 'https://github.com/anorga/portfolio-website',
-    //     category: { name: 'This Website', href: 'https://anorga.xyz/' },
-    //     description:
-    //         'Current porfolio website used to host personal projects. Built with React, React-Router, and TailWindUI.',
-    //     imageUrl:
-    //         `${portfolio}`,
-    //     target: '_blank',
-    // },
-    // {
-    //     title: 'San Diego Auto Repair & Collision Center',
-    //     href: 'https://sdautocenter.com/',
-    //     category: { name: 'Live Website', href: 'https://sdautocenter.com/' },
-    //     description:
-    //         'Business website for a local auto repair shop. Built with WordPress.',
-    //     imageUrl:
-    //         `${sdauto}`,
-    //     target: '_blank',
-    // },
 ]
 
 export default function Projects() {
