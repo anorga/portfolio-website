@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import readmangas from './assets/readmangas.webp'
 import weatherapp from './assets/weatherapp.webp'
 import portfolio from './assets/portfolio.jpeg'
-import pokedex from './assets/pokedexApp.webp'
+import pokedex from './assets/pokedexApp.png'
 import sdauto from './assets/sdauto.webp'
 
 const navigation = [
