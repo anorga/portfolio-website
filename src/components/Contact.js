@@ -145,12 +145,12 @@ export default function Home() {
           {/* Contact Form */}
           <div>
             <div className="px-4 py-16 mx-auto max-w-7xl sm:py-24 sm:px-6 lg:px-8">
-              <div className="relative bg-white shadow-xl rounded-r-lg">
+              <div className="relative bg-white shadow-xl rounded-b-lg lg:rounded-b-none lg:rounded-r-lg">
                 <h2 className="sr-only">Contact us</h2>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3">
                   {/* Contact information */}
-                  <div className="relative px-6 py-10 overflow-hidden bg-red-700 sm:px-10 xl:p-12 rounded-l-lg shadow-xl">
+                  <div className="relative px-6 py-10 overflow-hidden bg-red-700 sm:px-10 xl:p-12 shadow-xl rounded-t-lg lg:rounded-t-none lg:rounded-l-lg">
                     <div className="absolute inset-0 pointer-events-none sm:hidden" aria-hidden="true">
                       <svg
                         className="absolute inset-0 w-full h-full"
