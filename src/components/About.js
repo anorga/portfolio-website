@@ -22,7 +22,7 @@ export default function About() {
                         I’m a front-end developer passionate about crafting high-quality web experiences. The constantly evolving nature of web development inspires me to stay at the forefront of new technologies and to approach challenges with innovative solutions. My goal is to combine technical expertise with thoughtful design to build intuitive, visually engaging websites and applications. Feel free to explore the <Link to={'/Projects'} className="hover:text-red-700 animate-pulse">Projects</Link> section to see some of my recent work.
                         </p>
                         <p className="mx-auto mt-6 px-3 leading-7 text-black max-w-7xl text-lg md:text-2xl md:leading-9">
-                        Currently, I provide comprehensive web solutions to clients, delivering projects that consistently surpass expectations. My expertise spans a diverse range of web applications, employing various languages, frameworks, and libraries. I am well-versed in the MERN web stack and proficient in content management systems like WordPress.
+                        I deliver comprehensive web solutions that consistently exceed client expectations. With expertise across a range of technologies, including the MERN stack, and significant experience in content management systems like WordPress, I’m well-equipped to handle both simple websites and more complex web applications. I’m always excited to turn ideas into reality.
                         </p>
                     </div>
                 </div>
