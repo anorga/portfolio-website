@@ -188,7 +188,7 @@ export default function Projects() {
                                 <div className="text-center">
                                     <h2 className="mb-5 md:mb-14 text-4xl font-medium tracking-tight text-white sm:text-5xl animate-bounce md:animate-none">Projects</h2>
                                     <p className="max-w-2xl mx-auto mt-3 text-xl text-white sm:mt-4">
-                                        The following is a sample of the business pages and projects I have created.<span className="hidden md:inline"><br /></span> Links to hosted web applications and repositories are provided.
+                                        The following is a sample of projects I have created.<span className="hidden md:inline"><br /></span> Links to hosted web applications and repositories are provided.
                                     </p>
                                 </div>
                                 <div className="grid max-w-lg gap-5 mx-auto mt-12 lg:grid-cols-3 lg:max-w-none">
