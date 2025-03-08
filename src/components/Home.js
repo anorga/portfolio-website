@@ -7,6 +7,7 @@ import About from './About'
 import { Link } from 'react-router-dom'
 import ResumePDF from './assets/pdf/resume.pdf'
 import { TypeAnimation } from 'react-type-animation';
+import { motion } from 'framer-motion';
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -69,7 +70,12 @@ export default function Home() {
           <Popover>
             <div className="px-4 mx-auto max-w-7xl sm:px-6">
               <nav className="relative flex items-center justify-between sm:h-10 md:justify-center" aria-label="Global">
-                <div className="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
+                <motion.div 
+                  initial={{ opacity: 0, y: -20 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  transition={{ duration: 0.8 }}
+                  className="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0"
+                >
                   <div className="flex items-center justify-between w-full md:w-auto">
                     <Link to="/">
                       <span className="sr-only">Workflow</span>
@@ -89,12 +95,19 @@ export default function Home() {
                       </Popover.Button>
                     </div>
                   </div>
-                </div>
+                </motion.div>
                 <div className="hidden md:flex md:space-x-12">
                   {navigation.map((item) => (
-                    <Link key={item.name} to={item.href} className="text-2xl text-black font-medium hover:text-red-600">
-                      {item.name}
-                    </Link>
+                    <motion.div
+                      key={item.name}
+                      initial={{ opacity: 0, y: -20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.2 * (navigation.indexOf(item) + 1) }}
+                    >
+                      <Link to={item.href} className="text-2xl text-black font-medium hover:text-red-600">
+                        {item.name}
+                      </Link>
+                    </motion.div>
                   ))}
                 </div>
               </nav>
@@ -147,19 +160,41 @@ export default function Home() {
 
           <main className="h-[450px] md:h-[500px] mx-auto pt-[50px] max-w-7xl mt-28">
             <div className="text-center mt-10">
-            <div className="text-red-600 text-4xl font-semibold md:text-[80px] md:mb-10">Chris Anorga</div>
-              <h1 className="text-4xl font-semibold tracking-tight text-gray-900 md:text-[80px]">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }} 
+                animate={{ opacity: 1, scale: 1 }} 
+                transition={{ duration: 0.7 }}
+                className="text-red-600 text-4xl font-semibold md:text-[80px] md:mb-10"
+              >
+                Chris Anorga
+              </motion.div>
+              <motion.h1 
+                initial={{ opacity: 0, y: 20 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ duration: 0.8, delay: 0.5 }}
+                className="text-4xl font-semibold tracking-tight text-gray-900 md:text-[80px]"
+              >
                 <TypeAnimation
-                sequence={['Web Developer', 1000, '', 500, 'Front-End Developer', 1000, '', 500 ]}
-                className="block my-5 xl:block"
-                wrapper="span"
-                repeat={Infinity}
-              />
-              </h1>
-              <p className="max-w-md mx-auto mt-3 text-black text-xl md:mt-10 md:text-2xl md:max-w-3xl">
+                  sequence={['Web Developer', 1000, '', 500, 'Front-End Developer', 1000, '', 500 ]}
+                  className="block my-5 xl:block"
+                  wrapper="span"
+                  repeat={Infinity}
+                />
+              </motion.h1>
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ duration: 0.9, delay: 0.7 }}
+                className="max-w-md mx-auto mt-3 text-black text-xl md:mt-10 md:text-2xl md:max-w-3xl"
+              >
                 Welcome to my portfolio website
-              </p>
-              <div className="max-w-xs mx-auto mt-12 sm:flex sm:justify-center md:mt-8">
+              </motion.p>
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ duration: 1, delay: 1 }}
+                className="max-w-xs mx-auto mt-12 sm:flex sm:justify-center md:mt-8"
+              >
                 <div className="rounded-md shadow">
                   <a
                     href={ResumePDF}
@@ -179,7 +214,7 @@ export default function Home() {
                     Github
                   </a>
                 </div>
-              </div>
+              </motion.div>
             </div>
            
           </main>

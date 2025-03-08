@@ -1,4 +1,5 @@
 import { Fragment } from 'react'
+import { motion } from 'framer-motion';
 import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import glasses from './assets/glasses.png'
@@ -186,14 +187,14 @@ export default function Projects() {
                             </div>
                             <div className="relative mx-auto max-w-7xl">
                                 <div className="text-center">
-                                    <h2 className="mb-5 md:mb-14 text-4xl font-medium tracking-tight text-white sm:text-5xl animate-bounce md:animate-none">Projects</h2>
-                                    <p className="max-w-2xl mx-auto mt-3 text-xl text-white sm:mt-4">
+                                    <motion.h2 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="mb-5 md:mb-14 text-4xl font-medium tracking-tight text-white sm:text-5xl animate-bounce md:animate-none">Projects</motion.h2>
+                                    <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.5 }} className="max-w-2xl mx-auto mt-3 text-xl text-white sm:mt-4">
                                         The following is a sample of projects I have created.<span className="hidden md:inline"><br /></span> Links to hosted web applications and repositories are provided.
-                                    </p>
+                                    </motion.p>
                                 </div>
-                                <div className="grid max-w-lg gap-5 mx-auto mt-12 lg:grid-cols-3 lg:max-w-none">
+                                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.7 }} className="grid max-w-lg gap-5 mx-auto mt-12 lg:grid-cols-3 lg:max-w-none">
                                     {posts.map((post) => (
-                                        <div key={post.title} className="flex flex-col overflow-hidden rounded-lg shadow-lg">
+                                        <motion.div key={post.title} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 * (posts.indexOf(post) + 1) }} className="flex flex-col overflow-hidden rounded-lg shadow-lg">
                                             <a href={post.category.href} target={post.target} className="block"> 
                                                 <div className="flex-shrink-0">
                                                     <img className="object-cover w-full h-48" src={post.imageUrl} alt="project" />
@@ -212,9 +213,9 @@ export default function Projects() {
                                                     <p className="mt-3 text-base text-gray-500">{post.description}</p>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </motion.div>
                                     ))}
-                                </div>
+                                </motion.div>
                             </div>
                         </div>
                     </main>
