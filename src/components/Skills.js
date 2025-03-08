@@ -12,7 +12,7 @@ export default function Skills() {
       <div className="bg-gray-50">
         <div className="px-4 py-12 mx-auto max-w-6xl sm:px-6 lg:py-16 lg:px-8">
 
-          <div className="text-center mb-16 mt-10">
+          <div className="text-center mb-16 mt-4">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 uppercase sm:text-center md:text-left">
               Technologies
             </h2>

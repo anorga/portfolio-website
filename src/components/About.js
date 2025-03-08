@@ -17,12 +17,12 @@ export default function About() {
                         transition={{ duration: 0.8 }}
                         className="md:w-1/2 text-left"
                       >
-                        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 text-center md:text-left mb-6 md:mb-8">
+                        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 text-center md:text-left mb-10 md:mb-14">
                           ABOUT ME
                         </h2>
 
                         {/* Image (only reorders for mobile) */}
-                        <div className="md:hidden flex justify-center mb-6">
+                        <div className="md:hidden flex justify-center mb-10">
                           <img 
                             src={portrait} 
                             alt="portrait" 
@@ -30,11 +30,11 @@ export default function About() {
                           />
                         </div>
 
-                        <p className="mt-4 text-lg md:text-xl text-gray-700 leading-relaxed max-w-lg text-left">
+                        <p className="mt-4 px-2 md:px-0 text-lg md:text-xl text-gray-700 leading-relaxed max-w-lg text-left">
                           I'm Chris, a Web Developer based in San Diego. I’m passionate about crafting high-quality web experiences, combining technical expertise with thoughtful design.
                         </p>
 
-                        <div className="mt-6 grid gap-6 text-lg md:text-xl text-gray-700 leading-8 text-left">
+                        <div className="mt-6 px-2 md:px-0 grid gap-6 text-lg md:text-xl text-gray-700 leading-8 text-left">
                           <p>
                             The constantly evolving nature of web development inspires me to stay at the forefront of new technologies and to approach challenges with innovative solutions. My goal is to build intuitive, visually engaging websites and applications. 
                           </p>
