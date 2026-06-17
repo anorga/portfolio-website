@@ -9,6 +9,18 @@ import { navLinks, site } from "@/content/site";
 export function Navbar() {
   const [open, setOpen] = useState(false);
 
+  function handleNavClick(
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) {
+    e.preventDefault();
+    setOpen(false);
+    const target = document.querySelector(href);
+    // Wait for the menu to collapse so the scroll position is computed
+    // against a stable layout, then scroll.
+    setTimeout(() => target?.scrollIntoView({ behavior: "smooth" }), 250);
+  }
+
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md">
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6 lg:px-8">
@@ -54,14 +66,14 @@ export function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="overflow-hidden border-t border-border/60 md:hidden"
+            className="absolute inset-x-0 top-full overflow-hidden border-b border-border bg-background shadow-lg md:hidden"
           >
             <div className="flex flex-col px-6 py-2">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  onClick={() => setOpen(false)}
+                  onClick={(e) => handleNavClick(e, link.href)}
                   className="py-3 text-base font-medium text-muted transition-colors hover:text-accent"
                 >
                   {link.name}
