@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 import { SiGithub as Github } from "react-icons/si";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { site } from "@/content/site";
@@ -46,9 +46,6 @@ export function Contact() {
         <div className="space-y-5 md:col-span-2">
           <ContactItem icon={<MapPin className="h-5 w-5" />}>
             {site.location}
-          </ContactItem>
-          <ContactItem icon={<Phone className="h-5 w-5" />}>
-            {site.phone}
           </ContactItem>
           <a
             href={`mailto:${site.email}`}

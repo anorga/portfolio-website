@@ -15,21 +15,21 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — Web Developer`,
-    template: `%s — ${site.name}`,
+    default: `${site.name} | Full Stack Developer`,
+    template: `%s | ${site.name}`,
   },
   description: site.description,
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     url: site.url,
-    title: `${site.name} — Web Developer`,
+    title: `${site.name} | Full Stack Developer`,
     description: site.description,
     siteName: site.name,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} — Web Developer`,
+    title: `${site.name} | Full Stack Developer`,
     description: site.description,
   },
   robots: { index: true, follow: true },

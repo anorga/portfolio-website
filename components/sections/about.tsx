@@ -28,6 +28,7 @@ export function About() {
               width={360}
               height={360}
               className="rounded-2xl object-cover shadow-lg"
+              priority
             />
           </div>
         </Reveal>
