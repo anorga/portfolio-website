@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { skills } from "@/content/skills";
@@ -15,15 +16,13 @@ export function Skills() {
       <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3">
         {skills.map(({ name, Icon, color }, i) => (
           <Reveal key={name} delay={i * 0.06}>
-            <div className="group flex items-center justify-center gap-3 rounded-xl border border-border bg-card px-6 py-6 transition-colors hover:border-accent">
+            <div className="group flex cursor-default items-center justify-center gap-3 rounded-xl border border-border bg-card px-6 py-6 transition-colors duration-300 hover:border-foreground/15">
               <Icon
-                className="h-8 w-8 shrink-0 transition-transform group-hover:scale-110"
-                style={{ color }}
+                className="h-8 w-8 shrink-0 transition duration-300 group-hover:scale-110 group-hover:[filter:drop-shadow(0_0_10px_var(--brand))]"
+                style={{ color, "--brand": color } as CSSProperties}
                 aria-hidden
               />
-              <span className="text-lg font-semibold transition-colors group-hover:text-accent">
-                {name}
-              </span>
+              <span className="text-lg font-semibold">{name}</span>
             </div>
           </Reveal>
         ))}
