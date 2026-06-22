@@ -2,13 +2,13 @@ import type { Project } from "@/lib/types";
 
 export const projects: Project[] = [
   {
-    title: "Pokedex App",
+    title: "Pokédex App",
     description:
-      "Pokedex web application built using data from PokeAPI. Search for any Pokemon to see base stats and type information.",
+      "A fast, installable Pokédex (PWA) powered by the PokéAPI. Browse 1,000+ Pokémon with search and filters, detailed stat and evolution pages, side-by-side comparison, favorites, and light/dark mode.",
     repo: "https://github.com/anorga/pokedex",
     liveUrl: "https://pokedex-navy-delta.vercel.app/",
-    image: "/images/pokedexApp.png",
-    tags: ["React", "React Router", "Tailwind", "PokeAPI"],
+    image: "/images/pokedex.png",
+    tags: ["React", "TypeScript", "Vite", "Tailwind CSS", "TanStack Query", "PWA", "PokéAPI"],
   },
   {
     title: "Read Manga App",
