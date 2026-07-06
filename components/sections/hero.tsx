@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { ArrowRight, FileText } from "lucide-react";
+import { ArrowRight, FileText, MapPin } from "lucide-react";
 import { SiGithub as Github } from "react-icons/si";
 import { site } from "@/content/site";
 
@@ -48,13 +48,18 @@ export function Hero() {
         aria-hidden
         className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl"
       />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-20 [background-image:radial-gradient(circle,var(--border)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_65%_60%_at_50%_40%,black,transparent)]"
+      />
       <div className="mx-auto flex min-h-[88vh] max-w-6xl flex-col items-center justify-center px-6 py-24 text-center lg:px-8">
         <motion.p
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-muted"
+          className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-1.5 text-sm font-medium text-muted"
         >
+          <MapPin className="h-4 w-4 text-accent" />
           {site.location}
         </motion.p>
 
