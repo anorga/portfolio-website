@@ -2,6 +2,15 @@ import type { Project } from "@/lib/types";
 
 export const projects: Project[] = [
   {
+    title: "Driftboard",
+    description:
+      "Multiplayer whiteboard with live cursors, presence, and conflict-free sync built on CRDTs (Yjs) over WebSockets. Infinite canvas with sticky notes, shapes, and freehand drawing; offline-ready via IndexedDB with per-user undo/redo. Custom Node.js sync server implementing the y-websocket protocol.",
+    repo: "https://github.com/anorga/driftboard",
+    liveUrl: "https://driftboard-waem.onrender.com",
+    image: "/images/driftboard.png",
+    tags: ["React", "TypeScript", "Yjs (CRDTs)", "WebSockets", "Node.js", "Vite", "Tailwind CSS"],
+  },
+  {
     title: "Pokédex App",
     description:
       "A fast, installable Pokédex (PWA) powered by the PokéAPI. Browse 1,000+ Pokémon with search and filters, detailed stat and evolution pages, side-by-side comparison, favorites, and light/dark mode.",
