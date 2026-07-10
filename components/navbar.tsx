@@ -50,15 +50,16 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50">
-      {/* Glass layer kept separate: backdrop-filter on the header itself would
-          make it the backdrop root and break the mobile menu's own blur, and a
-          negative z-index child loses its blur in Chromium. */}
-      <div
-        aria-hidden
-        className="absolute inset-0 border-b border-border/40 bg-background/90 backdrop-blur-xl backdrop-saturate-150 supports-[backdrop-filter]:bg-background/35"
-      />
-      <nav className="relative mx-auto flex h-16 max-w-6xl items-center justify-between px-6 lg:px-8">
+    <header className="sticky top-3 z-50 px-3 sm:px-6">
+      <div className="relative mx-auto max-w-6xl rounded-2xl border border-foreground/10 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.12)]">
+        {/* Glass layer kept separate: backdrop-filter on the container would
+            make it the backdrop root and break the mobile menu's own blur, and a
+            negative z-index child loses its blur in Chromium. */}
+        <div
+          aria-hidden
+          className="absolute inset-0 rounded-2xl bg-background/90 backdrop-blur-xl backdrop-saturate-150 supports-[backdrop-filter]:bg-background/20 [background-image:linear-gradient(120deg,rgba(255,255,255,0.10),transparent_45%)]"
+        />
+        <nav className="relative mx-auto flex h-14 items-center justify-between px-5 sm:px-6">
         <a
           href="#top"
           className="text-lg font-bold tracking-tight transition-colors hover:text-accent"
@@ -106,36 +107,37 @@ export function Navbar() {
         </div>
       </nav>
 
-      <motion.div
-        aria-hidden
-        style={{ scaleX: scrollYProgress }}
-        className="absolute bottom-0 left-0 right-0 h-0.5 origin-left bg-accent/70"
-      />
+        <motion.div
+          aria-hidden
+          style={{ scaleX: scrollYProgress }}
+          className="absolute bottom-0 left-3 right-3 h-0.5 origin-left rounded-full bg-accent/70"
+        />
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="absolute inset-x-0 top-full overflow-hidden border-b border-border/40 bg-background/70 shadow-lg backdrop-blur-xl backdrop-saturate-150 md:hidden"
-          >
-            <div className="flex flex-col px-6 py-2">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className="py-3 text-base font-medium text-muted transition-colors hover:text-accent"
-                >
-                  {link.name}
-                </a>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="absolute inset-x-0 top-full mt-2 overflow-hidden rounded-2xl border border-foreground/10 bg-background/95 shadow-lg backdrop-blur-xl backdrop-saturate-150 supports-[backdrop-filter]:bg-background/70 md:hidden"
+            >
+              <div className="flex flex-col px-6 py-2">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    onClick={(e) => handleNavClick(e, link.href)}
+                    className="py-3 text-base font-medium text-muted transition-colors hover:text-accent"
+                  >
+                    {link.name}
+                  </a>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </header>
   );
 }
