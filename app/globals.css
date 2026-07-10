@@ -56,3 +56,57 @@ body {
   background: var(--accent);
   color: var(--accent-fg);
 }
+
+/*
+  Liquid glass surface. The backdrop stays mostly clear while directional
+  highlights, a bright rim, and a darker lower edge give it lens-like depth.
+*/
+.glass {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  background: color-mix(in oklab, var(--background) 72%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.52),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.12),
+    inset 1px 0 0 rgba(255, 255, 255, 0.18),
+    inset -1px 0 0 rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background:
+    radial-gradient(120% 95% at 12% -20%, rgba(255, 255, 255, 0.38), transparent 42%),
+    linear-gradient(105deg, transparent 24%, rgba(255, 255, 255, 0.16) 42%, transparent 58%);
+  mix-blend-mode: soft-light;
+}
+
+.glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.08) 38%, rgba(255, 255, 255, 0.28) 68%, rgba(0, 0, 0, 0.2)),
+    radial-gradient(70% 140% at 50% 115%, color-mix(in oklab, var(--accent) 22%, transparent), transparent 65%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .glass {
+    background:
+      linear-gradient(115deg, rgba(255, 255, 255, 0.1), transparent 38%),
+      color-mix(in oklab, var(--background) 7%, transparent);
+    -webkit-backdrop-filter: blur(1.5px) saturate(1.45) contrast(1.08) brightness(1.04);
+    backdrop-filter: blur(1.5px) saturate(1.45) contrast(1.08) brightness(1.04);
+  }
+}
