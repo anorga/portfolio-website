@@ -56,7 +56,7 @@ export function Navbar() {
           negative z-index child loses its blur in Chromium. */}
       <div
         aria-hidden
-        className="absolute inset-0 border-b border-border/40 bg-background/35 backdrop-blur-xl backdrop-saturate-150"
+        className="absolute inset-0 border-b border-border/40 bg-background/90 backdrop-blur-xl backdrop-saturate-150 supports-[backdrop-filter]:bg-background/35"
       />
       <nav className="relative mx-auto flex h-16 max-w-6xl items-center justify-between px-6 lg:px-8">
         <a
