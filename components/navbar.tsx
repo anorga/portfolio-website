@@ -55,10 +55,7 @@ export function Navbar() {
         {/* Glass layer kept separate: backdrop-filter on the container would
             make it the backdrop root and break the mobile menu's own blur, and a
             negative z-index child loses its blur in Chromium. */}
-        <div
-          aria-hidden
-          className="absolute inset-0 rounded-2xl bg-background/90 backdrop-blur-xl backdrop-saturate-150 supports-[backdrop-filter]:bg-background/20 [background-image:linear-gradient(120deg,rgba(255,255,255,0.10),transparent_45%)]"
-        />
+        <div aria-hidden className="glass" />
         <nav className="relative mx-auto flex h-14 items-center justify-between px-5 sm:px-6">
         <a
           href="#top"
@@ -120,9 +117,10 @@ export function Navbar() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="absolute inset-x-0 top-full mt-2 overflow-hidden rounded-2xl border border-foreground/10 bg-background/95 shadow-lg backdrop-blur-xl backdrop-saturate-150 supports-[backdrop-filter]:bg-background/70 md:hidden"
+              className="absolute inset-x-0 top-full mt-2 overflow-hidden rounded-2xl border border-foreground/10 shadow-lg md:hidden"
             >
-              <div className="flex flex-col px-6 py-2">
+              <div aria-hidden className="glass" />
+              <div className="relative flex flex-col px-6 py-2">
                 {navLinks.map((link) => (
                   <a
                     key={link.name}
