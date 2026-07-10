@@ -50,8 +50,15 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md">
-      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6 lg:px-8">
+    <header className="sticky top-0 z-50">
+      {/* Glass layer kept separate: backdrop-filter on the header itself would
+          make it the backdrop root and break the mobile menu's own blur, and a
+          negative z-index child loses its blur in Chromium. */}
+      <div
+        aria-hidden
+        className="absolute inset-0 border-b border-border/40 bg-background/35 backdrop-blur-xl backdrop-saturate-150"
+      />
+      <nav className="relative mx-auto flex h-16 max-w-6xl items-center justify-between px-6 lg:px-8">
         <a
           href="#top"
           className="text-lg font-bold tracking-tight transition-colors hover:text-accent"
@@ -112,7 +119,7 @@ export function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="absolute inset-x-0 top-full overflow-hidden border-b border-border bg-background shadow-lg md:hidden"
+            className="absolute inset-x-0 top-full overflow-hidden border-b border-border/40 bg-background/70 shadow-lg backdrop-blur-xl backdrop-saturate-150 md:hidden"
           >
             <div className="flex flex-col px-6 py-2">
               {navLinks.map((link) => (
