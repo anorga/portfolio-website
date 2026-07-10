@@ -46,7 +46,7 @@ export function Hero() {
     <section className="relative overflow-hidden">
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[620px] w-[980px] -translate-x-1/2 [background:radial-gradient(closest-side,color-mix(in_oklab,var(--accent)_12%,transparent),transparent)]"
+        className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[560px] w-[560px] -translate-x-1/2 rounded-full [background-image:radial-gradient(closest-side,color-mix(in_oklab,var(--accent)_16%,transparent),transparent)]"
       />
       <div
         aria-hidden
