@@ -51,7 +51,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-3 z-50 px-3 sm:px-6">
-      <div className="relative mx-auto max-w-6xl rounded-2xl border border-foreground/5 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.5)]">
+      <div className="glass-shell relative mx-auto max-w-6xl rounded-[1.75rem]">
         {/* Glass layer kept separate: backdrop-filter on the container would
             make it the backdrop root and break the mobile menu's own blur, and a
             negative z-index child loses its blur in Chromium. */}
@@ -117,7 +117,7 @@ export function Navbar() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="absolute inset-x-0 top-full mt-2 overflow-hidden rounded-2xl border border-foreground/5 shadow-lg md:hidden"
+              className="glass-shell absolute inset-x-0 top-full mt-2 overflow-hidden rounded-3xl md:hidden"
             >
               <div aria-hidden className="glass" />
               <div className="relative flex flex-col px-6 py-2">
