@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Mail, MapPin } from "lucide-react";
+import { LoaderCircle, Mail, MapPin, Send } from "lucide-react";
 import { SiGithub as Github } from "react-icons/si";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
@@ -107,8 +107,13 @@ export function Contact() {
                 <button
                   type="submit"
                   disabled={status === "submitting"}
-                  className="inline-flex items-center justify-center rounded-full bg-accent px-7 py-3 font-medium text-accent-fg transition-transform duration-200 hover:-translate-y-0.5 hover:scale-[1.02] active:translate-y-0 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="pressable group inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3 font-medium text-accent-fg transition-transform duration-200 hover:-translate-y-0.5 hover:scale-[1.02] active:translate-y-0 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                 >
+                  {status === "submitting" ? (
+                    <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden />
+                  ) : (
+                    <Send className="h-4 w-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+                  )}
                   {status === "submitting" ? "Sending…" : "Send Message"}
                 </button>
                 {status === "success" && (

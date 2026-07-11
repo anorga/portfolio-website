@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
-import { AnimatePresence, motion, useScroll } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion, useScroll } from "motion/react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { navLinks, site } from "@/content/site";
 
@@ -35,7 +35,17 @@ function useActiveSection() {
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const active = useActiveSection();
+  const shouldReduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
+
+  useEffect(() => {
+    function closeMenu(event: KeyboardEvent) {
+      if (event.key === "Escape") setOpen(false);
+    }
+
+    window.addEventListener("keydown", closeMenu);
+    return () => window.removeEventListener("keydown", closeMenu);
+  }, []);
 
   function handleNavClick(
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -46,7 +56,13 @@ export function Navbar() {
     const target = document.querySelector(href);
     // Wait for the menu to collapse so the scroll position is computed
     // against a stable layout, then scroll.
-    setTimeout(() => target?.scrollIntoView({ behavior: "smooth" }), 250);
+    setTimeout(
+      () =>
+        target?.scrollIntoView({
+          behavior: shouldReduceMotion ? "auto" : "smooth",
+        }),
+      shouldReduceMotion ? 0 : 250,
+    );
   }
 
   return (
@@ -94,12 +110,23 @@ export function Navbar() {
           <ThemeToggle />
           <button
             type="button"
-            aria-label="Toggle menu"
+            aria-label={open ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={open}
+            aria-controls="mobile-navigation"
             onClick={() => setOpen((v) => !v)}
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border text-foreground transition-[transform,border-color,color] duration-200 hover:border-accent hover:text-accent active:scale-95"
           >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            <AnimatePresence initial={false} mode="wait">
+              <motion.span
+                key={open ? "close" : "menu"}
+                initial={{ opacity: 0, rotate: -18, scale: 0.8 }}
+                animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                exit={{ opacity: 0, rotate: 18, scale: 0.8 }}
+                transition={{ duration: shouldReduceMotion ? 0 : 0.16 }}
+              >
+                {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </motion.span>
+            </AnimatePresence>
           </button>
         </div>
       </nav>
@@ -113,23 +140,33 @@ export function Navbar() {
         <AnimatePresence>
           {open && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.2 }}
+              id="mobile-navigation"
+              initial={{ opacity: 0, height: 0, y: -8, scale: 0.985 }}
+              animate={{ opacity: 1, height: "auto", y: 0, scale: 1 }}
+              exit={{ opacity: 0, height: 0, y: -6, scale: 0.99 }}
+              transition={{
+                duration: shouldReduceMotion ? 0 : 0.26,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               className="glass-shell absolute inset-x-0 top-full mt-2 overflow-hidden rounded-3xl md:hidden"
             >
               <div aria-hidden className="glass" />
               <div className="relative flex flex-col px-6 py-2">
-                {navLinks.map((link) => (
-                  <a
+                {navLinks.map((link, index) => (
+                  <motion.a
                     key={link.name}
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
+                    initial={{ opacity: 0, x: 8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      delay: shouldReduceMotion ? 0 : 0.04 + index * 0.035,
+                      duration: shouldReduceMotion ? 0 : 0.2,
+                    }}
                     className="py-3 text-base font-medium text-muted transition-colors hover:text-accent"
                   >
                     {link.name}
-                  </a>
+                  </motion.a>
                 ))}
               </div>
             </motion.div>

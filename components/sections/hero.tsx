@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { ArrowRight, FileText, MapPin } from "lucide-react";
 import { SiGithub as Github } from "react-icons/si";
 import { site } from "@/content/site";
@@ -40,7 +40,9 @@ function useTypewriter(words: readonly string[]) {
 }
 
 export function Hero() {
-  const role = useTypewriter(site.roles);
+  const animatedRole = useTypewriter(site.roles);
+  const shouldReduceMotion = useReducedMotion();
+  const role = shouldReduceMotion ? site.roles[0] : animatedRole;
 
   return (
     <section className="relative overflow-hidden">
@@ -52,7 +54,7 @@ export function Hero() {
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-20 [background-image:radial-gradient(circle,var(--border)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_65%_60%_at_50%_40%,black,transparent)]"
       />
-      <div className="mx-auto flex min-h-[88vh] max-w-6xl flex-col items-center justify-center px-6 py-24 text-center lg:px-8">
+      <div className="mx-auto flex min-h-[88svh] max-w-6xl flex-col items-center justify-center px-6 py-24 text-center lg:px-8">
         <motion.p
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -79,7 +81,10 @@ export function Hero() {
           className="mt-4 text-2xl font-semibold sm:text-4xl"
         >
           <span>{role}</span>
-          <span className="ml-1 inline-block w-0.5 animate-pulse bg-foreground align-middle">
+          <span
+            aria-hidden
+            className={`ml-1 inline-block w-0.5 bg-foreground align-middle ${shouldReduceMotion ? "" : "animate-pulse"}`}
+          >
             &nbsp;
           </span>
         </motion.div>
@@ -103,18 +108,18 @@ export function Hero() {
             href={site.resumeUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3 text-base font-medium text-accent-fg transition-transform duration-200 hover:-translate-y-0.5 hover:scale-[1.02] active:translate-y-0 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="pressable group inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3 text-base font-medium text-accent-fg transition-transform duration-200 hover:-translate-y-0.5 hover:scale-[1.02] active:translate-y-0 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            <FileText className="h-5 w-5" />
+            <FileText className="h-5 w-5 transition-transform duration-200 group-hover:-translate-y-0.5" />
             Resume
           </a>
           <a
             href={site.github}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-7 py-3 text-base font-medium transition-[transform,border-color,color] duration-200 hover:-translate-y-0.5 hover:border-accent hover:text-accent active:translate-y-0 active:scale-[0.98]"
+            className="group inline-flex items-center justify-center gap-2 rounded-full border border-border bg-background/40 px-7 py-3 text-base font-medium shadow-sm transition-[transform,border-color,color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-accent hover:text-accent hover:shadow-md active:translate-y-0 active:scale-[0.98] active:shadow-sm"
           >
-            <Github className="h-5 w-5" />
+            <Github className="h-5 w-5 transition-transform duration-200 group-hover:-translate-y-0.5" />
             GitHub
           </a>
         </motion.div>

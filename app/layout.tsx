@@ -4,6 +4,7 @@ import { GoogleTagManager } from "@next/third-parties/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { AmbientBackdrop } from "@/components/ui/ambient-backdrop";
 import { site } from "@/content/site";
 import "./globals.css";
 
@@ -50,6 +51,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <AmbientBackdrop />
           <a
             href="#top"
             className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-accent focus:px-4 focus:py-2 focus:text-accent-fg"
