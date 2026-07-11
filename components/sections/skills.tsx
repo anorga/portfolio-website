@@ -5,7 +5,7 @@ import { skills } from "@/content/skills";
 
 export function Skills() {
   return (
-    <Section id="skills" className="bg-card/40">
+    <Section id="skills" className="border-y border-border/50 bg-card/40">
       <Reveal>
         <SectionHeading className="text-center">Technologies</SectionHeading>
         <p className="mx-auto mt-4 max-w-xl text-center text-muted">
@@ -16,9 +16,9 @@ export function Skills() {
       <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3">
         {skills.map(({ name, Icon, color }, i) => (
           <Reveal key={name} delay={i * 0.06}>
-            <div className="group flex cursor-default items-center justify-center gap-3 rounded-xl border border-border bg-card px-6 py-6 transition-colors duration-300 hover:border-foreground/15">
+            <div className="group flex cursor-default items-center justify-center gap-3 rounded-xl border border-border bg-card px-6 py-6 transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-foreground/20 hover:shadow-md">
               <Icon
-                className="h-8 w-8 shrink-0 transition duration-300 group-hover:scale-110 group-hover:[filter:drop-shadow(0_0_10px_var(--brand))]"
+                className="h-8 w-8 shrink-0 transition duration-300 ease-out group-hover:-rotate-3 group-hover:scale-110 group-hover:[filter:drop-shadow(0_0_10px_var(--brand))]"
                 style={{ color, "--brand": color } as CSSProperties}
                 aria-hidden
               />

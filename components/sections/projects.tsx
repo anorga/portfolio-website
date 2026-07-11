@@ -9,8 +9,11 @@ export function Projects() {
   return (
     <Section id="projects">
       <Reveal>
-        <SectionHeading className="text-center">Projects</SectionHeading>
-        <p className="mx-auto mt-4 max-w-2xl text-center text-muted">
+        <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
+          Selected work
+        </p>
+        <SectionHeading>Projects</SectionHeading>
+        <p className="mt-4 max-w-2xl text-muted">
           A sample of projects I&apos;ve built. Links to the live apps and
           source repositories are included.
         </p>
@@ -19,7 +22,7 @@ export function Projects() {
       <div className="mt-12 grid gap-8 md:grid-cols-2">
         {projects.map((project, i) => (
           <Reveal key={project.title} delay={i * 0.1}>
-            <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:border-accent hover:shadow-lg">
+            <article className="group/project flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1.5 hover:border-accent/70 hover:shadow-xl focus-within:border-accent/70 focus-within:shadow-xl">
               <a
                 href={project.liveUrl ?? project.repo}
                 target="_blank"
@@ -31,7 +34,7 @@ export function Projects() {
                   alt={`${project.title} screenshot`}
                   width={640}
                   height={360}
-                  className="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="h-48 w-full object-cover transition-transform duration-500 ease-out group-hover/project:scale-[1.035]"
                 />
               </a>
 
@@ -45,7 +48,7 @@ export function Projects() {
                   {project.tags.map((tag) => (
                     <li
                       key={tag}
-                      className="rounded-full border border-border px-2.5 py-0.5 text-xs text-muted"
+                      className="rounded-full border border-border px-2.5 py-0.5 text-xs text-muted transition-colors duration-300 group-hover/project:border-foreground/15"
                     >
                       {tag}
                     </li>
@@ -58,9 +61,9 @@ export function Projects() {
                       href={project.liveUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 text-accent transition-colors hover:opacity-80"
+                      className="group/live inline-flex items-center gap-1.5 text-accent transition-opacity hover:opacity-80"
                     >
-                      <ExternalLink className="h-4 w-4" />
+                      <ExternalLink className="h-4 w-4 transition-transform duration-200 group-hover/live:-translate-y-0.5 group-hover/live:translate-x-0.5" />
                       Live
                     </a>
                   )}
@@ -68,9 +71,9 @@ export function Projects() {
                     href={project.repo}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 text-muted transition-colors hover:text-foreground"
+                    className="group/code inline-flex items-center gap-1.5 text-muted transition-colors hover:text-foreground"
                   >
-                    <Github className="h-4 w-4" />
+                    <Github className="h-4 w-4 transition-transform duration-200 group-hover/code:-translate-y-0.5" />
                     Code
                   </a>
                 </div>

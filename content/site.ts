@@ -13,7 +13,20 @@ export const site = {
   bio: [
     "I'm Chris, a full-stack developer and Web Systems Analyst based in San Diego. I'm passionate about crafting high-quality web experiences, combining technical expertise with thoughtful design.",
     "The constantly evolving nature of web development inspires me to stay at the forefront of new technologies and to approach challenges with innovative solutions. My goal is to build intuitive, visually engaging websites and applications.",
-    "As a Web Systems Analyst, I translate business requirements into technical solutions, building and maintaining full-stack web applications with React, Next.js, .NET, and C#, along with CMS platforms like WordPress. I integrate third-party APIs, optimize application performance, and partner with stakeholders across design, engineering, and IT to deliver reliable, scalable systems.",
+  ],
+  aboutHighlights: [
+    {
+      title: "Full-stack delivery",
+      description: "React, Next.js, .NET, C#, and API integrations.",
+    },
+    {
+      title: "Systems thinking",
+      description: "Turning business requirements into reliable solutions.",
+    },
+    {
+      title: "Close collaboration",
+      description: "Working across design, engineering, and IT.",
+    },
   ],
 } as const;
 

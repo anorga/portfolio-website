@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
 
 interface RevealProps {
@@ -10,13 +10,27 @@ interface RevealProps {
 }
 
 export function Reveal({ children, delay = 0, className }: RevealProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+      initial={
+        shouldReduceMotion
+          ? { opacity: 1 }
+          : { opacity: 0, y: 16, filter: "blur(3px)" }
+      }
+      whileInView={
+        shouldReduceMotion
+          ? { opacity: 1 }
+          : { opacity: 1, y: 0, filter: "blur(0px)" }
+      }
+      viewport={{ once: true, amount: 0.15 }}
+      transition={
+        shouldReduceMotion
+          ? { duration: 0 }
+          : { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }
+      }
     >
       {children}
     </motion.div>
