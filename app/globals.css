@@ -35,12 +35,14 @@
 }
 
 html {
+  background: var(--background);
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
 }
 
 body {
-  background: var(--background);
+  isolation: isolate;
+  background: transparent;
   color: var(--foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -50,11 +52,153 @@ body {
   html {
     scroll-behavior: auto;
   }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .skill-track {
+    animation: none;
+    transform: none;
+  }
+
+  .skill-track > [aria-hidden="true"] {
+    display: none;
+  }
+
+  .pointer-sheen {
+    display: none;
+  }
 }
 
 ::selection {
   background: var(--accent);
   color: var(--accent-fg);
+}
+
+.pointer-sheen {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    var(--glow-size) circle at var(--glow-x, 50%) var(--glow-y, 50%),
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.06) 22%,
+    transparent 48%
+  );
+  mix-blend-mode: soft-light;
+  transition: opacity 250ms ease;
+}
+
+.group\/pointer:focus-within > .pointer-sheen {
+  opacity: 0.7;
+}
+
+.dark .pointer-sheen {
+  background: radial-gradient(
+    var(--glow-size) circle at var(--glow-x, 50%) var(--glow-y, 50%),
+    rgba(255, 255, 255, 0.14),
+    rgba(255, 255, 255, 0.035) 24%,
+    transparent 50%
+  );
+}
+
+.skill-track {
+  display: flex;
+  width: max-content;
+  gap: 1rem;
+  animation: skill-marquee 28s linear infinite;
+  will-change: transform;
+}
+
+.skill-track-reverse {
+  animation-direction: reverse;
+  animation-duration: 32s;
+}
+
+.skill-track-paused {
+  animation-play-state: paused;
+}
+
+.skill-marquee:hover .skill-track {
+  animation-play-state: paused;
+}
+
+.pressable {
+  box-shadow: 0 8px 18px -11px color-mix(in oklab, var(--accent) 72%, transparent);
+}
+
+.pressable:hover {
+  box-shadow: 0 12px 24px -13px color-mix(in oklab, var(--accent) 86%, transparent);
+}
+
+.pressable:active {
+  box-shadow: 0 4px 10px -8px color-mix(in oklab, var(--accent) 70%, transparent);
+}
+
+html[data-theme-transition]::view-transition-image-pair(root) {
+  isolation: auto;
+}
+
+html[data-theme-transition]::view-transition-old(root),
+html[data-theme-transition]::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html[data-theme-transition]::view-transition-old(root) {
+  z-index: 1;
+}
+
+html[data-theme-transition]::view-transition-new(root) {
+  z-index: 2;
+}
+
+@keyframes skill-marquee {
+  to {
+    transform: translateX(calc(-50% - 0.5rem));
+  }
+}
+
+@media (hover: none) {
+  .pointer-sheen {
+    display: none;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .group\/pointer:hover > .pointer-sheen {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .skill-marquee {
+    overflow-x: auto;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    scrollbar-width: none;
+  }
+
+  .skill-marquee::-webkit-scrollbar {
+    display: none;
+  }
+
+  .skill-track {
+    animation: none;
+    transform: none;
+  }
+
+  .skill-track > [aria-hidden="true"] {
+    display: none;
+  }
 }
 
 /* A restrained approximation of Apple's regular Liquid Glass material. */

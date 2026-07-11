@@ -11,21 +11,24 @@ export const site = {
   description:
     "Chris Anorga is a Full Stack Developer and Web Systems Analyst based in San Diego, building reliable web applications with React, Next.js, .NET, and C#.",
   bio: [
-    "I'm Chris, a full-stack developer and Web Systems Analyst based in San Diego. I'm passionate about crafting high-quality web experiences, combining technical expertise with thoughtful design.",
-    "The constantly evolving nature of web development inspires me to stay at the forefront of new technologies and to approach challenges with innovative solutions. My goal is to build intuitive, visually engaging websites and applications.",
+    "I'm Chris, a full-stack developer and Web Systems Analyst based in San Diego. I build web platforms that make complex business needs easier for people to use and teams to maintain.",
+    "My work spans customer-facing experiences, internal tools, content architecture, and API integrations. I'm most effective where product thinking and hands-on engineering meet: clarifying the problem, choosing a practical approach, and delivering a reliable result.",
   ],
   aboutHighlights: [
     {
-      title: "Full-stack delivery",
-      description: "React, Next.js, .NET, C#, and API integrations.",
+      title: "Reliable delivery",
+      description:
+        "Clear requirements, sound architecture, and maintainable applications delivered through launch.",
     },
     {
-      title: "Systems thinking",
-      description: "Turning business requirements into reliable solutions.",
+      title: "Practical modernization",
+      description:
+        "Faster, scalable systems that make legacy sites and workflows easier to maintain.",
     },
     {
-      title: "Close collaboration",
-      description: "Working across design, engineering, and IT.",
+      title: "Measurable outcomes",
+      description:
+        "Work that has increased engagement, improved reported UX, and reduced operating costs.",
     },
   ],
 } as const;

@@ -1,16 +1,16 @@
-import Image from "next/image";
-import { Code2, Users, Workflow } from "lucide-react";
+import { Code2, RefreshCw, TrendingUp } from "lucide-react";
+import { PortraitCard } from "@/components/sections/portrait-card";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { site } from "@/content/site";
 
-const highlightIcons = [Code2, Workflow, Users] as const;
+const highlightIcons = [Code2, RefreshCw, TrendingUp] as const;
 
 export function About() {
   return (
     <Section
       id="about"
-      className="relative isolate overflow-hidden !py-16 sm:!py-24"
+      className="relative isolate -mt-6 overflow-hidden rounded-t-[2.5rem] bg-background !py-16 shadow-[0_-24px_70px_-55px_rgba(0,0,0,0.45)] ring-1 ring-border/40 sm:-mt-10 sm:rounded-t-[3.5rem] sm:!py-24"
     >
       <div
         aria-hidden
@@ -19,15 +19,10 @@ export function About() {
 
       <div className="grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-start lg:gap-20">
         <Reveal className="lg:col-start-2 lg:row-start-1">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-            A little about me
-          </p>
           <SectionHeading>About Me</SectionHeading>
           <div className="mt-6 space-y-4 text-lg leading-relaxed text-muted">
-            {site.bio.map((paragraph, i) => (
-              <p key={i} className={i === 0 ? "text-foreground/90" : undefined}>
-                {paragraph}
-              </p>
+            {site.bio.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
 
@@ -57,25 +52,7 @@ export function About() {
           delay={0.1}
           className="flex justify-center lg:col-start-1 lg:row-start-1 lg:justify-start"
         >
-          <div className="group relative aspect-[4/5] w-full max-w-[420px]">
-            <div
-              aria-hidden
-              className="absolute inset-6 -z-10 translate-x-5 translate-y-5 rounded-[2rem] bg-accent/14 blur-2xl transition-transform duration-500 group-hover:translate-x-3 group-hover:translate-y-3"
-            />
-            <div className="relative h-full overflow-hidden rounded-[2rem] bg-card shadow-xl ring-1 ring-foreground/8 transition-[transform,box-shadow] duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-2xl">
-              <Image
-                src="/images/portrait.jpeg"
-                alt={`Portrait of ${site.name}`}
-                fill
-                sizes="(min-width: 1024px) 420px, (min-width: 640px) 55vw, calc(100vw - 48px)"
-                className="origin-[center_65%] scale-[1.35] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.39]"
-              />
-              <div
-                aria-hidden
-                className="absolute inset-0 bg-gradient-to-t from-black/12 via-transparent to-white/5"
-              />
-            </div>
-          </div>
+          <PortraitCard />
         </Reveal>
       </div>
     </Section>

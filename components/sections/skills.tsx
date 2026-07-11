@@ -1,32 +1,108 @@
-import type { CSSProperties } from "react";
+"use client";
+
+import { useState, type CSSProperties } from "react";
+import { Pause, Play } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
-import { skills } from "@/content/skills";
+import { skills, type Skill } from "@/content/skills";
+
+const skillRows = [skills.slice(0, 6), skills.slice(6)];
 
 export function Skills() {
-  return (
-    <Section id="skills" className="border-y border-border/50 bg-card/40">
-      <Reveal>
-        <SectionHeading className="text-center">Technologies</SectionHeading>
-        <p className="mx-auto mt-4 max-w-xl text-center text-muted">
-          Tools and frameworks I use to build modern web experiences.
-        </p>
-      </Reveal>
+  const [paused, setPaused] = useState(false);
 
-      <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3">
-        {skills.map(({ name, Icon, color }, i) => (
-          <Reveal key={name} delay={i * 0.06}>
-            <div className="group flex cursor-default items-center justify-center gap-3 rounded-xl border border-border bg-card px-6 py-6 transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-foreground/20 hover:shadow-md">
-              <Icon
-                className="h-8 w-8 shrink-0 transition duration-300 ease-out group-hover:-rotate-3 group-hover:scale-110 group-hover:[filter:drop-shadow(0_0_10px_var(--brand))]"
-                style={{ color, "--brand": color } as CSSProperties}
-                aria-hidden
-              />
-              <span className="text-lg font-semibold">{name}</span>
-            </div>
-          </Reveal>
-        ))}
+  return (
+    <Section
+      id="skills"
+      className="relative mx-3 overflow-hidden rounded-[2.5rem] border border-border/60 bg-card/55 !py-20 shadow-sm sm:mx-6 sm:rounded-[3rem] sm:!py-24"
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-24 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-accent/8 blur-3xl"
+      />
+
+      <div className="relative">
+        <Reveal>
+          <SectionHeading className="text-center">Technologies</SectionHeading>
+          <p className="mx-auto mt-4 max-w-xl text-center text-muted">
+            Tools and frameworks I use to build modern web experiences.
+          </p>
+        </Reveal>
+        <button
+          type="button"
+          aria-pressed={paused}
+          aria-label={
+            paused
+              ? "Resume technology animation"
+              : "Pause technology animation"
+          }
+          onClick={() => setPaused((value) => !value)}
+          className="absolute right-0 top-0 hidden h-10 w-10 items-center justify-center rounded-full border border-border bg-background/70 text-muted transition-[transform,border-color,color] duration-200 hover:-translate-y-0.5 hover:border-accent hover:text-accent active:translate-y-0 active:scale-95 sm:inline-flex"
+        >
+          {paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
+        </button>
       </div>
+
+      <Reveal delay={0.08} className="relative mt-12 space-y-4">
+        {skillRows.map((row, index) => (
+          <SkillMarquee
+            key={index}
+            skills={row}
+            reverse={index === 1}
+            paused={paused}
+          />
+        ))}
+      </Reveal>
     </Section>
+  );
+}
+
+function SkillMarquee({
+  skills: row,
+  reverse = false,
+  paused = false,
+}: {
+  skills: Skill[];
+  reverse?: boolean;
+  paused?: boolean;
+}) {
+  return (
+    <div className="skill-marquee overflow-hidden py-1 [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+      <div
+        className={`skill-track ${reverse ? "skill-track-reverse" : ""} ${paused ? "skill-track-paused" : ""}`}
+      >
+        <SkillGroup skills={row} />
+        <SkillGroup skills={row} duplicate />
+      </div>
+    </div>
+  );
+}
+
+function SkillGroup({
+  skills: row,
+  duplicate = false,
+}: {
+  skills: Skill[];
+  duplicate?: boolean;
+}) {
+  return (
+    <div
+      aria-hidden={duplicate || undefined}
+      className="flex shrink-0 gap-4"
+    >
+      {row.map(({ name, Icon, color }) => (
+        <div
+          key={name}
+          className="group flex min-w-44 cursor-default items-center justify-center gap-3 rounded-2xl border border-border/80 bg-background/80 px-6 py-5 shadow-sm transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-foreground/20 hover:shadow-md"
+        >
+          <Icon
+            className="h-7 w-7 shrink-0 transition duration-300 ease-out group-hover:-rotate-3 group-hover:scale-110 group-hover:[filter:drop-shadow(0_0_10px_var(--brand))]"
+            style={{ color, "--brand": color } as CSSProperties}
+            aria-hidden
+          />
+          <span className="font-semibold">{name}</span>
+        </div>
+      ))}
+    </div>
   );
 }
