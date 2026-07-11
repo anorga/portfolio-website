@@ -103,7 +103,7 @@ export function Hero() {
             href={site.resumeUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3 text-base font-medium text-accent-fg transition-transform hover:scale-[1.03] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3 text-base font-medium text-accent-fg transition-transform duration-200 hover:-translate-y-0.5 hover:scale-[1.02] active:translate-y-0 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <FileText className="h-5 w-5" />
             Resume
@@ -112,7 +112,7 @@ export function Hero() {
             href={site.github}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-7 py-3 text-base font-medium transition-colors hover:border-accent hover:text-accent"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-7 py-3 text-base font-medium transition-[transform,border-color,color] duration-200 hover:-translate-y-0.5 hover:border-accent hover:text-accent active:translate-y-0 active:scale-[0.98]"
           >
             <Github className="h-5 w-5" />
             GitHub

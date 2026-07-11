@@ -97,7 +97,7 @@ export function Navbar() {
             aria-label="Toggle menu"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border text-foreground"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border text-foreground transition-[transform,border-color,color] duration-200 hover:border-accent hover:text-accent active:scale-95"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
