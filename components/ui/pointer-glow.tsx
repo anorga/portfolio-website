@@ -39,6 +39,8 @@ export function PointerGlow({
   function handlePointerEnter(event: PointerEvent<HTMLDivElement>) {
     if (event.pointerType !== "touch" && ref.current) {
       bounds.current = ref.current.getBoundingClientRect();
+      ref.current.dataset.pointerActive = "";
+      ref.current.dataset.pointerType = event.pointerType || "mouse";
     }
   }
 
@@ -52,13 +54,47 @@ export function PointerGlow({
       y: event.clientY - rect.top,
     };
 
+    if (event.pointerType === "pen") {
+      const tilt = Math.min(1, Math.hypot(event.tiltX, event.tiltY) / 75);
+      element.style.setProperty(
+        "--pointer-glow-opacity",
+        `${0.78 + tilt * 0.18}`,
+      );
+    }
+
     if (frame.current !== null) return;
 
     frame.current = requestAnimationFrame(() => {
+      const normalizedX = point.current.x / rect.width - 0.5;
+      const normalizedY = point.current.y / rect.height - 0.5;
       element.style.setProperty("--glow-x", `${point.current.x}px`);
       element.style.setProperty("--glow-y", `${point.current.y}px`);
+      element.style.setProperty("--pointer-shift-x", `${normalizedX * 7}px`);
+      element.style.setProperty("--pointer-shift-y", `${normalizedY * 7}px`);
       frame.current = null;
     });
+  }
+
+  function handlePointerDown(event: PointerEvent<HTMLDivElement>) {
+    if (!ref.current) return;
+    ref.current.dataset.pointerPressed = "";
+    ref.current.dataset.pointerType = event.pointerType || "touch";
+  }
+
+  function clearPointerState() {
+    const element = ref.current;
+    if (!element) return;
+    delete element.dataset.pointerActive;
+    delete element.dataset.pointerPressed;
+    delete element.dataset.pointerType;
+    element.style.removeProperty("--pointer-glow-opacity");
+    bounds.current = null;
+  }
+
+  function handlePointerUp(event: PointerEvent<HTMLDivElement>) {
+    if (!ref.current) return;
+    delete ref.current.dataset.pointerPressed;
+    if (event.pointerType === "touch") delete ref.current.dataset.pointerType;
   }
 
   return (
@@ -66,6 +102,10 @@ export function PointerGlow({
       ref={ref}
       onPointerEnter={handlePointerEnter}
       onPointerMove={handlePointerMove}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={clearPointerState}
+      onPointerLeave={clearPointerState}
       className={`group/pointer relative ${className}`}
       style={{ "--glow-size": `${size}px` } as CSSProperties}
     >

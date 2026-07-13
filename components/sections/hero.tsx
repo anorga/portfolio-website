@@ -8,7 +8,7 @@ import { site } from "@/content/site";
 
 function useTypewriter(words: readonly string[]) {
   const [index, setIndex] = useState(0);
-  const [text, setText] = useState("");
+  const [text, setText] = useState(words[0] ?? "");
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export function Hero() {
         </motion.p>
 
         <motion.h1
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={false}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-5xl font-bold tracking-tight text-accent sm:text-7xl"
@@ -108,7 +108,7 @@ export function Hero() {
             href={site.resumeUrl}
             target="_blank"
             rel="noreferrer"
-            className="pressable group inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3 text-base font-medium text-accent-fg transition-transform duration-200 hover:-translate-y-0.5 hover:scale-[1.02] active:translate-y-0 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="pressable group inline-flex items-center justify-center gap-2 rounded-full bg-accent-solid px-7 py-3 text-base font-medium text-accent-fg transition-transform duration-200 hover:-translate-y-0.5 hover:scale-[1.02] active:translate-y-0 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <FileText className="h-5 w-5 transition-transform duration-200 group-hover:-translate-y-0.5" />
             Resume
