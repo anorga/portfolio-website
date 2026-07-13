@@ -18,12 +18,12 @@ export function Reveal({ children, delay = 0, className }: RevealProps) {
       initial={
         shouldReduceMotion
           ? { opacity: 1 }
-          : { opacity: 0, y: 16, filter: "blur(3px)" }
+          : { opacity: 0, y: 14, scale: 0.995 }
       }
       whileInView={
         shouldReduceMotion
           ? { opacity: 1 }
-          : { opacity: 1, y: 0, filter: "blur(0px)" }
+          : { opacity: 1, y: 0, scale: 1 }
       }
       viewport={{ once: true, amount: 0.15 }}
       transition={

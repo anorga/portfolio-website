@@ -8,6 +8,8 @@ export const projects: Project[] = [
     repo: "https://github.com/anorga/driftboard",
     liveUrl: "https://driftboard-waem.onrender.com",
     image: "/images/driftboard.png",
+    imageAspectRatio: "8 / 5",
+    imageFocalPoint: "50% 48%",
     tags: ["React", "TypeScript", "Yjs (CRDTs)", "WebSockets", "Node.js", "Vite", "Tailwind CSS"],
   },
   {
@@ -17,6 +19,8 @@ export const projects: Project[] = [
     repo: "https://github.com/anorga/pokedex",
     liveUrl: "https://pokedex-navy-delta.vercel.app/",
     image: "/images/pokedex.png",
+    imageAspectRatio: "8 / 5",
+    imageFocalPoint: "50% 38%",
     tags: ["React", "TypeScript", "Vite", "Tailwind CSS", "TanStack Query", "PWA", "PokéAPI"],
   },
   {
@@ -26,6 +30,8 @@ export const projects: Project[] = [
     repo: "https://github.com/anorga/manga-react-app",
     liveUrl: "https://readmangas.xyz/",
     image: "/images/readmangas.webp",
+    imageAspectRatio: "2 / 1",
+    imageFocalPoint: "50% 28%",
     tags: ["React", "React Router", "Bootstrap"],
   },
   {
@@ -35,6 +41,8 @@ export const projects: Project[] = [
     repo: "https://github.com/anorga/weather-app",
     liveUrl: "https://master.d1g2odaawq5ejv.amplifyapp.com/",
     image: "/images/weatherapp.webp",
+    imageAspectRatio: "2 / 1",
+    imageFocalPoint: "42% 34%",
     tags: ["React", "TypeScript", "Bootstrap", "OpenWeather API"],
   },
 ];

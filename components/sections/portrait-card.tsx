@@ -43,7 +43,7 @@ export function PortraitCard() {
             alt={`Portrait of ${site.name}`}
             fill
             sizes="(min-width: 1024px) 420px, (min-width: 640px) 55vw, calc(100vw - 48px)"
-            className="origin-[center_65%] scale-[1.35] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.39]"
+            className="pointer-shift origin-[center_65%] scale-[1.35] object-cover transition-[transform,translate] duration-700 ease-out group-hover:scale-[1.39]"
           />
         </motion.div>
         <div

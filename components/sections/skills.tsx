@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, type CSSProperties } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 import { Pause, Play } from "lucide-react";
+import { useInView } from "motion/react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { skills, type Skill } from "@/content/skills";
@@ -10,6 +11,8 @@ const skillRows = [skills.slice(0, 6), skills.slice(6)];
 
 export function Skills() {
   const [paused, setPaused] = useState(false);
+  const marqueeRef = useRef<HTMLDivElement>(null);
+  const marqueeIsVisible = useInView(marqueeRef, { margin: "150px" });
 
   return (
     <Section
@@ -43,16 +46,18 @@ export function Skills() {
         </button>
       </div>
 
-      <Reveal delay={0.08} className="relative mt-12 space-y-4">
-        {skillRows.map((row, index) => (
-          <SkillMarquee
-            key={index}
-            skills={row}
-            reverse={index === 1}
-            paused={paused}
-          />
-        ))}
-      </Reveal>
+      <div ref={marqueeRef} className="relative mt-12">
+        <Reveal delay={0.08} className="space-y-4">
+          {skillRows.map((row, index) => (
+            <SkillMarquee
+              key={index}
+              skills={row}
+              reverse={index === 1}
+              paused={paused || !marqueeIsVisible}
+            />
+          ))}
+        </Reveal>
+      </div>
     </Section>
   );
 }
@@ -93,7 +98,7 @@ function SkillGroup({
       {row.map(({ name, Icon, color }) => (
         <div
           key={name}
-          className="group flex min-w-44 cursor-default items-center justify-center gap-3 rounded-2xl border border-border/80 bg-background/80 px-6 py-5 shadow-sm transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-foreground/20 hover:shadow-md"
+          className="skill-chip group flex min-w-44 cursor-default items-center justify-center gap-3 rounded-2xl border border-border/80 bg-background/80 px-6 py-5 shadow-sm transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-foreground/20 hover:shadow-md active:scale-[0.98]"
         >
           <Icon
             className="h-7 w-7 shrink-0 transition duration-300 ease-out group-hover:-rotate-3 group-hover:scale-110 group-hover:[filter:drop-shadow(0_0_10px_var(--brand))]"

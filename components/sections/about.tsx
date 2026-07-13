@@ -1,6 +1,7 @@
 import { Code2, RefreshCw, TrendingUp } from "lucide-react";
 import { PortraitCard } from "@/components/sections/portrait-card";
 import { Section, SectionHeading } from "@/components/ui/section";
+import { PointerGlow } from "@/components/ui/pointer-glow";
 import { Reveal } from "@/components/ui/reveal";
 import { site } from "@/content/site";
 
@@ -26,22 +27,29 @@ export function About() {
             ))}
           </div>
 
-          <ul className="mt-8 grid gap-3 sm:grid-cols-3">
+          <ul className="mt-8 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
             {site.aboutHighlights.map((item, i) => {
               const Icon = highlightIcons[i];
 
               return (
                 <li
                   key={item.title}
-                  className="group rounded-2xl border border-border/70 bg-card/60 p-4 transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-accent/40 hover:shadow-md"
+                  className={i === 2 ? "sm:col-span-2 md:col-span-1" : undefined}
                 >
-                  <span className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-accent/10 text-accent transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3">
-                    <Icon className="h-4.5 w-4.5" aria-hidden />
-                  </span>
-                  <h3 className="font-semibold leading-snug">{item.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted">
-                    {item.description}
-                  </p>
+                  <PointerGlow
+                    size={240}
+                    className="h-full rounded-2xl transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:shadow-md"
+                  >
+                    <div className="group h-full rounded-2xl border border-border/70 bg-card/60 p-4 transition-[border-color] duration-300 ease-out group-hover/pointer:border-accent/40">
+                      <span className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-accent/10 text-accent transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3">
+                        <Icon className="h-4.5 w-4.5" aria-hidden />
+                      </span>
+                      <h3 className="font-semibold leading-snug">{item.title}</h3>
+                      <p className="mt-1.5 text-sm leading-relaxed text-muted">
+                        {item.description}
+                      </p>
+                    </div>
+                  </PointerGlow>
                 </li>
               );
             })}

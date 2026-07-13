@@ -4,6 +4,8 @@ export interface Project {
   repo: string;
   liveUrl?: string;
   image: string;
+  imageAspectRatio: `${number} / ${number}`;
+  imageFocalPoint: `${number}% ${number}%`;
   tags: string[];
 }
 

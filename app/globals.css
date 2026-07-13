@@ -9,7 +9,10 @@
   --card: #ffffff;
   --border: #e7e5e4;
   --accent: #dc2626;
+  --accent-solid: #b91c1c;
   --accent-fg: #ffffff;
+  --control-border: #78716c;
+  --error: #b91c1c;
 }
 
 .dark {
@@ -18,8 +21,11 @@
   --muted: #a8a29e;
   --card: #1c1917;
   --border: #292524;
-  --accent: #ef4444;
+  --accent: #f87171;
+  --accent-solid: #b91c1c;
   --accent-fg: #ffffff;
+  --control-border: #78716c;
+  --error: #fca5a5;
 }
 
 @theme inline {
@@ -29,7 +35,10 @@
   --color-card: var(--card);
   --color-border: var(--border);
   --color-accent: var(--accent);
+  --color-accent-solid: var(--accent-solid);
   --color-accent-fg: var(--accent-fg);
+  --color-control-border: var(--control-border);
+  --color-error: var(--error);
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
@@ -76,8 +85,13 @@ body {
 }
 
 ::selection {
-  background: var(--accent);
+  background: var(--accent-solid);
   color: var(--accent-fg);
+}
+
+:where(a, button, input, textarea, select):focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 3px !important;
 }
 
 .pointer-sheen {
@@ -97,8 +111,37 @@ body {
   transition: opacity 250ms ease;
 }
 
-.group\/pointer:focus-within > .pointer-sheen {
+.group\/pointer:focus-within:not([data-pointer-active]) > .pointer-sheen {
   opacity: 0.7;
+}
+
+.group\/pointer.pointer-focus-none:focus-within:not([data-pointer-active])
+  > .pointer-sheen {
+  opacity: 0;
+}
+
+.group\/pointer[data-pointer-active] > .pointer-sheen {
+  opacity: 1;
+}
+
+.group\/pointer[data-pointer-type="pen"] > .pointer-sheen {
+  opacity: var(--pointer-glow-opacity, 0.9);
+}
+
+.group\/pointer[data-pointer-pressed] > .pointer-sheen {
+  opacity: 0.45;
+}
+
+.group\/pointer[data-pointer-pressed] {
+  scale: 0.992;
+}
+
+.pointer-shift {
+  translate: 0 0;
+}
+
+.group\/pointer[data-pointer-active] .pointer-shift {
+  translate: var(--pointer-shift-x, 0) var(--pointer-shift-y, 0);
 }
 
 .dark .pointer-sheen {
@@ -125,6 +168,7 @@ body {
 
 .skill-track-paused {
   animation-play-state: paused;
+  will-change: auto;
 }
 
 .skill-marquee:hover .skill-track {
@@ -167,12 +211,6 @@ html[data-theme-transition]::view-transition-new(root) {
   }
 }
 
-@media (hover: none) {
-  .pointer-sheen {
-    display: none;
-  }
-}
-
 @media (hover: hover) and (pointer: fine) {
   .group\/pointer:hover > .pointer-sheen {
     opacity: 1;
@@ -184,6 +222,7 @@ html[data-theme-transition]::view-transition-new(root) {
     overflow-x: auto;
     -webkit-mask-image: none !important;
     mask-image: none !important;
+    scroll-snap-type: x proximity;
     scrollbar-width: none;
   }
 
@@ -194,10 +233,15 @@ html[data-theme-transition]::view-transition-new(root) {
   .skill-track {
     animation: none;
     transform: none;
+    will-change: auto;
   }
 
   .skill-track > [aria-hidden="true"] {
     display: none;
+  }
+
+  .skill-chip {
+    scroll-snap-align: start;
   }
 }
 
