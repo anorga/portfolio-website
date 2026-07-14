@@ -90,8 +90,15 @@ body {
 }
 
 :where(a, button, input, textarea, select):focus-visible {
-  outline: 2px solid var(--accent) !important;
-  outline-offset: 3px !important;
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (forced-colors: active) {
+  :where(a, button, input, textarea, select):focus-visible {
+    outline: 2px solid CanvasText !important;
+    outline-offset: 3px !important;
+  }
 }
 
 .pointer-sheen {
@@ -102,7 +109,7 @@ body {
   pointer-events: none;
   opacity: 0;
   background: radial-gradient(
-    var(--glow-size) circle at var(--glow-x, 50%) var(--glow-y, 50%),
+    var(--active-glow-size, var(--glow-size)) circle at var(--glow-x, 50%) var(--glow-y, 50%),
     rgba(255, 255, 255, 0.2),
     rgba(255, 255, 255, 0.06) 22%,
     transparent 48%
@@ -132,12 +139,13 @@ body {
   opacity: 0.45;
 }
 
-.group\/pointer[data-pointer-pressed] {
+.group\/pointer[data-pointer-pressed][data-pointer-pressable] {
   scale: 0.992;
 }
 
 .pointer-shift {
   translate: 0 0;
+  transition: translate 180ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .group\/pointer[data-pointer-active] .pointer-shift {
@@ -146,7 +154,7 @@ body {
 
 .dark .pointer-sheen {
   background: radial-gradient(
-    var(--glow-size) circle at var(--glow-x, 50%) var(--glow-y, 50%),
+    var(--active-glow-size, var(--glow-size)) circle at var(--glow-x, 50%) var(--glow-y, 50%),
     rgba(255, 255, 255, 0.14),
     rgba(255, 255, 255, 0.035) 24%,
     transparent 50%
@@ -167,20 +175,46 @@ body {
 }
 
 .skill-track-paused {
-  animation-play-state: paused;
+  animation: none;
+  transform: none;
   will-change: auto;
+}
+
+.skill-track-paused > [aria-hidden="true"] {
+  display: none;
+}
+
+.skill-marquee:has(.skill-track-paused) {
+  overflow-x: auto;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.skill-marquee:has(.skill-track-paused)::-webkit-scrollbar {
+  display: none;
 }
 
 .skill-marquee:hover .skill-track {
   animation-play-state: paused;
 }
 
-.pressable {
-  box-shadow: 0 8px 18px -11px color-mix(in oklab, var(--accent) 72%, transparent);
+.skill-chip[data-pen-hover] {
+  translate: 0 -0.25rem;
+  border-color: color-mix(in oklab, var(--foreground) 20%, var(--border));
+  box-shadow: 0 12px 22px -14px color-mix(in oklab, var(--foreground) 28%, transparent);
 }
 
-.pressable:hover {
-  box-shadow: 0 12px 24px -13px color-mix(in oklab, var(--accent) 86%, transparent);
+.skill-chip[data-pen-hover] svg {
+  translate: var(--pen-shift-x, 0) var(--pen-shift-y, 0);
+  rotate: -3deg;
+  scale: 1.1;
+  filter: drop-shadow(0 0 10px var(--brand));
+}
+
+.pressable {
+  box-shadow: 0 8px 18px -11px color-mix(in oklab, var(--accent) 72%, transparent);
 }
 
 .pressable:active {
@@ -215,9 +249,13 @@ html[data-theme-transition]::view-transition-new(root) {
   .group\/pointer:hover > .pointer-sheen {
     opacity: 1;
   }
+
+  .pressable:hover {
+    box-shadow: 0 12px 24px -13px color-mix(in oklab, var(--accent) 86%, transparent);
+  }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px), (hover: none) and (pointer: coarse), (prefers-reduced-motion: reduce) {
   .skill-marquee {
     overflow-x: auto;
     -webkit-mask-image: none !important;
@@ -242,6 +280,10 @@ html[data-theme-transition]::view-transition-new(root) {
 
   .skill-chip {
     scroll-snap-align: start;
+  }
+
+  .skill-pause {
+    display: none;
   }
 }
 

@@ -34,7 +34,10 @@ export function Projects() {
   }
 
   return (
-    <Section id="projects" className="relative !py-24 sm:!py-32">
+    <Section
+      id="projects"
+      className="relative !pb-12 !pt-24 sm:!pb-16 sm:!pt-32"
+    >
       <Reveal>
         <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
           Selected work
@@ -46,7 +49,7 @@ export function Projects() {
         </p>
       </Reveal>
 
-      <div className="mt-10 hidden gap-14 xl:grid xl:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] xl:gap-20 2xl:relative 2xl:left-1/2 2xl:w-[calc(100vw-6rem)] 2xl:max-w-[88rem] 2xl:-translate-x-1/2 2xl:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] 2xl:gap-24">
+      <div className="mt-10 hidden gap-14 xl:grid xl:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] xl:gap-20 2xl:w-[calc(100%+8rem)] 2xl:max-w-[calc(100vw-4rem)] 2xl:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] 2xl:gap-24">
         <div>
           {projects.map((project, index) => {
             const isActive = activeIndex === index;
@@ -91,6 +94,7 @@ export function Projects() {
           <div className="sticky top-24 flex h-[calc(100svh-7rem)] flex-col justify-center">
             <PointerGlow
               size={620}
+              pressable
               className="w-full rounded-[2rem] border border-border/70 bg-card shadow-2xl"
             >
               <a
@@ -106,9 +110,20 @@ export function Projects() {
                     <span className="h-2.5 w-2.5 rounded-full bg-amber-400/90" />
                     <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/90" />
                   </div>
-                  <span className="min-w-0 flex-1 truncate rounded-full border border-border/70 bg-card/80 px-3 py-1 text-center text-[11px] font-medium sm:text-xs">
-                    {getProjectHost(activeProject)}
-                  </span>
+                  <AnimatePresence initial={false} mode="wait">
+                    <motion.span
+                      key={activeProject.title}
+                      initial={
+                        shouldReduceMotion ? false : { opacity: 0, y: 3 }
+                      }
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={shouldReduceMotion ? undefined : { opacity: 0, y: -3 }}
+                      transition={{ duration: shouldReduceMotion ? 0 : 0.18 }}
+                      className="min-w-0 flex-1 truncate rounded-full border border-border/70 bg-card/80 px-3 py-1 text-center text-[11px] font-medium sm:text-xs"
+                    >
+                      {getProjectHost(activeProject)}
+                    </motion.span>
+                  </AnimatePresence>
                   <ExternalLink
                     aria-hidden
                     className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover/preview:-translate-y-0.5 group-hover/preview:translate-x-0.5"
@@ -116,8 +131,7 @@ export function Projects() {
                 </div>
 
                 <div
-                  className="relative overflow-hidden bg-stone-950"
-                  style={{ aspectRatio: activeProject.imageAspectRatio }}
+                  className="relative aspect-[8/5] overflow-hidden bg-stone-950"
                 >
                   <AnimatePresence initial={false}>
                     <motion.div
@@ -143,7 +157,6 @@ export function Projects() {
                         src={activeProject.image}
                         alt={`${activeProject.title} project screenshot`}
                         fill
-                        priority={activeIndex === 0}
                         sizes="(min-width: 1536px) 760px, (min-width: 1280px) 52vw, 1px"
                         className="object-cover"
                         style={{ objectPosition: activeProject.imageFocalPoint }}
@@ -155,7 +168,20 @@ export function Projects() {
                     className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-white/5"
                   />
                   <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 text-white sm:p-6">
-                    <p className="font-semibold">{activeProject.title}</p>
+                    <AnimatePresence initial={false} mode="wait">
+                      <motion.p
+                        key={activeProject.title}
+                        initial={
+                          shouldReduceMotion ? false : { opacity: 0, y: 5 }
+                        }
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={shouldReduceMotion ? undefined : { opacity: 0, y: -5 }}
+                        transition={{ duration: shouldReduceMotion ? 0 : 0.2 }}
+                        className="font-semibold"
+                      >
+                        {activeProject.title}
+                      </motion.p>
+                    </AnimatePresence>
                     <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/40 px-3 py-1.5 text-xs font-medium backdrop-blur-md transition-[transform,background-color] duration-200 group-hover/preview:-translate-y-0.5 group-hover/preview:bg-black/65 group-focus-visible/preview:-translate-y-0.5 group-focus-visible/preview:bg-black/65">
                       <ExternalLink aria-hidden className="h-3.5 w-3.5" />
                       {activeProject.liveUrl ? "Open live" : "Open code"}
@@ -202,7 +228,10 @@ export function Projects() {
       <div className="mt-12 grid gap-7 md:grid-cols-2 xl:hidden">
         {projects.map((project, index) => (
           <Reveal key={project.title} delay={index * 0.06} className="h-full">
-            <PointerGlow className="group/project h-full rounded-2xl border border-border bg-card shadow-sm transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-accent/70 hover:shadow-xl focus-within:-translate-y-1 focus-within:border-accent/70 focus-within:shadow-xl">
+            <PointerGlow
+              pressable
+              className="group/project h-full rounded-2xl border border-border bg-card shadow-sm transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-accent/70 hover:shadow-xl focus-within:-translate-y-1 focus-within:border-accent/70 focus-within:shadow-xl"
+            >
               <article className="flex h-full flex-col overflow-hidden rounded-[inherit]">
                 <a
                   href={getProjectDestination(project)}

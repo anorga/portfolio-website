@@ -153,6 +153,16 @@ export function Navbar() {
     <header className="sticky top-3 z-50 px-3 sm:px-6">
       <div
         ref={shellRef}
+        onBlurCapture={(event) => {
+          const nextTarget = event.relatedTarget;
+          if (
+            open &&
+            (!(nextTarget instanceof Node) ||
+              !event.currentTarget.contains(nextTarget))
+          ) {
+            setOpen(false);
+          }
+        }}
         className={`glass-shell relative mx-auto rounded-[1.75rem] transition-[width,max-width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:duration-0 ${
           compact
             ? "w-[calc(100%-0.5rem)] max-w-5xl sm:w-[calc(100%-1rem)] md:w-[calc(100%-1.5rem)] xl:w-full 2xl:max-w-6xl"
@@ -270,7 +280,7 @@ export function Navbar() {
               className="glass-shell absolute inset-x-0 top-full mt-2 overflow-hidden rounded-3xl md:hidden"
             >
               <div aria-hidden className="glass" />
-              <div className="relative flex flex-col gap-1 p-2">
+              <div className="relative flex max-h-[calc(100dvh-6.5rem)] flex-col gap-1 overflow-y-auto overscroll-contain p-2 [-webkit-overflow-scrolling:touch]">
                 {navLinks.map((link, index) => {
                   const isActive = active === link.href.slice(1);
 

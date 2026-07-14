@@ -18,7 +18,7 @@ import { site } from "@/content/site";
 type Status = "idle" | "submitting" | "success" | "error";
 
 const fieldClassName =
-  "min-h-12 w-full rounded-xl border border-control-border bg-background/85 px-4 py-3 text-foreground shadow-sm outline-none transition-[border-color,box-shadow,background-color] duration-200 placeholder:text-muted/70 hover:border-accent/70 focus:border-accent focus:bg-background focus:ring-4 focus:ring-accent/15";
+  "min-h-12 w-full rounded-xl border border-control-border bg-background/85 px-4 py-3 text-foreground shadow-sm outline-none transition-[border-color,box-shadow,background-color,opacity] duration-200 placeholder:text-muted/70 hover:border-accent/70 focus:border-accent focus:bg-background focus:ring-4 focus:ring-accent/15 disabled:cursor-wait disabled:opacity-70";
 
 export function Contact() {
   const [status, setStatus] = useState<Status>("idle");
@@ -52,7 +52,10 @@ export function Contact() {
   }
 
   return (
-    <Section id="contact" className="relative !pb-0 sm:!pb-0">
+    <Section
+      id="contact"
+      className="relative !pb-0 !pt-12 sm:!pb-0 sm:!pt-16"
+    >
       <PointerGlow
         size={760}
         className="pointer-focus-none overflow-hidden rounded-t-[2rem] border border-b-0 border-border/70 bg-card/70 shadow-sm sm:rounded-t-[2.5rem]"
@@ -80,7 +83,7 @@ export function Contact() {
 
           <div className="relative mx-auto mt-10 grid max-w-5xl gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-12">
             <Reveal delay={0.08}>
-              <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+              <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1">
                 <ContactItem icon={<MapPin className="h-5 w-5" />} label="Location">
                   {site.location}
                 </ContactItem>
@@ -96,6 +99,7 @@ export function Contact() {
                   icon={<Github className="h-5 w-5" />}
                   label="GitHub"
                   external
+                  className="sm:col-span-2 md:col-span-1 lg:col-span-1"
                 >
                   github.com/{site.githubHandle}
                 </ContactLink>
@@ -124,6 +128,7 @@ export function Contact() {
                     label="Name"
                     name="name"
                     autoComplete="name"
+                    disabled={isSubmitting}
                     required
                   />
                   <Field
@@ -132,12 +137,14 @@ export function Contact() {
                     type="email"
                     autoComplete="email"
                     inputMode="email"
+                    disabled={isSubmitting}
                     required
                   />
                   <Field
                     label="Subject"
                     name="subject"
                     autoComplete="off"
+                    disabled={isSubmitting}
                     className="sm:col-span-2"
                   />
                   <div className="sm:col-span-2">
@@ -154,6 +161,7 @@ export function Contact() {
                       rows={5}
                       required
                       maxLength={1000}
+                      disabled={isSubmitting}
                       aria-describedby="message-hint"
                       className={`${fieldClassName} min-h-36 resize-y`}
                     />
@@ -186,7 +194,7 @@ export function Contact() {
                       className="min-h-6 text-sm"
                     >
                       {status === "success" && (
-                        <p className="flex items-start gap-2 text-foreground" role="status">
+                        <p className="flex items-start gap-2 text-foreground">
                           <CircleCheck
                             className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400"
                             aria-hidden
@@ -195,7 +203,7 @@ export function Contact() {
                         </p>
                       )}
                       {status === "error" && (
-                        <p className="flex items-start gap-2 text-error" role="alert">
+                        <p className="flex items-start gap-2 text-error">
                           <CircleAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
                           <span>
                             Something went wrong. Please{" "}
@@ -250,12 +258,14 @@ function ContactLink({
   icon,
   label,
   external = false,
+  className = "",
   children,
 }: {
   href: string;
   icon: ReactNode;
   label: string;
   external?: boolean;
+  className?: string;
   children: ReactNode;
 }) {
   return (
@@ -263,7 +273,7 @@ function ContactLink({
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noreferrer" : undefined}
-      className="group/contact flex min-h-20 items-center gap-3 rounded-2xl border border-border/70 bg-background/55 px-4 py-3 text-muted shadow-sm transition-[transform,border-color,color,box-shadow,background-color] duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:bg-background/85 hover:shadow-md active:translate-y-0 active:scale-[0.985] focus-visible:border-accent"
+      className={`group/contact flex min-h-20 items-center gap-3 rounded-2xl border border-border/70 bg-background/55 px-4 py-3 text-muted shadow-sm transition-[transform,border-color,color,box-shadow,background-color] duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:bg-background/85 hover:shadow-md active:translate-y-0 active:scale-[0.985] focus-visible:border-accent ${className}`}
     >
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent transition-transform duration-200 group-hover/contact:-translate-y-0.5 group-hover/contact:scale-105">
         {icon}
@@ -272,7 +282,7 @@ function ContactLink({
         <span className="block text-xs font-semibold uppercase tracking-wider text-muted">
           {label}
         </span>
-        <span className="mt-0.5 block break-all text-sm text-foreground">{children}</span>
+        <span className="mt-0.5 block break-words text-sm text-foreground">{children}</span>
       </span>
     </a>
   );
@@ -294,6 +304,7 @@ function Field({
   name,
   type = "text",
   required = false,
+  disabled = false,
   autoComplete,
   inputMode,
   className = "",
@@ -302,6 +313,7 @@ function Field({
   name: string;
   type?: string;
   required?: boolean;
+  disabled?: boolean;
   autoComplete?: string;
   inputMode?: "email" | "text";
   className?: string;
@@ -317,6 +329,7 @@ function Field({
         name={name}
         type={type}
         required={required}
+        disabled={disabled}
         autoComplete={autoComplete}
         inputMode={inputMode}
         className={fieldClassName}

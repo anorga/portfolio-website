@@ -1,17 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView, useReducedMotion } from "motion/react";
 import { ArrowRight, FileText, MapPin } from "lucide-react";
 import { SiGithub as Github } from "react-icons/si";
 import { site } from "@/content/site";
 
-function useTypewriter(words: readonly string[]) {
+function useTypewriter(words: readonly string[], enabled: boolean) {
   const [index, setIndex] = useState(0);
   const [text, setText] = useState(words[0] ?? "");
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
+    if (!enabled || words.length === 0) return;
+
     const current = words[index % words.length];
     const done = text === current;
     const cleared = text === "";
@@ -34,18 +36,45 @@ function useTypewriter(words: readonly string[]) {
     }, delay);
 
     return () => clearTimeout(timeout);
-  }, [text, deleting, index, words]);
+  }, [deleting, enabled, index, text, words]);
 
   return text;
 }
 
+function usePageVisibility() {
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const update = () => setVisible(document.visibilityState === "visible");
+    update();
+    document.addEventListener("visibilitychange", update);
+    return () => document.removeEventListener("visibilitychange", update);
+  }, []);
+
+  return visible;
+}
+
 export function Hero() {
-  const animatedRole = useTypewriter(site.roles);
+  const heroRef = useRef<HTMLElement>(null);
   const shouldReduceMotion = useReducedMotion();
+  const heroIsVisible = useInView(heroRef, { amount: 0.1, margin: "120px" });
+  const pageIsVisible = usePageVisibility();
+  const animatedRole = useTypewriter(
+    site.roles,
+    !shouldReduceMotion && heroIsVisible && pageIsVisible,
+  );
   const role = shouldReduceMotion ? site.roles[0] : animatedRole;
+  const entrance = (y: number, delay: number) => ({
+    initial: shouldReduceMotion ? false : { opacity: 0, y },
+    animate: { opacity: 1, y: 0 },
+    transition: {
+      duration: shouldReduceMotion ? 0 : 0.6,
+      delay: shouldReduceMotion ? 0 : delay,
+    },
+  });
 
   return (
-    <section className="relative overflow-hidden">
+    <section ref={heroRef} className="relative overflow-hidden">
       <div
         aria-hidden
         className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[560px] w-[560px] -translate-x-1/2 rounded-full [background-image:radial-gradient(closest-side,color-mix(in_oklab,var(--accent)_16%,transparent),transparent)]"
@@ -54,11 +83,9 @@ export function Hero() {
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-20 [background-image:radial-gradient(circle,var(--border)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_65%_60%_at_50%_40%,black,transparent)]"
       />
-      <div className="mx-auto flex min-h-[88svh] max-w-6xl flex-col items-center justify-center px-6 py-24 text-center lg:px-8">
+      <div className="mx-auto flex min-h-[88svh] max-w-6xl flex-col items-center justify-center px-6 py-24 text-center lg:px-8 2xl:max-w-7xl">
         <motion.p
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          {...entrance(-12, 0)}
           className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-1.5 text-sm font-medium text-muted"
         >
           <MapPin className="h-4 w-4 text-accent" />
@@ -75,12 +102,11 @@ export function Hero() {
         </motion.h1>
 
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.25 }}
-          className="mt-4 text-2xl font-semibold sm:text-4xl"
+          {...entrance(12, 0.25)}
+          aria-label={site.roles.join(" and ")}
+          className="mt-4 min-h-[1.25em] text-2xl font-semibold sm:text-4xl"
         >
-          <span>{role}</span>
+          <span aria-hidden>{role}</span>
           <span
             aria-hidden
             className={`ml-1 inline-block w-0.5 bg-foreground align-middle ${shouldReduceMotion ? "" : "animate-pulse"}`}
@@ -90,25 +116,22 @@ export function Hero() {
         </motion.div>
 
         <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          {...entrance(12, 0.4)}
           className="mt-6 max-w-xl text-lg text-muted"
         >
           Crafting intuitive, visually engaging websites and applications.
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.55 }}
-          className="mt-10 flex flex-col gap-3 sm:flex-row"
+          {...entrance(12, 0.55)}
+          className="mt-10 flex w-full max-w-sm flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row"
         >
           <a
             href={site.resumeUrl}
             target="_blank"
             rel="noreferrer"
-            className="pressable group inline-flex items-center justify-center gap-2 rounded-full bg-accent-solid px-7 py-3 text-base font-medium text-accent-fg transition-transform duration-200 hover:-translate-y-0.5 hover:scale-[1.02] active:translate-y-0 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            aria-label={`Open ${site.name}'s resume in a new tab`}
+            className="pressable group inline-flex min-h-12 touch-manipulation items-center justify-center gap-2 rounded-full bg-accent-solid px-7 py-3 text-base font-medium text-accent-fg transition-transform duration-200 hover:-translate-y-0.5 hover:scale-[1.02] active:translate-y-0 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <FileText className="h-5 w-5 transition-transform duration-200 group-hover:-translate-y-0.5" />
             Resume
@@ -117,7 +140,8 @@ export function Hero() {
             href={site.github}
             target="_blank"
             rel="noreferrer"
-            className="group inline-flex items-center justify-center gap-2 rounded-full border border-border bg-background/40 px-7 py-3 text-base font-medium shadow-sm transition-[transform,border-color,color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-accent hover:text-accent hover:shadow-md active:translate-y-0 active:scale-[0.98] active:shadow-sm"
+            aria-label={`Open ${site.name}'s GitHub profile in a new tab`}
+            className="group inline-flex min-h-12 touch-manipulation items-center justify-center gap-2 rounded-full border border-border bg-background/40 px-7 py-3 text-base font-medium shadow-sm transition-[transform,border-color,color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-accent hover:text-accent hover:shadow-md active:translate-y-0 active:scale-[0.98] active:shadow-sm"
           >
             <Github className="h-5 w-5 transition-transform duration-200 group-hover:-translate-y-0.5" />
             GitHub
@@ -127,12 +151,18 @@ export function Hero() {
         <motion.a
           href="#about"
           aria-label="Scroll to about"
-          initial={{ opacity: 0 }}
+          initial={shouldReduceMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.9 }}
-          className="mt-16 inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-accent"
+          transition={{
+            duration: shouldReduceMotion ? 0 : 0.6,
+            delay: shouldReduceMotion ? 0 : 0.9,
+          }}
+          whileHover={shouldReduceMotion ? undefined : { y: -2 }}
+          whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
+          className="group/more mt-14 inline-flex min-h-11 touch-manipulation items-center gap-1 rounded-full px-3 text-sm text-muted transition-[background-color,color] hover:bg-card/70 hover:text-accent active:bg-card sm:mt-16"
         >
-          Learn more <ArrowRight className="h-4 w-4 rotate-90" />
+          Learn more
+          <ArrowRight className="h-4 w-4 rotate-90 transition-transform duration-200 group-hover/more:translate-y-0.5" />
         </motion.a>
       </div>
     </section>

@@ -40,7 +40,7 @@ export function Footer() {
             <a
               href="#main-content"
               aria-label={`Back to the top of ${site.name}'s portfolio`}
-              className={`group/signature mt-10 block rounded-2xl py-2 text-center text-[clamp(3rem,11vw,8.5rem)] font-bold leading-[0.82] tracking-[-0.065em] text-foreground transition-[transform,color] duration-300 hover:text-accent active:scale-[0.99] sm:mt-14 ${focusClassName}`}
+              className={`group/signature mt-10 block rounded-2xl py-2 text-center text-[clamp(2.35rem,10.5vw,8.5rem)] font-bold leading-[0.82] tracking-[-0.065em] text-foreground transition-[transform,color] duration-300 hover:text-accent active:scale-[0.99] sm:mt-14 sm:text-[clamp(3rem,11vw,8.5rem)] ${focusClassName}`}
             >
               <span aria-hidden>
                 {site.name}
