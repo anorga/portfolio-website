@@ -196,7 +196,7 @@ body {
   display: none;
 }
 
-.skill-marquee:hover .skill-track {
+.skill-marquee:has(.skill-chip[data-pen-hover]) .skill-track {
   animation-play-state: paused;
 }
 
@@ -250,12 +250,16 @@ html[data-theme-transition]::view-transition-new(root) {
     opacity: 1;
   }
 
+  .skill-marquee:hover .skill-track {
+    animation-play-state: paused;
+  }
+
   .pressable:hover {
     box-shadow: 0 12px 24px -13px color-mix(in oklab, var(--accent) 86%, transparent);
   }
 }
 
-@media (max-width: 767px), (hover: none) and (pointer: coarse), (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce) {
   .skill-marquee {
     overflow-x: auto;
     -webkit-mask-image: none !important;
