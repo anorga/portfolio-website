@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type MouseEvent } from "react";
+import { useRef, useState, type MouseEvent } from "react";
 import { flushSync } from "react-dom";
 import { useTheme } from "next-themes";
 import { motion, useReducedMotion } from "motion/react";
@@ -10,9 +10,11 @@ export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const shouldReduceMotion = useReducedMotion();
   const transitionPending = useRef(false);
+  const [transitioning, setTransitioning] = useState(false);
 
-  const actionLabel =
-    resolvedTheme === "dark"
+  const actionLabel = transitioning
+    ? "Changing color theme"
+    : resolvedTheme === "dark"
       ? "Switch to light theme"
       : resolvedTheme === "light"
         ? "Switch to dark theme"
@@ -39,11 +41,25 @@ export function ThemeToggle() {
     );
 
     transitionPending.current = true;
+    setTransitioning(true);
     document.documentElement.dataset.themeTransition = "";
 
-    const transition = document.startViewTransition(() => {
-      flushSync(() => setTheme(nextTheme));
-    });
+    const finishTransition = () => {
+      transitionPending.current = false;
+      setTransitioning(false);
+      delete document.documentElement.dataset.themeTransition;
+    };
+
+    let transition: ViewTransition;
+    try {
+      transition = document.startViewTransition(() => {
+        flushSync(() => setTheme(nextTheme));
+      });
+    } catch {
+      finishTransition();
+      setTheme(nextTheme);
+      return;
+    }
 
     void transition.ready
       .then(() => {
@@ -63,21 +79,20 @@ export function ThemeToggle() {
       })
       .catch(() => {});
 
-    void transition.finished.finally(() => {
-      transitionPending.current = false;
-      delete document.documentElement.dataset.themeTransition;
-    });
+    void transition.finished.finally(finishTransition);
   }
 
   return (
     <motion.button
       type="button"
       aria-label={actionLabel}
+      aria-busy={transitioning}
       title={actionLabel}
+      disabled={transitioning}
       onClick={toggleTheme}
       whileHover={shouldReduceMotion ? undefined : { y: -1, scale: 1.04 }}
       whileTap={shouldReduceMotion ? undefined : { y: 0, scale: 0.92 }}
-      className="group inline-flex h-11 w-11 touch-manipulation items-center justify-center rounded-full border border-foreground/20 bg-background/45 text-foreground shadow-sm transition-[background-color,border-color,color,box-shadow] duration-200 hover:border-accent hover:bg-accent/10 hover:text-accent hover:shadow-md active:bg-accent/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="group inline-flex h-11 w-11 touch-manipulation items-center justify-center rounded-full border border-foreground/20 bg-background/45 text-foreground shadow-sm transition-[background-color,border-color,color,box-shadow,opacity] duration-200 hover:border-accent hover:bg-accent/10 hover:text-accent hover:shadow-md active:bg-accent/15 disabled:cursor-wait disabled:opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       <Sun
         aria-hidden

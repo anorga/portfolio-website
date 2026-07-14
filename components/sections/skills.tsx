@@ -1,6 +1,11 @@
 "use client";
 
-import { useRef, useState, type CSSProperties } from "react";
+import {
+  useRef,
+  useState,
+  type CSSProperties,
+  type PointerEvent,
+} from "react";
 import { Pause, Play } from "lucide-react";
 import { useInView } from "motion/react";
 import { Section, SectionHeading } from "@/components/ui/section";
@@ -40,7 +45,7 @@ export function Skills() {
               : "Pause technology animation"
           }
           onClick={() => setPaused((value) => !value)}
-          className="absolute right-0 top-0 hidden h-10 w-10 items-center justify-center rounded-full border border-border bg-background/70 text-muted transition-[transform,border-color,color] duration-200 hover:-translate-y-0.5 hover:border-accent hover:text-accent active:translate-y-0 active:scale-95 sm:inline-flex"
+          className="skill-pause absolute right-0 top-0 hidden h-11 w-11 touch-manipulation items-center justify-center rounded-full border border-border bg-background/70 text-muted transition-[transform,border-color,color] duration-200 hover:-translate-y-0.5 hover:border-accent hover:text-accent active:translate-y-0 active:scale-95 sm:inline-flex"
         >
           {paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
         </button>
@@ -71,8 +76,44 @@ function SkillMarquee({
   reverse?: boolean;
   paused?: boolean;
 }) {
+  const penChip = useRef<HTMLDivElement | null>(null);
+
+  function clearPenHover() {
+    if (!penChip.current) return;
+    delete penChip.current.dataset.penHover;
+    penChip.current.style.removeProperty("--pen-shift-x");
+    penChip.current.style.removeProperty("--pen-shift-y");
+    penChip.current = null;
+  }
+
+  function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
+    if (event.pointerType !== "pen" || !(event.target instanceof Element)) {
+      return;
+    }
+
+    const chip = event.target.closest<HTMLDivElement>(".skill-chip");
+    if (!chip || !event.currentTarget.contains(chip)) return;
+
+    if (penChip.current !== chip) {
+      clearPenHover();
+      penChip.current = chip;
+      chip.dataset.penHover = "";
+    }
+
+    const rect = chip.getBoundingClientRect();
+    const x = rect.width ? (event.clientX - rect.left) / rect.width - 0.5 : 0;
+    const y = rect.height ? (event.clientY - rect.top) / rect.height - 0.5 : 0;
+    chip.style.setProperty("--pen-shift-x", `${x * 5}px`);
+    chip.style.setProperty("--pen-shift-y", `${y * 5}px`);
+  }
+
   return (
-    <div className="skill-marquee overflow-hidden py-1 [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+    <div
+      onPointerMove={handlePointerMove}
+      onPointerLeave={clearPenHover}
+      onPointerCancel={clearPenHover}
+      className="skill-marquee overflow-hidden py-1 [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
+    >
       <div
         className={`skill-track ${reverse ? "skill-track-reverse" : ""} ${paused ? "skill-track-paused" : ""}`}
       >
@@ -98,7 +139,7 @@ function SkillGroup({
       {row.map(({ name, Icon, color }) => (
         <div
           key={name}
-          className="skill-chip group flex min-w-44 cursor-default items-center justify-center gap-3 rounded-2xl border border-border/80 bg-background/80 px-6 py-5 shadow-sm transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-foreground/20 hover:shadow-md active:scale-[0.98]"
+          className="skill-chip group flex min-w-44 cursor-default items-center justify-center gap-3 overflow-hidden rounded-2xl border border-border/80 bg-background/80 px-6 py-5 shadow-sm transition-[transform,translate,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-foreground/20 hover:shadow-md"
         >
           <Icon
             className="h-7 w-7 shrink-0 transition duration-300 ease-out group-hover:-rotate-3 group-hover:scale-110 group-hover:[filter:drop-shadow(0_0_10px_var(--brand))]"
