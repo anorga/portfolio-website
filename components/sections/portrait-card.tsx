@@ -25,7 +25,7 @@ export function PortraitCard() {
   }, []);
 
   return (
-    <div ref={ref} className="group relative aspect-[4/5] w-full max-w-[420px]">
+    <div ref={ref} className="group relative aspect-[4/5] w-full max-w-[440px]">
       <div
         aria-hidden
         className="absolute inset-6 -z-10 translate-x-5 translate-y-5 rounded-[2rem] bg-accent/14 blur-2xl transition-transform duration-500 group-hover:translate-x-3 group-hover:translate-y-3"
@@ -39,11 +39,11 @@ export function PortraitCard() {
           className="absolute inset-0"
         >
           <Image
-            src="/images/portrait.jpeg"
+            src="/images/portrait-crop.avif"
             alt={`Portrait of ${site.name}`}
             fill
-            sizes="(min-width: 1024px) 420px, (min-width: 768px) 36vw, (min-width: 640px) 55vw, calc(100vw - 48px)"
-            className="pointer-shift origin-[center_65%] scale-[1.35] object-cover transition-[transform,translate] duration-700 ease-out group-hover:scale-[1.39]"
+            sizes="(min-width: 1024px) 440px, (min-width: 768px) 36vw, (min-width: 640px) 55vw, calc(100vw - 48px)"
+            className="pointer-shift origin-[center_55%] scale-[1.08] object-cover transition-[transform,translate] duration-700 ease-out group-hover:scale-[1.11]"
           />
         </motion.div>
         <div

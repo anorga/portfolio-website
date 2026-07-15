@@ -15,28 +15,47 @@ function useActiveSection() {
   const [active, setActive] = useState("");
 
   useEffect(() => {
-    const visible = new Set<string>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) visible.add(entry.target.id);
-          else visible.delete(entry.target.id);
+    const sections = navLinks.flatMap((link) => {
+      const id = link.href.slice(1);
+      const element = document.getElementById(id);
+      return element ? [{ id, element }] : [];
+    });
+    let frame: number | null = null;
+
+    function updateActiveSection() {
+      const threshold = Math.min(window.innerHeight * 0.38, 300);
+      let current = "";
+
+      for (const section of sections) {
+        if (section.element.getBoundingClientRect().top <= threshold) {
+          current = section.id;
         }
+      }
 
-        const current = navLinks.find((link) =>
-          visible.has(link.href.slice(1)),
-        );
-        setActive(current ? current.href.slice(1) : "");
-      },
-      { rootMargin: "-35% 0px -60% 0px" },
-    );
+      if (
+        window.scrollY + window.innerHeight >=
+        document.documentElement.scrollHeight - 2
+      ) {
+        current = sections.at(-1)?.id ?? current;
+      }
 
-    for (const link of navLinks) {
-      const element = document.getElementById(link.href.slice(1));
-      if (element) observer.observe(element);
+      setActive((previous) => (previous === current ? previous : current));
+      frame = null;
     }
 
-    return () => observer.disconnect();
+    function scheduleUpdate() {
+      if (frame === null) frame = requestAnimationFrame(updateActiveSection);
+    }
+
+    updateActiveSection();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      if (frame !== null) cancelAnimationFrame(frame);
+    };
   }, []);
 
   return active;
@@ -66,26 +85,6 @@ function useCompactNavigation() {
   }, []);
 
   return compact;
-}
-
-function focusHashDestination(href: string) {
-  const id = href.startsWith("#") ? href.slice(1) : "";
-  const destination = id ? document.getElementById(id) : null;
-
-  if (!destination) return;
-
-  const hadTabIndex = destination.hasAttribute("tabindex");
-  if (!hadTabIndex) destination.setAttribute("tabindex", "-1");
-
-  destination.focus({ preventScroll: true });
-
-  if (!hadTabIndex) {
-    destination.addEventListener(
-      "blur",
-      () => destination.removeAttribute("tabindex"),
-      { once: true },
-    );
-  }
 }
 
 export function Navbar() {
@@ -135,13 +134,8 @@ export function Navbar() {
     return () => desktop.removeEventListener("change", closeAtDesktop);
   }, []);
 
-  function handleHashClick(event: React.MouseEvent<HTMLAnchorElement>) {
-    const href = event.currentTarget.getAttribute("href");
+  function handleHashClick() {
     setOpen(false);
-
-    if (href?.startsWith("#")) {
-      window.setTimeout(() => focusHashDestination(href), 0);
-    }
   }
 
   const navMotion = shouldReduceMotion
@@ -150,7 +144,7 @@ export function Navbar() {
   const tapMotion = shouldReduceMotion ? undefined : { y: 0, scale: 0.97 };
 
   return (
-    <header className="sticky top-3 z-50 px-3 sm:px-6">
+    <header className="safe-nav sticky z-50">
       <div
         ref={shellRef}
         onBlurCapture={(event) => {

@@ -83,10 +83,10 @@ export function Hero() {
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-20 [background-image:radial-gradient(circle,var(--border)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_65%_60%_at_50%_40%,black,transparent)]"
       />
-      <div className="mx-auto flex min-h-[88svh] max-w-6xl flex-col items-center justify-center px-6 py-24 text-center lg:px-8 2xl:max-w-7xl">
+      <div className="safe-section-x hero-stage mx-auto flex min-h-[88svh] max-w-6xl flex-col items-center justify-center py-24 text-center 2xl:max-w-7xl">
         <motion.p
           {...entrance(-12, 0)}
-          className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-1.5 text-sm font-medium text-muted"
+          className="hero-location mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-1.5 text-sm font-medium text-muted"
         >
           <MapPin className="h-4 w-4 text-accent" />
           {site.location}
@@ -104,7 +104,7 @@ export function Hero() {
         <motion.div
           {...entrance(12, 0.25)}
           aria-label={site.roles.join(" and ")}
-          className="mt-4 min-h-[1.25em] text-2xl font-semibold sm:text-4xl"
+          className="hero-role mt-4 min-h-[1.25em] text-2xl font-semibold sm:text-4xl"
         >
           <span aria-hidden>{role}</span>
           <span
@@ -117,14 +117,14 @@ export function Hero() {
 
         <motion.p
           {...entrance(12, 0.4)}
-          className="mt-6 max-w-xl text-lg text-muted"
+          className="hero-tagline mt-6 max-w-xl text-lg text-muted"
         >
           Crafting intuitive, visually engaging websites and applications.
         </motion.p>
 
         <motion.div
           {...entrance(12, 0.55)}
-          className="mt-10 flex w-full max-w-sm flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row"
+          className="hero-actions mt-10 flex w-full max-w-sm flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row"
         >
           <a
             href={site.resumeUrl}
@@ -159,7 +159,7 @@ export function Hero() {
           }}
           whileHover={shouldReduceMotion ? undefined : { y: -2 }}
           whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
-          className="group/more mt-14 inline-flex min-h-11 touch-manipulation items-center gap-1 rounded-full px-3 text-sm text-muted transition-[background-color,color] hover:bg-card/70 hover:text-accent active:bg-card sm:mt-16"
+          className="hero-more group/more mt-14 inline-flex min-h-11 touch-manipulation items-center gap-1 rounded-full px-3 text-sm text-muted transition-[background-color,color] hover:bg-card/70 hover:text-accent active:bg-card sm:mt-16"
         >
           Learn more
           <ArrowRight className="h-4 w-4 rotate-90 transition-transform duration-200 group-hover/more:translate-y-0.5" />

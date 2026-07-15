@@ -16,6 +16,14 @@ interface PointerGlowProps {
   pressable?: boolean;
 }
 
+interface TouchGesture {
+  pointerId: number;
+  startX: number;
+  startY: number;
+  cancelled: boolean;
+}
+
+const TOUCH_MOVE_THRESHOLD = 8;
 const geometryInvalidators = new Set<() => void>();
 
 function invalidatePointerGeometry() {
@@ -55,6 +63,7 @@ export function PointerGlow({
   const bounds = useRef<DOMRect | null>(null);
   const frame = useRef<number | null>(null);
   const point = useRef({ clientX: 0, clientY: 0 });
+  const touchGesture = useRef<TouchGesture | null>(null);
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
@@ -88,6 +97,7 @@ export function PointerGlow({
     element.style.removeProperty("--active-glow-size");
     element.style.removeProperty("--pointer-glow-opacity");
     bounds.current = null;
+    touchGesture.current = null;
 
     if (frame.current !== null) {
       cancelAnimationFrame(frame.current);
@@ -153,12 +163,53 @@ export function PointerGlow({
   }
 
   function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
-    if (shouldReduceMotion || event.pointerType === "touch") return;
+    if (shouldReduceMotion) return;
+
+    if (event.pointerType === "touch") {
+      const gesture = touchGesture.current;
+      if (
+        !gesture ||
+        gesture.pointerId !== event.pointerId ||
+        gesture.cancelled
+      ) {
+        return;
+      }
+
+      const deltaX = event.clientX - gesture.startX;
+      const deltaY = event.clientY - gesture.startY;
+      if (
+        deltaX * deltaX + deltaY * deltaY >
+        TOUCH_MOVE_THRESHOLD * TOUCH_MOVE_THRESHOLD
+      ) {
+        gesture.cancelled = true;
+        clearPointerVisualState();
+        return;
+      }
+
+      updatePointerPosition(event);
+      return;
+    }
+
     updatePointerPosition(event);
   }
 
   function handlePointerDown(event: PointerEvent<HTMLDivElement>) {
     if (shouldReduceMotion || !pressable || !ref.current) return;
+
+    if (event.pointerType === "touch") {
+      if (!event.isPrimary) {
+        touchGesture.current = null;
+        clearPointerVisualState();
+        return;
+      }
+
+      touchGesture.current = {
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startY: event.clientY,
+        cancelled: false,
+      };
+    }
 
     ref.current.dataset.pointerActive = "";
     ref.current.dataset.pointerPressed = "";
@@ -175,7 +226,7 @@ export function PointerGlow({
     updatePointerPosition(event, true);
   }
 
-  function clearPointerState() {
+  function clearPointerVisualState() {
     const element = ref.current;
     if (!element) return;
     delete element.dataset.pointerActive;
@@ -193,12 +244,31 @@ export function PointerGlow({
 
   function handlePointerUp(event: PointerEvent<HTMLDivElement>) {
     if (!ref.current) return;
-    delete ref.current.dataset.pointerPressed;
+
     if (event.pointerType === "touch") {
-      delete ref.current.dataset.pointerActive;
-      delete ref.current.dataset.pointerType;
-      ref.current.style.removeProperty("--active-glow-size");
+      const gesture = touchGesture.current;
+      if (gesture && gesture.pointerId !== event.pointerId) return;
+
+      touchGesture.current = null;
+      clearPointerVisualState();
+      return;
     }
+
+    delete ref.current.dataset.pointerPressed;
+  }
+
+  function handlePointerInterruption(event: PointerEvent<HTMLDivElement>) {
+    if (event.pointerType === "touch") {
+      const gesture = touchGesture.current;
+      if (gesture && gesture.pointerId !== event.pointerId) return;
+      touchGesture.current = null;
+    }
+
+    clearPointerVisualState();
+  }
+
+  function handleLostPointerCapture(event: PointerEvent<HTMLDivElement>) {
+    if (event.pointerType === "touch") handlePointerInterruption(event);
   }
 
   return (
@@ -208,8 +278,9 @@ export function PointerGlow({
       onPointerMove={handlePointerMove}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
-      onPointerCancel={clearPointerState}
-      onPointerLeave={clearPointerState}
+      onPointerCancel={handlePointerInterruption}
+      onPointerLeave={handlePointerInterruption}
+      onLostPointerCapture={handleLostPointerCapture}
       data-pointer-pressable={pressable ? "" : undefined}
       className={`group/pointer relative ${className}`}
       style={{ "--glow-size": `${size}px` } as CSSProperties}

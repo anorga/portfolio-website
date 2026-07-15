@@ -3,6 +3,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
+  color-scheme: light;
   --background: #fafaf9;
   --foreground: #1c1917;
   --muted: #57534e;
@@ -16,6 +17,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   --background: #0c0a09;
   --foreground: #f5f5f4;
   --muted: #a8a29e;
@@ -55,6 +57,71 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+}
+
+.safe-nav {
+  top: calc(0.75rem + env(safe-area-inset-top));
+  padding-left: max(0.75rem, env(safe-area-inset-left));
+  padding-right: max(0.75rem, env(safe-area-inset-right));
+}
+
+.safe-section-x {
+  padding-left: max(1.5rem, env(safe-area-inset-left));
+  padding-right: max(1.5rem, env(safe-area-inset-right));
+}
+
+.safe-footer {
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+}
+
+.project-rail {
+  top: calc(5.25rem + env(safe-area-inset-top));
+}
+
+@media (min-width: 640px) {
+  .safe-nav {
+    padding-left: max(1.5rem, env(safe-area-inset-left));
+    padding-right: max(1.5rem, env(safe-area-inset-right));
+  }
+
+  .safe-footer {
+    padding-bottom: max(2.5rem, env(safe-area-inset-bottom));
+  }
+}
+
+@media (min-width: 1024px) {
+  .safe-section-x {
+    padding-left: max(2rem, env(safe-area-inset-left));
+    padding-right: max(2rem, env(safe-area-inset-right));
+  }
+}
+
+@media (max-height: 700px) and (orientation: landscape) {
+  .hero-stage {
+    min-height: auto;
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .hero-location {
+    margin-bottom: 0.75rem;
+  }
+
+  .hero-role {
+    margin-top: 0.5rem;
+  }
+
+  .hero-tagline {
+    margin-top: 0.75rem;
+  }
+
+  .hero-actions {
+    margin-top: 1.25rem;
+  }
+
+  .hero-more {
+    margin-top: 1.5rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -175,25 +242,7 @@ body {
 }
 
 .skill-track-paused {
-  animation: none;
-  transform: none;
-  will-change: auto;
-}
-
-.skill-track-paused > [aria-hidden="true"] {
-  display: none;
-}
-
-.skill-marquee:has(.skill-track-paused) {
-  overflow-x: auto;
-  -webkit-mask-image: none !important;
-  mask-image: none !important;
-  scroll-snap-type: x proximity;
-  scrollbar-width: none;
-}
-
-.skill-marquee:has(.skill-track-paused)::-webkit-scrollbar {
-  display: none;
+  animation-play-state: paused;
 }
 
 .skill-marquee:has(.skill-chip[data-pen-hover]) .skill-track {
@@ -286,7 +335,7 @@ html[data-theme-transition]::view-transition-new(root) {
     scroll-snap-align: start;
   }
 
-  .skill-pause {
+  .skill-pause-slot {
     display: none;
   }
 }

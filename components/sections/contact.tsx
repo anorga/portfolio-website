@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { SiGithub as Github } from "react-icons/si";
 import { PointerGlow } from "@/components/ui/pointer-glow";
-import { Section, SectionHeading } from "@/components/ui/section";
+import { Section, SectionIntro } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { site } from "@/content/site";
 
@@ -71,14 +71,18 @@ export function Contact() {
 
         <div className="relative px-5 pb-10 pt-12 sm:px-10 sm:pb-12 lg:px-14 lg:pb-14 lg:pt-16">
           <Reveal>
-            <p className="mb-3 text-center text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-              Start a conversation
-            </p>
-            <SectionHeading className="text-center">Get in Touch</SectionHeading>
-            <p className="mx-auto mt-4 max-w-xl text-center leading-relaxed text-muted">
-              Have a question or want to work together? Send me a message and
-              I&apos;ll get back to you as soon as possible.
-            </p>
+            <SectionIntro
+              eyebrow="Start a conversation"
+              title="Get in Touch"
+              description={
+                <>
+                  Have a question or want to work together? Send me a message
+                  and I&apos;ll get back to you as soon as possible.
+                </>
+              }
+              align="center"
+              descriptionClassName="max-w-xl"
+            />
           </Reveal>
 
           <div className="relative mx-auto mt-10 grid max-w-5xl gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-12">
