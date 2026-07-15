@@ -16,7 +16,7 @@ export function Footer() {
         >
           <div
             aria-hidden
-            className="pointer-events-none absolute -bottom-44 left-1/2 h-80 w-[42rem] max-w-full -translate-x-1/2 rounded-full bg-accent/8 blur-3xl"
+            className="accent-bloom pointer-events-none absolute -bottom-44 left-1/2 h-80 w-[42rem] max-w-full -translate-x-1/2 rounded-full opacity-[0.08]"
           />
 
           <div className="relative px-5 pb-8 sm:px-10 sm:pb-10 lg:px-14">

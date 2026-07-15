@@ -62,11 +62,11 @@ export function Contact() {
       >
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-accent/10 blur-3xl"
+          className="accent-bloom pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full opacity-10"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -bottom-40 -left-32 h-80 w-80 rounded-full bg-accent/6 blur-3xl"
+          className="accent-bloom pointer-events-none absolute -bottom-40 -left-32 h-80 w-80 rounded-full opacity-[0.06]"
         />
 
         <div className="relative px-5 pb-10 pt-12 sm:px-10 sm:pb-12 lg:px-14 lg:pb-14 lg:pt-16">
@@ -111,7 +111,7 @@ export function Contact() {
             </Reveal>
 
             <Reveal delay={0.14}>
-              <div className="rounded-[1.75rem] border border-border/80 bg-background/70 p-5 shadow-sm backdrop-blur-sm sm:p-7 lg:p-8">
+              <div className="rounded-[1.75rem] border border-border/80 bg-background/80 p-5 shadow-sm sm:p-7 lg:p-8">
                 <div className="mb-6">
                   <h3 id="contact-form-heading" className="text-xl font-semibold tracking-tight">
                     Send a message

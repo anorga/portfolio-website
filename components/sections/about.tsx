@@ -15,7 +15,7 @@ export function About() {
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-48 top-1/2 -z-10 h-96 w-96 -translate-y-1/2 rounded-full bg-accent/8 blur-3xl"
+        className="accent-bloom pointer-events-none absolute -right-48 top-1/2 -z-10 h-96 w-96 -translate-y-1/2 rounded-full opacity-[0.08]"
       />
 
       <div className="grid gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:items-start md:gap-x-10 md:gap-y-8 lg:gap-x-16 xl:gap-x-20">

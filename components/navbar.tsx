@@ -20,40 +20,68 @@ function useActiveSection() {
       const element = document.getElementById(id);
       return element ? [{ id, element }] : [];
     });
+    let sectionOffsets = sections.map(({ id }) => ({ id, top: 0 }));
+    let documentHeight = document.documentElement.scrollHeight;
     let frame: number | null = null;
+    let disposed = false;
 
     function updateActiveSection() {
       const threshold = Math.min(window.innerHeight * 0.38, 300);
+      const position = window.scrollY + threshold;
       let current = "";
 
-      for (const section of sections) {
-        if (section.element.getBoundingClientRect().top <= threshold) {
+      for (const section of sectionOffsets) {
+        if (section.top <= position) {
           current = section.id;
         }
       }
 
       if (
         window.scrollY + window.innerHeight >=
-        document.documentElement.scrollHeight - 2
+        documentHeight - 2
       ) {
-        current = sections.at(-1)?.id ?? current;
+        current = sectionOffsets.at(-1)?.id ?? current;
       }
 
       setActive((previous) => (previous === current ? previous : current));
       frame = null;
     }
 
+    function measureSections() {
+      sectionOffsets = sections.map(({ id, element }) => ({
+        id,
+        top: element.getBoundingClientRect().top + window.scrollY,
+      }));
+      documentHeight = document.documentElement.scrollHeight;
+      updateActiveSection();
+    }
+
     function scheduleUpdate() {
       if (frame === null) frame = requestAnimationFrame(updateActiveSection);
     }
 
-    updateActiveSection();
+    function scheduleMeasurement() {
+      if (frame !== null) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(measureSections);
+    }
+
+    const resizeObserver = new ResizeObserver(scheduleMeasurement);
+    const main = document.getElementById("main-content");
+    if (main) resizeObserver.observe(main);
+    sections.forEach(({ element }) => resizeObserver.observe(element));
+
+    measureSections();
     window.addEventListener("scroll", scheduleUpdate, { passive: true });
-    window.addEventListener("resize", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleMeasurement, { passive: true });
+    document.fonts.ready.then(() => {
+      if (!disposed) scheduleMeasurement();
+    });
 
     return () => {
+      disposed = true;
+      resizeObserver.disconnect();
       window.removeEventListener("scroll", scheduleUpdate);
-      window.removeEventListener("resize", scheduleUpdate);
+      window.removeEventListener("resize", scheduleMeasurement);
       if (frame !== null) cancelAnimationFrame(frame);
     };
   }, []);

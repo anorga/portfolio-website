@@ -59,6 +59,25 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+.accent-bloom {
+  contain: paint;
+  background: radial-gradient(
+    circle closest-side,
+    var(--accent) 0 20%,
+    transparent 100%
+  );
+}
+
+.ambient-backdrop {
+  contain: layout paint style;
+}
+
+.ambient-orb {
+  contain: paint;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
 .safe-nav {
   top: calc(0.75rem + env(safe-area-inset-top));
   padding-left: max(0.75rem, env(safe-area-inset-left));
@@ -129,6 +148,10 @@ body {
     scroll-behavior: auto;
   }
 
+  .ambient-orb {
+    will-change: auto;
+  }
+
   *,
   *::before,
   *::after {
@@ -171,39 +194,66 @@ body {
 .pointer-sheen {
   position: absolute;
   inset: 0;
-  z-index: 20;
   border-radius: inherit;
+  overflow: hidden;
   pointer-events: none;
-  opacity: 0;
+  visibility: hidden;
+  transition: visibility 0s linear 250ms;
+}
+
+.pointer-sheen::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 20;
+  width: var(--active-glow-size, var(--glow-size));
+  height: var(--active-glow-size, var(--glow-size));
+  border-radius: 9999px;
   background: radial-gradient(
-    var(--active-glow-size, var(--glow-size)) circle at var(--glow-x, 50%) var(--glow-y, 50%),
+    circle closest-side,
     rgba(255, 255, 255, 0.2),
-    rgba(255, 255, 255, 0.06) 22%,
-    transparent 48%
+    rgba(255, 255, 255, 0.06) 44%,
+    transparent 96%
   );
+  opacity: var(--pointer-sheen-opacity, 0);
   mix-blend-mode: soft-light;
+  transform: translate3d(
+    calc(-50% + var(--glow-translate-x, 0px)),
+    calc(-50% + var(--glow-translate-y, 0px)),
+    0
+  );
   transition: opacity 250ms ease;
 }
 
 .group\/pointer:focus-within:not([data-pointer-active]) > .pointer-sheen {
-  opacity: 0.7;
+  --pointer-sheen-opacity: 0.7;
+  visibility: visible;
+  transition-delay: 0s;
 }
 
 .group\/pointer.pointer-focus-none:focus-within:not([data-pointer-active])
   > .pointer-sheen {
-  opacity: 0;
+  --pointer-sheen-opacity: 0;
+  visibility: hidden;
 }
 
 .group\/pointer[data-pointer-active] > .pointer-sheen {
-  opacity: 1;
+  --pointer-sheen-opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.group\/pointer[data-pointer-active] > .pointer-sheen::before {
+  will-change: transform;
 }
 
 .group\/pointer[data-pointer-type="pen"] > .pointer-sheen {
-  opacity: var(--pointer-glow-opacity, 0.9);
+  --pointer-sheen-opacity: var(--pointer-glow-opacity, 0.9);
 }
 
 .group\/pointer[data-pointer-pressed] > .pointer-sheen {
-  opacity: 0.45;
+  --pointer-sheen-opacity: 0.45;
 }
 
 .group\/pointer[data-pointer-pressed][data-pointer-pressable] {
@@ -219,12 +269,12 @@ body {
   translate: var(--pointer-shift-x, 0) var(--pointer-shift-y, 0);
 }
 
-.dark .pointer-sheen {
+.dark .pointer-sheen::before {
   background: radial-gradient(
-    var(--active-glow-size, var(--glow-size)) circle at var(--glow-x, 50%) var(--glow-y, 50%),
+    circle closest-side,
     rgba(255, 255, 255, 0.14),
-    rgba(255, 255, 255, 0.035) 24%,
-    transparent 50%
+    rgba(255, 255, 255, 0.035) 48%,
+    transparent 100%
   );
 }
 
@@ -236,6 +286,10 @@ body {
   will-change: transform;
 }
 
+.skill-marquee {
+  contain: layout paint;
+}
+
 .skill-track-reverse {
   animation-direction: reverse;
   animation-duration: 32s;
@@ -243,6 +297,7 @@ body {
 
 .skill-track-paused {
   animation-play-state: paused;
+  will-change: auto;
 }
 
 .skill-marquee:has(.skill-chip[data-pen-hover]) .skill-track {
@@ -296,7 +351,13 @@ html[data-theme-transition]::view-transition-new(root) {
 
 @media (hover: hover) and (pointer: fine) {
   .group\/pointer:hover > .pointer-sheen {
-    opacity: 1;
+    --pointer-sheen-opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .group\/pointer:hover > .pointer-sheen::before {
+    will-change: transform;
   }
 
   .skill-marquee:hover .skill-track {

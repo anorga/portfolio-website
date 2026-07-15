@@ -28,7 +28,7 @@ export function PortraitCard() {
     <div ref={ref} className="group relative aspect-[4/5] w-full max-w-[440px]">
       <div
         aria-hidden
-        className="absolute inset-6 -z-10 translate-x-5 translate-y-5 rounded-[2rem] bg-accent/14 blur-2xl transition-transform duration-500 group-hover:translate-x-3 group-hover:translate-y-3"
+        className="accent-bloom absolute inset-6 -z-10 translate-x-5 translate-y-5 rounded-[2rem] opacity-[0.14] transition-transform duration-500 group-hover:translate-x-3 group-hover:translate-y-3"
       />
       <PointerGlow
         size={420}
