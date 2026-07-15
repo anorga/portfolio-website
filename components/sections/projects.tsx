@@ -15,6 +15,9 @@ export function Projects() {
   const [activeIndex, setActiveIndex] = useState(0);
   const projectRefs = useRef<Array<HTMLElement | null>>([]);
   const compactProjectRefs = useRef<Array<HTMLElement | null>>([]);
+  const compactScrollTargetRef = useRef<number | null>(null);
+  const compactScrollTargetTimeoutRef = useRef<number | null>(null);
+  const updateCompactActiveRef = useRef<() => void>(() => undefined);
   const shouldReduceMotion = useReducedMotion();
   const activeProject = projects[activeIndex];
 
@@ -22,62 +25,102 @@ export function Projects() {
     const compactLayout = window.matchMedia("(max-width: 1279px)");
     let frame = 0;
 
+    const cancelScrollTarget = () => {
+      compactScrollTargetRef.current = null;
+
+      if (compactScrollTargetTimeoutRef.current !== null) {
+        window.clearTimeout(compactScrollTargetTimeoutRef.current);
+        compactScrollTargetTimeoutRef.current = null;
+      }
+    };
+
     const updateActiveProject = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         if (!compactLayout.matches) return;
 
-        const focusLine = window.innerHeight * 0.46;
-        const candidates = compactProjectRefs.current.flatMap(
-          (project, index) => {
-            if (!project) return [];
-
-            const bounds = project.getBoundingClientRect();
-            const visibleHeight = Math.max(
-              0,
-              Math.min(bounds.bottom, window.innerHeight) -
-                Math.max(bounds.top, 0),
-            );
-
-            if (visibleHeight < Math.min(80, bounds.height * 0.16)) return [];
-
-            return [
-              {
-                index,
-                distance: Math.abs(bounds.top + bounds.height / 2 - focusLine),
-              },
-            ];
-          },
+        const viewportTop = window.scrollY;
+        const viewportBottom = viewportTop + window.innerHeight;
+        const focusLine = viewportTop + window.innerHeight * 0.46;
+        const measurements = getCompactProjectMeasurements(
+          compactProjectRefs.current,
         );
 
-        if (!candidates.length) return;
+        const hasVisibleProject = measurements.some((project) => {
+          const visibleHeight = Math.max(
+            0,
+            Math.min(project.bottom, viewportBottom) -
+              Math.max(project.top, viewportTop),
+          );
 
-        const closestDistance = Math.min(
-          ...candidates.map((candidate) => candidate.distance),
-        );
-        const closestProjects = candidates
-          .filter(
-            (candidate) =>
-              Math.abs(candidate.distance - closestDistance) < 8,
-          )
-          .map((candidate) => candidate.index);
+          return (
+            visibleHeight >= Math.min(80, (project.bottom - project.top) * 0.16)
+          );
+        });
+
+        if (!hasVisibleProject) return;
+
+        const anchors = getOrderedProjectAnchors(measurements);
+        const scrollTarget = compactScrollTargetRef.current;
+
+        if (scrollTarget !== null) {
+          const targetAnchor = anchors.find(
+            (anchor) => anchor.index === scrollTarget,
+          );
+          const targetReached =
+            targetAnchor &&
+            Math.abs(targetAnchor.position - focusLine) <=
+              Math.max(48, window.innerHeight * 0.07);
+
+          if (!targetReached) {
+            setActiveIndex(scrollTarget);
+            return;
+          }
+
+          cancelScrollTarget();
+        }
 
         setActiveIndex((current) =>
-          closestProjects.includes(current) ? current : closestProjects[0],
+          getActiveProjectIndex(anchors, focusLine, current),
         );
       });
     };
 
+    const cancelScrollTargetFromKeyboard = (event: KeyboardEvent) => {
+      if (
+        [
+          "ArrowUp",
+          "ArrowDown",
+          "PageUp",
+          "PageDown",
+          "Home",
+          "End",
+          " ",
+        ].includes(event.key)
+      ) {
+        cancelScrollTarget();
+      }
+    };
+
+    updateCompactActiveRef.current = updateActiveProject;
     updateActiveProject();
     window.addEventListener("scroll", updateActiveProject, { passive: true });
     window.addEventListener("resize", updateActiveProject);
     compactLayout.addEventListener("change", updateActiveProject);
+    window.addEventListener("pointerdown", cancelScrollTarget, true);
+    window.addEventListener("wheel", cancelScrollTarget, { passive: true });
+    window.addEventListener("keydown", cancelScrollTargetFromKeyboard);
 
     return () => {
       cancelAnimationFrame(frame);
+      cancelScrollTarget();
+      updateCompactActiveRef.current = () => undefined;
       window.removeEventListener("scroll", updateActiveProject);
       window.removeEventListener("resize", updateActiveProject);
       compactLayout.removeEventListener("change", updateActiveProject);
+      window.removeEventListener("pointerdown", cancelScrollTarget, true);
+      window.removeEventListener("wheel", cancelScrollTarget);
+      window.removeEventListener("keydown", cancelScrollTargetFromKeyboard);
     };
   }, []);
 
@@ -97,19 +140,48 @@ export function Projects() {
     }
   }
 
-  function selectCompactProject(index: number, focusProject = false) {
+  function selectCompactProject(
+    index: number,
+    focusProject = false,
+  ) {
+    if (compactScrollTargetTimeoutRef.current !== null) {
+      window.clearTimeout(compactScrollTargetTimeoutRef.current);
+      compactScrollTargetTimeoutRef.current = null;
+    }
+
+    compactScrollTargetRef.current = shouldReduceMotion ? null : index;
+
+    if (!shouldReduceMotion) {
+      compactScrollTargetTimeoutRef.current = window.setTimeout(() => {
+        if (compactScrollTargetRef.current === index) {
+          compactScrollTargetRef.current = null;
+          updateCompactActiveRef.current();
+        }
+
+        compactScrollTargetTimeoutRef.current = null;
+      }, 1200);
+    }
+
     setActiveIndex(index);
 
     const project = compactProjectRefs.current[index];
     if (!project) return;
 
-    project.scrollIntoView({
+    const targetAnchor = getOrderedProjectAnchors(
+      getCompactProjectMeasurements(compactProjectRefs.current),
+    ).find((anchor) => anchor.index === index);
+
+    window.scrollTo({
+      top: targetAnchor
+        ? Math.max(0, targetAnchor.position - window.innerHeight * 0.46)
+        : getLayoutTop(project),
       behavior: shouldReduceMotion ? "auto" : "smooth",
-      block: "center",
     });
 
     if (focusProject) {
-      project.focus({ preventScroll: true });
+      project
+        .querySelector<HTMLElement>("article")
+        ?.focus({ preventScroll: true });
     }
   }
 
@@ -366,96 +438,223 @@ export function Projects() {
                 isWideTabletCard ? "lg:col-span-7" : "lg:col-span-5"
               }`}
             >
-              <PointerGlow
-                pressable
-                className={`group/project h-full rounded-2xl border bg-card transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-accent/70 hover:shadow-xl focus-within:-translate-y-1 focus-within:border-accent/70 focus-within:shadow-xl ${
-                  isActive
-                    ? "border-accent/55 shadow-lg shadow-accent/[0.07]"
-                    : "border-border shadow-sm"
-                }`}
+              <div
+                ref={(node) => {
+                  compactProjectRefs.current[index] = node;
+                }}
+                className="h-full"
               >
-                <motion.article
-                  ref={(node) => {
-                    compactProjectRefs.current[index] = node;
-                  }}
-                  aria-labelledby={`project-card-title-${index}`}
-                  tabIndex={-1}
-                  onPointerEnter={(event) => {
-                    if (event.pointerType !== "touch") setActiveIndex(index);
-                  }}
-                  onPointerDown={(event) => {
-                    if (event.pointerType === "touch") setActiveIndex(index);
-                  }}
-                  onFocusCapture={() => setActiveIndex(index)}
-                  animate={{ y: !shouldReduceMotion && isActive ? -2 : 0 }}
-                  transition={{ duration: shouldReduceMotion ? 0 : 0.24 }}
-                  className="relative flex h-full flex-col overflow-hidden rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
+                <PointerGlow
+                  pressable
+                  className={`group/project h-full rounded-2xl border bg-card transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-accent/70 hover:shadow-xl focus-within:-translate-y-1 focus-within:border-accent/70 focus-within:shadow-xl ${
+                    isActive
+                      ? "border-accent/55 shadow-lg shadow-accent/[0.07]"
+                      : "border-border shadow-sm"
+                  }`}
                 >
-                  <motion.span
-                    aria-hidden
-                    animate={{ scaleX: isActive ? 1 : 0 }}
+                  <motion.article
+                    aria-labelledby={`project-card-title-${index}`}
+                    tabIndex={-1}
+                    onPointerEnter={(event) => {
+                      if (event.pointerType !== "touch") setActiveIndex(index);
+                    }}
+                    onFocusCapture={() => setActiveIndex(index)}
+                    animate={{ y: !shouldReduceMotion && isActive ? -2 : 0 }}
                     transition={{ duration: shouldReduceMotion ? 0 : 0.24 }}
-                    className="absolute inset-x-6 top-0 z-10 h-0.5 origin-left rounded-full bg-accent"
-                  />
-                  <a
-                    href={getProjectDestination(project)}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={getProjectLinkLabel(project)}
-                    className="group/media relative block touch-manipulation overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
-                    style={{ aspectRatio: project.imageAspectRatio }}
+                    className="relative flex h-full flex-col overflow-hidden rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
                   >
-                    <div className="pointer-shift absolute -inset-2">
-                      <Image
-                        src={project.image}
-                        alt={`${project.title} project screenshot`}
-                        fill
-                        sizes="(min-width: 1280px) 1px, (min-width: 768px) calc(50vw - 3.5rem), calc(100vw - 3rem)"
-                        className="object-cover transition-transform duration-500 ease-out group-hover/project:scale-[1.035] group-focus-within/project:scale-[1.035]"
-                        style={{ objectPosition: project.imageFocalPoint }}
-                      />
-                    </div>
-                    <div
+                    <motion.span
                       aria-hidden
-                      className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent opacity-80 transition-opacity duration-300 group-hover/media:opacity-100 group-focus-visible/media:opacity-100"
+                      animate={{ scaleX: isActive ? 1 : 0 }}
+                      transition={{ duration: shouldReduceMotion ? 0 : 0.24 }}
+                      className="absolute inset-x-6 top-0 z-10 h-0.5 origin-left rounded-full bg-accent"
                     />
-                    <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/55 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-[transform,background-color] duration-200 group-hover/media:-translate-y-0.5 group-hover/media:bg-black/75 group-focus-visible/media:-translate-y-0.5 group-focus-visible/media:bg-black/75">
-                      <ExternalLink aria-hidden className="h-3.5 w-3.5" />
-                      {project.liveUrl ? "Open live" : "Open code"}
-                    </span>
-                  </a>
-                  <div className="flex flex-1 flex-col p-6">
-                    <div className="flex items-center justify-between gap-4">
-                      <span className="text-xs font-semibold tabular-nums text-accent">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      <span
-                        aria-hidden
-                        className={`h-px flex-1 transition-colors duration-300 ${
-                          isActive ? "bg-accent/45" : "bg-border/70"
-                        }`}
-                      />
-                    </div>
-                    <h3
-                      id={`project-card-title-${index}`}
-                      className="mt-2 text-xl font-semibold"
+                    <a
+                      href={getProjectDestination(project)}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={getProjectLinkLabel(project)}
+                      className="group/media relative block touch-manipulation overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
+                      style={{ aspectRatio: project.imageAspectRatio }}
                     >
-                      {project.title}
-                    </h3>
-                    <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
-                      {project.description}
-                    </p>
-                    <ProjectTags project={project} />
-                    <ProjectLinks project={project} />
-                  </div>
-                </motion.article>
-              </PointerGlow>
+                      <div className="pointer-shift absolute -inset-2">
+                        <Image
+                          src={project.image}
+                          alt={`${project.title} project screenshot`}
+                          fill
+                          sizes="(min-width: 1280px) 1px, (min-width: 768px) calc(50vw - 3.5rem), calc(100vw - 3rem)"
+                          className="object-cover transition-transform duration-500 ease-out group-hover/project:scale-[1.035] group-focus-within/project:scale-[1.035]"
+                          style={{ objectPosition: project.imageFocalPoint }}
+                        />
+                      </div>
+                      <div
+                        aria-hidden
+                        className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent opacity-80 transition-opacity duration-300 group-hover/media:opacity-100 group-focus-visible/media:opacity-100"
+                      />
+                      <span
+                        className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/55 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-[transform,background-color] duration-200 group-hover/media:-translate-y-0.5 group-hover/media:bg-black/75 group-focus-visible/media:-translate-y-0.5 group-focus-visible/media:bg-black/75"
+                      >
+                        <ExternalLink aria-hidden className="h-3.5 w-3.5" />
+                        {project.liveUrl ? "Open live" : "Open code"}
+                      </span>
+                    </a>
+                    <div className="flex flex-1 flex-col p-6">
+                      <div className="flex items-center justify-between gap-4">
+                        <span className="text-xs font-semibold tabular-nums text-accent">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <span
+                          aria-hidden
+                          className={`h-px flex-1 transition-colors duration-300 ${
+                            isActive ? "bg-accent/45" : "bg-border/70"
+                          }`}
+                        />
+                      </div>
+                      <h3
+                        id={`project-card-title-${index}`}
+                        className="mt-2 text-xl font-semibold"
+                      >
+                        {project.title}
+                      </h3>
+                      <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
+                        {project.description}
+                      </p>
+                      <ProjectTags project={project} />
+                      <ProjectLinks project={project} />
+                    </div>
+                  </motion.article>
+                </PointerGlow>
+              </div>
             </Reveal>
           );
         })}
       </div>
     </Section>
   );
+}
+
+interface CompactProjectMeasurement {
+  index: number;
+  top: number;
+  bottom: number;
+}
+
+interface CompactProjectAnchor {
+  index: number;
+  position: number;
+}
+
+function getCompactProjectMeasurements(
+  projectElements: Array<HTMLElement | null>,
+): CompactProjectMeasurement[] {
+  return projectElements
+    .flatMap((project, index) => {
+      if (!project) return [];
+
+      const top = getLayoutTop(project);
+
+      return [{ index, top, bottom: top + project.offsetHeight }];
+    })
+    .sort((a, b) => a.top - b.top || a.index - b.index);
+}
+
+function getLayoutTop(element: HTMLElement) {
+  let top = 0;
+  let current: HTMLElement | null = element;
+
+  while (current) {
+    top += current.offsetTop;
+    current =
+      current.offsetParent instanceof HTMLElement
+        ? current.offsetParent
+        : null;
+  }
+
+  return top;
+}
+
+function getOrderedProjectAnchors(
+  measurements: CompactProjectMeasurement[],
+): CompactProjectAnchor[] {
+  const rows: Array<{
+    top: number;
+    bottom: number;
+    projects: CompactProjectMeasurement[];
+  }> = [];
+
+  measurements.forEach((project) => {
+    const currentRow = rows.at(-1);
+
+    if (!currentRow || Math.abs(project.top - currentRow.top) > 8) {
+      rows.push({
+        top: project.top,
+        bottom: project.bottom,
+        projects: [project],
+      });
+      return;
+    }
+
+    currentRow.top = Math.min(currentRow.top, project.top);
+    currentRow.bottom = Math.max(currentRow.bottom, project.bottom);
+    currentRow.projects.push(project);
+  });
+
+  return rows.flatMap((row) => {
+    const rowHeight = row.bottom - row.top;
+    const orderedProjects = row.projects.sort((a, b) => a.index - b.index);
+
+    return orderedProjects.map((project, projectIndex) => ({
+      index: project.index,
+      position:
+        row.top +
+        rowHeight * ((projectIndex + 1) / (orderedProjects.length + 1)),
+    }));
+  });
+}
+
+function getActiveProjectIndex(
+  anchors: CompactProjectAnchor[],
+  focusLine: number,
+  currentIndex: number,
+) {
+  if (!anchors.length) return currentIndex;
+
+  let nextAnchorIndex = 0;
+
+  for (let index = 0; index < anchors.length - 1; index += 1) {
+    const boundary = (anchors[index].position + anchors[index + 1].position) / 2;
+
+    if (focusLine < boundary) break;
+    nextAnchorIndex = index + 1;
+  }
+
+  const currentAnchorIndex = anchors.findIndex(
+    (anchor) => anchor.index === currentIndex,
+  );
+
+  if (currentAnchorIndex === -1 || currentAnchorIndex === nextAnchorIndex) {
+    return anchors[nextAnchorIndex].index;
+  }
+
+  const hysteresis = 18;
+
+  if (nextAnchorIndex > currentAnchorIndex) {
+    const forwardBoundary =
+      (anchors[currentAnchorIndex].position +
+        anchors[currentAnchorIndex + 1].position) /
+      2;
+
+    if (focusLine < forwardBoundary + hysteresis) return currentIndex;
+  } else {
+    const backwardBoundary =
+      (anchors[currentAnchorIndex - 1].position +
+        anchors[currentAnchorIndex].position) /
+      2;
+
+    if (focusLine > backwardBoundary - hysteresis) return currentIndex;
+  }
+
+  return anchors[nextAnchorIndex].index;
 }
 
 function ProjectTags({ project }: { project: Project }) {
