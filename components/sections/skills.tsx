@@ -8,7 +8,7 @@ import {
 } from "react";
 import { Pause, Play } from "lucide-react";
 import { useInView } from "motion/react";
-import { Section, SectionHeading } from "@/components/ui/section";
+import { Section, SectionIntro } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { skills, type Skill } from "@/content/skills";
 
@@ -31,24 +31,32 @@ export function Skills() {
 
       <div className="relative">
         <Reveal>
-          <SectionHeading className="text-center">Technologies</SectionHeading>
-          <p className="mx-auto mt-4 max-w-xl text-center text-muted">
-            Tools and frameworks I use to build modern web experiences.
-          </p>
+          <SectionIntro
+            title="Technologies"
+            description="Tools and frameworks I use to build modern web experiences."
+            align="center"
+            descriptionClassName="max-w-xl"
+          />
         </Reveal>
-        <button
-          type="button"
-          aria-pressed={paused}
-          aria-label={
-            paused
-              ? "Resume technology animation"
-              : "Pause technology animation"
-          }
-          onClick={() => setPaused((value) => !value)}
-          className="skill-pause absolute right-0 top-0 hidden h-11 w-11 touch-manipulation items-center justify-center rounded-full border border-border bg-background/70 text-muted transition-[transform,border-color,color] duration-200 hover:-translate-y-0.5 hover:border-accent hover:text-accent active:translate-y-0 active:scale-95 sm:inline-flex"
-        >
-          {paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
-        </button>
+        <div className="skill-pause-slot mt-5 flex justify-center sm:absolute sm:right-0 sm:top-0 sm:mt-0">
+          <button
+            type="button"
+            aria-pressed={paused}
+            aria-label={
+              paused
+                ? "Resume technology animation"
+                : "Pause technology animation"
+            }
+            onClick={() => setPaused((value) => !value)}
+            className="skill-pause inline-flex h-11 w-11 touch-manipulation items-center justify-center rounded-full border border-border bg-background/70 text-muted shadow-sm transition-[transform,border-color,color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-accent hover:text-accent hover:shadow-md active:translate-y-0 active:scale-95"
+          >
+            {paused ? (
+              <Play className="h-4 w-4" aria-hidden />
+            ) : (
+              <Pause className="h-4 w-4" aria-hidden />
+            )}
+          </button>
+        </div>
       </div>
 
       <div ref={marqueeRef} className="relative mt-12">
@@ -87,12 +95,21 @@ function SkillMarquee({
   }
 
   function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
-    if (event.pointerType !== "pen" || !(event.target instanceof Element)) {
+    if (event.pointerType !== "pen") {
+      clearPenHover();
+      return;
+    }
+
+    if (!(event.target instanceof Element)) {
+      clearPenHover();
       return;
     }
 
     const chip = event.target.closest<HTMLDivElement>(".skill-chip");
-    if (!chip || !event.currentTarget.contains(chip)) return;
+    if (!chip || !event.currentTarget.contains(chip)) {
+      clearPenHover();
+      return;
+    }
 
     if (penChip.current !== chip) {
       clearPenHover();

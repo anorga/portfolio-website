@@ -8,8 +8,8 @@ const focusClassName =
 
 export function Footer() {
   return (
-    <footer className="relative pb-6 sm:pb-10">
-      <div className="mx-auto w-full max-w-6xl px-6 lg:px-8 2xl:max-w-7xl">
+    <footer className="safe-footer relative">
+      <div className="safe-section-x mx-auto w-full max-w-6xl 2xl:max-w-7xl">
         <PointerGlow
           size={820}
           className="pointer-focus-none -mt-px overflow-hidden rounded-b-[2rem] border border-t-0 border-border/70 bg-card/70 shadow-sm sm:rounded-b-[2.5rem]"

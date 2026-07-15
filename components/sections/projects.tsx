@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ExternalLink } from "lucide-react";
 import { SiGithub as Github } from "react-icons/si";
-import { Section, SectionHeading } from "@/components/ui/section";
+import { Section, SectionIntro } from "@/components/ui/section";
 import { PointerGlow } from "@/components/ui/pointer-glow";
 import { Reveal } from "@/components/ui/reveal";
 import { projects } from "@/content/projects";
@@ -14,8 +14,72 @@ import type { Project } from "@/lib/types";
 export function Projects() {
   const [activeIndex, setActiveIndex] = useState(0);
   const projectRefs = useRef<Array<HTMLElement | null>>([]);
+  const compactProjectRefs = useRef<Array<HTMLElement | null>>([]);
   const shouldReduceMotion = useReducedMotion();
   const activeProject = projects[activeIndex];
+
+  useEffect(() => {
+    const compactLayout = window.matchMedia("(max-width: 1279px)");
+    let frame = 0;
+
+    const updateActiveProject = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        if (!compactLayout.matches) return;
+
+        const focusLine = window.innerHeight * 0.46;
+        const candidates = compactProjectRefs.current.flatMap(
+          (project, index) => {
+            if (!project) return [];
+
+            const bounds = project.getBoundingClientRect();
+            const visibleHeight = Math.max(
+              0,
+              Math.min(bounds.bottom, window.innerHeight) -
+                Math.max(bounds.top, 0),
+            );
+
+            if (visibleHeight < Math.min(80, bounds.height * 0.16)) return [];
+
+            return [
+              {
+                index,
+                distance: Math.abs(bounds.top + bounds.height / 2 - focusLine),
+              },
+            ];
+          },
+        );
+
+        if (!candidates.length) return;
+
+        const closestDistance = Math.min(
+          ...candidates.map((candidate) => candidate.distance),
+        );
+        const closestProjects = candidates
+          .filter(
+            (candidate) =>
+              Math.abs(candidate.distance - closestDistance) < 8,
+          )
+          .map((candidate) => candidate.index);
+
+        setActiveIndex((current) =>
+          closestProjects.includes(current) ? current : closestProjects[0],
+        );
+      });
+    };
+
+    updateActiveProject();
+    window.addEventListener("scroll", updateActiveProject, { passive: true });
+    window.addEventListener("resize", updateActiveProject);
+    compactLayout.addEventListener("change", updateActiveProject);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", updateActiveProject);
+      window.removeEventListener("resize", updateActiveProject);
+      compactLayout.removeEventListener("change", updateActiveProject);
+    };
+  }, []);
 
   function selectProject(index: number, focusProject = false) {
     setActiveIndex(index);
@@ -33,23 +97,41 @@ export function Projects() {
     }
   }
 
+  function selectCompactProject(index: number, focusProject = false) {
+    setActiveIndex(index);
+
+    const project = compactProjectRefs.current[index];
+    if (!project) return;
+
+    project.scrollIntoView({
+      behavior: shouldReduceMotion ? "auto" : "smooth",
+      block: "center",
+    });
+
+    if (focusProject) {
+      project.focus({ preventScroll: true });
+    }
+  }
+
   return (
     <Section
       id="projects"
-      className="relative !pb-12 !pt-24 sm:!pb-16 sm:!pt-32"
+      className="relative !pb-12 !pt-16 sm:!pb-16 sm:!pt-20"
     >
       <Reveal>
-        <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-          Selected work
-        </p>
-        <SectionHeading>Projects</SectionHeading>
-        <p className="mt-4 max-w-2xl text-muted">
-          A sample of projects I&apos;ve built. Links to the live apps and
-          source repositories are included.
-        </p>
+        <SectionIntro
+          eyebrow="Selected work"
+          title="Projects"
+          description={
+            <>
+              A sample of projects I&apos;ve built. Links to the live apps and
+              source repositories are included.
+            </>
+          }
+        />
       </Reveal>
 
-      <div className="mt-10 hidden gap-14 xl:grid xl:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] xl:gap-20 2xl:w-[calc(100%+8rem)] 2xl:max-w-[calc(100vw-4rem)] 2xl:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] 2xl:gap-24">
+      <div className="mt-10 hidden gap-14 xl:grid xl:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] xl:gap-20 2xl:-ml-16 2xl:w-[calc(100%+8rem)] 2xl:max-w-[calc(100vw-4rem)] 2xl:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] 2xl:gap-24">
         <div>
           {projects.map((project, index) => {
             const isActive = activeIndex === index;
@@ -225,56 +307,152 @@ export function Projects() {
         </div>
       </div>
 
-      <div className="mt-12 grid gap-7 md:grid-cols-2 xl:hidden">
-        {projects.map((project, index) => (
-          <Reveal key={project.title} delay={index * 0.06} className="h-full">
-            <PointerGlow
-              pressable
-              className="group/project h-full rounded-2xl border border-border bg-card shadow-sm transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-accent/70 hover:shadow-xl focus-within:-translate-y-1 focus-within:border-accent/70 focus-within:shadow-xl"
-            >
-              <article className="flex h-full flex-col overflow-hidden rounded-[inherit]">
-                <a
-                  href={getProjectDestination(project)}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={getProjectLinkLabel(project)}
-                  className="group/media relative block touch-manipulation overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
-                  style={{ aspectRatio: project.imageAspectRatio }}
+      <nav
+        aria-label="Project progress"
+        className="project-rail sticky z-20 mt-8 xl:hidden"
+      >
+        <div className="mx-auto flex min-h-12 max-w-md items-center gap-2 rounded-2xl border border-border/75 bg-background/90 px-2 shadow-lg shadow-foreground/[0.04] backdrop-blur-xl supports-[backdrop-filter]:bg-background/75">
+          <div className="flex min-w-0 flex-1 items-center pl-2 text-sm font-medium">
+            <span className="mr-2 shrink-0 tabular-nums text-accent">
+              {String(activeIndex + 1).padStart(2, "0")}
+            </span>
+            <span className="min-w-0 truncate text-foreground">
+              {activeProject.title}
+            </span>
+          </div>
+          <div className="flex shrink-0 items-center">
+            {projects.map((project, index) => {
+              const isActive = index === activeIndex;
+
+              return (
+                <button
+                  key={project.title}
+                  type="button"
+                  aria-label={`Go to ${project.title}`}
+                  aria-current={isActive ? "true" : undefined}
+                  onPointerEnter={(event) => {
+                    if (event.pointerType !== "touch") setActiveIndex(index);
+                  }}
+                  onFocus={() => setActiveIndex(index)}
+                  onClick={(event) =>
+                    selectCompactProject(index, event.detail === 0)
+                  }
+                  className="group/rail inline-flex h-11 w-11 touch-manipulation items-center justify-center rounded-xl outline-none transition-transform duration-200 hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 focus-visible:ring-offset-background"
                 >
-                  <div className="pointer-shift absolute -inset-2">
-                    <Image
-                      src={project.image}
-                      alt={`${project.title} project screenshot`}
-                      fill
-                      sizes="(min-width: 1280px) 1px, (min-width: 768px) calc(50vw - 3.5rem), calc(100vw - 3rem)"
-                      className="object-cover transition-transform duration-500 ease-out group-hover/project:scale-[1.035] group-focus-within/project:scale-[1.035]"
-                      style={{ objectPosition: project.imageFocalPoint }}
-                    />
-                  </div>
-                  <div
+                  <span
                     aria-hidden
-                    className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent opacity-80 transition-opacity duration-300 group-hover/media:opacity-100 group-focus-visible/media:opacity-100"
+                    className={`h-1.5 rounded-full transition-[width,background-color,transform] duration-300 group-hover/rail:scale-y-125 ${
+                      isActive ? "w-7 bg-accent" : "w-3 bg-muted/35"
+                    }`}
                   />
-                  <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/55 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-[transform,background-color] duration-200 group-hover/media:-translate-y-0.5 group-hover/media:bg-black/75 group-focus-visible/media:-translate-y-0.5 group-focus-visible/media:bg-black/75">
-                    <ExternalLink aria-hidden className="h-3.5 w-3.5" />
-                    {project.liveUrl ? "Open live" : "Open code"}
-                  </span>
-                </a>
-                <div className="flex flex-1 flex-col p-6">
-                  <span className="text-xs font-semibold tabular-nums text-accent">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="mt-2 text-xl font-semibold">{project.title}</h3>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
-                    {project.description}
-                  </p>
-                  <ProjectTags project={project} />
-                  <ProjectLinks project={project} />
-                </div>
-              </article>
-            </PointerGlow>
-          </Reveal>
-        ))}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </nav>
+
+      <div className="mt-6 grid gap-7 md:grid-cols-2 lg:grid-cols-12 lg:gap-8 xl:hidden">
+        {projects.map((project, index) => {
+          const isActive = index === activeIndex;
+          const isWideTabletCard =
+            index === 0 || index === projects.length - 1;
+
+          return (
+            <Reveal
+              key={project.title}
+              delay={index * 0.06}
+              className={`h-full ${
+                isWideTabletCard ? "lg:col-span-7" : "lg:col-span-5"
+              }`}
+            >
+              <PointerGlow
+                pressable
+                className={`group/project h-full rounded-2xl border bg-card transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-accent/70 hover:shadow-xl focus-within:-translate-y-1 focus-within:border-accent/70 focus-within:shadow-xl ${
+                  isActive
+                    ? "border-accent/55 shadow-lg shadow-accent/[0.07]"
+                    : "border-border shadow-sm"
+                }`}
+              >
+                <motion.article
+                  ref={(node) => {
+                    compactProjectRefs.current[index] = node;
+                  }}
+                  aria-labelledby={`project-card-title-${index}`}
+                  tabIndex={-1}
+                  onPointerEnter={(event) => {
+                    if (event.pointerType !== "touch") setActiveIndex(index);
+                  }}
+                  onPointerDown={(event) => {
+                    if (event.pointerType === "touch") setActiveIndex(index);
+                  }}
+                  onFocusCapture={() => setActiveIndex(index)}
+                  animate={{ y: !shouldReduceMotion && isActive ? -2 : 0 }}
+                  transition={{ duration: shouldReduceMotion ? 0 : 0.24 }}
+                  className="relative flex h-full flex-col overflow-hidden rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
+                >
+                  <motion.span
+                    aria-hidden
+                    animate={{ scaleX: isActive ? 1 : 0 }}
+                    transition={{ duration: shouldReduceMotion ? 0 : 0.24 }}
+                    className="absolute inset-x-6 top-0 z-10 h-0.5 origin-left rounded-full bg-accent"
+                  />
+                  <a
+                    href={getProjectDestination(project)}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={getProjectLinkLabel(project)}
+                    className="group/media relative block touch-manipulation overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
+                    style={{ aspectRatio: project.imageAspectRatio }}
+                  >
+                    <div className="pointer-shift absolute -inset-2">
+                      <Image
+                        src={project.image}
+                        alt={`${project.title} project screenshot`}
+                        fill
+                        sizes="(min-width: 1280px) 1px, (min-width: 768px) calc(50vw - 3.5rem), calc(100vw - 3rem)"
+                        className="object-cover transition-transform duration-500 ease-out group-hover/project:scale-[1.035] group-focus-within/project:scale-[1.035]"
+                        style={{ objectPosition: project.imageFocalPoint }}
+                      />
+                    </div>
+                    <div
+                      aria-hidden
+                      className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent opacity-80 transition-opacity duration-300 group-hover/media:opacity-100 group-focus-visible/media:opacity-100"
+                    />
+                    <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/55 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-[transform,background-color] duration-200 group-hover/media:-translate-y-0.5 group-hover/media:bg-black/75 group-focus-visible/media:-translate-y-0.5 group-focus-visible/media:bg-black/75">
+                      <ExternalLink aria-hidden className="h-3.5 w-3.5" />
+                      {project.liveUrl ? "Open live" : "Open code"}
+                    </span>
+                  </a>
+                  <div className="flex flex-1 flex-col p-6">
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="text-xs font-semibold tabular-nums text-accent">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span
+                        aria-hidden
+                        className={`h-px flex-1 transition-colors duration-300 ${
+                          isActive ? "bg-accent/45" : "bg-border/70"
+                        }`}
+                      />
+                    </div>
+                    <h3
+                      id={`project-card-title-${index}`}
+                      className="mt-2 text-xl font-semibold"
+                    >
+                      {project.title}
+                    </h3>
+                    <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
+                      {project.description}
+                    </p>
+                    <ProjectTags project={project} />
+                    <ProjectLinks project={project} />
+                  </div>
+                </motion.article>
+              </PointerGlow>
+            </Reveal>
+          );
+        })}
       </div>
     </Section>
   );

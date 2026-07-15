@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { GoogleTagManager } from "@next/third-parties/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { AmbientBackdrop } from "@/components/ui/ambient-backdrop";
+import { HashNavigation } from "@/components/ui/hash-navigation";
 import { site } from "@/content/site";
 import "./globals.css";
 
@@ -38,6 +39,14 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  colorScheme: "light dark",
+  themeColor: "#fafaf9",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -51,6 +60,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <HashNavigation />
           <AmbientBackdrop />
           <a
             href="#main-content"
