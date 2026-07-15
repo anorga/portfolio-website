@@ -35,10 +35,10 @@ export function Projects() {
     };
 
     const updateActiveProject = () => {
+      if (!compactLayout.matches) return;
+
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
-        if (!compactLayout.matches) return;
-
         const viewportTop = window.scrollY;
         const viewportBottom = viewportTop + window.innerHeight;
         const focusLine = viewportTop + window.innerHeight * 0.46;
@@ -102,25 +102,49 @@ export function Projects() {
       }
     };
 
-    updateCompactActiveRef.current = updateActiveProject;
-    updateActiveProject();
-    window.addEventListener("scroll", updateActiveProject, { passive: true });
-    window.addEventListener("resize", updateActiveProject);
-    compactLayout.addEventListener("change", updateActiveProject);
-    window.addEventListener("pointerdown", cancelScrollTarget, true);
-    window.addEventListener("wheel", cancelScrollTarget, { passive: true });
-    window.addEventListener("keydown", cancelScrollTargetFromKeyboard);
+    let compactListenersAttached = false;
 
-    return () => {
+    const attachCompactListeners = () => {
+      if (compactListenersAttached) return;
+
+      compactListenersAttached = true;
+      window.addEventListener("scroll", updateActiveProject, { passive: true });
+      window.addEventListener("resize", updateActiveProject);
+      window.addEventListener("pointerdown", cancelScrollTarget, true);
+      window.addEventListener("wheel", cancelScrollTarget, { passive: true });
+      window.addEventListener("keydown", cancelScrollTargetFromKeyboard);
+      updateActiveProject();
+    };
+
+    const detachCompactListeners = () => {
+      if (!compactListenersAttached) return;
+
+      compactListenersAttached = false;
       cancelAnimationFrame(frame);
       cancelScrollTarget();
-      updateCompactActiveRef.current = () => undefined;
       window.removeEventListener("scroll", updateActiveProject);
       window.removeEventListener("resize", updateActiveProject);
-      compactLayout.removeEventListener("change", updateActiveProject);
       window.removeEventListener("pointerdown", cancelScrollTarget, true);
       window.removeEventListener("wheel", cancelScrollTarget);
       window.removeEventListener("keydown", cancelScrollTargetFromKeyboard);
+    };
+
+    const syncCompactListeners = () => {
+      if (compactLayout.matches) {
+        attachCompactListeners();
+      } else {
+        detachCompactListeners();
+      }
+    };
+
+    updateCompactActiveRef.current = updateActiveProject;
+    compactLayout.addEventListener("change", syncCompactListeners);
+    syncCompactListeners();
+
+    return () => {
+      compactLayout.removeEventListener("change", syncCompactListeners);
+      detachCompactListeners();
+      updateCompactActiveRef.current = () => undefined;
     };
   }, []);
 

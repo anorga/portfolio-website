@@ -26,7 +26,7 @@ export function Skills() {
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-24 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-accent/8 blur-3xl"
+        className="accent-bloom pointer-events-none absolute -left-24 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full opacity-[0.08]"
       />
 
       <div className="relative">

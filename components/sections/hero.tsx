@@ -56,14 +56,8 @@ function usePageVisibility() {
 
 export function Hero() {
   const heroRef = useRef<HTMLElement>(null);
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = Boolean(useReducedMotion());
   const heroIsVisible = useInView(heroRef, { amount: 0.1, margin: "120px" });
-  const pageIsVisible = usePageVisibility();
-  const animatedRole = useTypewriter(
-    site.roles,
-    !shouldReduceMotion && heroIsVisible && pageIsVisible,
-  );
-  const role = shouldReduceMotion ? site.roles[0] : animatedRole;
   const entrance = (y: number, delay: number) => ({
     initial: shouldReduceMotion ? false : { opacity: 0, y },
     animate: { opacity: 1, y: 0 },
@@ -106,13 +100,10 @@ export function Hero() {
           aria-label={site.roles.join(" and ")}
           className="hero-role mt-4 min-h-[1.25em] text-2xl font-semibold sm:text-4xl"
         >
-          <span aria-hidden>{role}</span>
-          <span
-            aria-hidden
-            className={`ml-1 inline-block w-0.5 bg-foreground align-middle ${shouldReduceMotion ? "" : "animate-pulse"}`}
-          >
-            &nbsp;
-          </span>
+          <AnimatedRole
+            enabled={!shouldReduceMotion && heroIsVisible}
+            shouldReduceMotion={shouldReduceMotion}
+          />
         </motion.div>
 
         <motion.p
@@ -166,5 +157,32 @@ export function Hero() {
         </motion.a>
       </div>
     </section>
+  );
+}
+
+function AnimatedRole({
+  enabled,
+  shouldReduceMotion,
+}: {
+  enabled: boolean;
+  shouldReduceMotion: boolean;
+}) {
+  const pageIsVisible = usePageVisibility();
+  const animatedRole = useTypewriter(
+    site.roles,
+    enabled && pageIsVisible,
+  );
+  const role = shouldReduceMotion ? site.roles[0] : animatedRole;
+
+  return (
+    <>
+      <span aria-hidden>{role}</span>
+      <span
+        aria-hidden
+        className={`ml-1 inline-block w-0.5 bg-foreground align-middle ${shouldReduceMotion ? "" : "animate-pulse"}`}
+      >
+        &nbsp;
+      </span>
+    </>
   );
 }

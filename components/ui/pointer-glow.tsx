@@ -64,26 +64,17 @@ export function PointerGlow({
   const frame = useRef<number | null>(null);
   const point = useRef({ clientX: 0, clientY: 0 });
   const touchGesture = useRef<TouchGesture | null>(null);
+  const resizeObserver = useRef<ResizeObserver | null>(null);
+  const unregisterGeometryInvalidator = useRef<(() => void) | null>(null);
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
-    if (shouldReduceMotion) return;
-
-    function invalidateBounds() {
-      bounds.current = null;
-    }
-
-    const resizeObserver = new ResizeObserver(invalidateBounds);
-    if (ref.current) resizeObserver.observe(ref.current);
-    const unregisterGeometryInvalidator =
-      registerGeometryInvalidator(invalidateBounds);
-
     return () => {
-      resizeObserver.disconnect();
-      unregisterGeometryInvalidator();
+      resizeObserver.current?.disconnect();
+      unregisterGeometryInvalidator.current?.();
       if (frame.current !== null) cancelAnimationFrame(frame.current);
     };
-  }, [shouldReduceMotion]);
+  }, []);
 
   useEffect(() => {
     if (!shouldReduceMotion) return;
@@ -98,12 +89,36 @@ export function PointerGlow({
     element.style.removeProperty("--pointer-glow-opacity");
     bounds.current = null;
     touchGesture.current = null;
+    stopTrackingGeometry();
 
     if (frame.current !== null) {
       cancelAnimationFrame(frame.current);
       frame.current = null;
     }
   }, [shouldReduceMotion]);
+
+  function startTrackingGeometry(element: HTMLDivElement) {
+    if (!unregisterGeometryInvalidator.current) {
+      unregisterGeometryInvalidator.current = registerGeometryInvalidator(() => {
+        bounds.current = null;
+      });
+    }
+
+    if (!resizeObserver.current) {
+      resizeObserver.current = new ResizeObserver(() => {
+        bounds.current = null;
+      });
+    }
+
+    resizeObserver.current.disconnect();
+    resizeObserver.current.observe(element);
+  }
+
+  function stopTrackingGeometry() {
+    resizeObserver.current?.disconnect();
+    unregisterGeometryInvalidator.current?.();
+    unregisterGeometryInvalidator.current = null;
+  }
 
   function updatePointerPosition(
     event: PointerEvent<HTMLDivElement>,
@@ -137,8 +152,14 @@ export function PointerGlow({
       const normalizedX = rect.width ? x / rect.width - 0.5 : 0;
       const normalizedY = rect.height ? y / rect.height - 0.5 : 0;
 
-      current.style.setProperty("--glow-x", `${x}px`);
-      current.style.setProperty("--glow-y", `${y}px`);
+      current.style.setProperty(
+        "--glow-translate-x",
+        `${x - rect.width / 2}px`,
+      );
+      current.style.setProperty(
+        "--glow-translate-y",
+        `${y - rect.height / 2}px`,
+      );
       current.style.setProperty("--pointer-shift-x", `${normalizedX * 7}px`);
       current.style.setProperty("--pointer-shift-y", `${normalizedY * 7}px`);
       frame.current = null;
@@ -155,6 +176,7 @@ export function PointerGlow({
 
   function handlePointerEnter(event: PointerEvent<HTMLDivElement>) {
     if (!shouldReduceMotion && event.pointerType !== "touch" && ref.current) {
+      startTrackingGeometry(ref.current);
       bounds.current = ref.current.getBoundingClientRect();
       ref.current.dataset.pointerActive = "";
       ref.current.dataset.pointerType = event.pointerType || "mouse";
@@ -196,6 +218,8 @@ export function PointerGlow({
   function handlePointerDown(event: PointerEvent<HTMLDivElement>) {
     if (shouldReduceMotion || !pressable || !ref.current) return;
 
+    startTrackingGeometry(ref.current);
+
     if (event.pointerType === "touch") {
       if (!event.isPrimary) {
         touchGesture.current = null;
@@ -235,6 +259,7 @@ export function PointerGlow({
     element.style.removeProperty("--active-glow-size");
     element.style.removeProperty("--pointer-glow-opacity");
     bounds.current = null;
+    stopTrackingGeometry();
 
     if (frame.current !== null) {
       cancelAnimationFrame(frame.current);
