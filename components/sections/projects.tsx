@@ -221,7 +221,7 @@ export function Projects() {
           description={
             <>
               A sample of projects I&apos;ve built. Links to the live apps and
-              source repositories are included.
+              public source repositories are included.
             </>
           }
         />
@@ -711,22 +711,30 @@ function ProjectLinks({ project }: { project: Project }) {
           Live
         </a>
       )}
-      <a
-        href={project.repo}
-        target="_blank"
-        rel="noreferrer"
-        aria-label={`View ${project.title} source code on GitHub in a new tab`}
-        className="group/code inline-flex min-h-11 touch-manipulation items-center gap-1.5 rounded-md text-muted transition-colors hover:text-foreground"
-      >
-        <Github className="h-4 w-4 transition-transform duration-200 group-hover/code:-translate-y-0.5" />
-        Code
-      </a>
+      {project.repo && (
+        <a
+          href={project.repo}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`View ${project.title} source code on GitHub in a new tab`}
+          className="group/code inline-flex min-h-11 touch-manipulation items-center gap-1.5 rounded-md text-muted transition-colors hover:text-foreground"
+        >
+          <Github className="h-4 w-4 transition-transform duration-200 group-hover/code:-translate-y-0.5" />
+          Code
+        </a>
+      )}
     </div>
   );
 }
 
 function getProjectDestination(project: Project) {
-  return project.liveUrl ?? project.repo;
+  const destination = project.liveUrl ?? project.repo;
+
+  if (!destination) {
+    throw new Error(`${project.title} must include a live or repository URL.`);
+  }
+
+  return destination;
 }
 
 function getProjectLinkLabel(project: Project) {

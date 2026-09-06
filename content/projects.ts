@@ -2,6 +2,24 @@ import type { Project } from "@/lib/types";
 
 export const projects: Project[] = [
   {
+    title: "Ambient Notes",
+    description:
+      "Local-first sticky notes for iPhone, iPad, and the web. Notes work offline and can sync as an encrypted private space, with photos, doodles, reminders, widgets, and real-time sharing for individual notes.",
+    liveUrl: "https://ambientnotes.app/",
+    image: "/images/ambient-notes.png",
+    imageAspectRatio: "40 / 21",
+    imageFocalPoint: "50% 50%",
+    tags: [
+      "Expo",
+      "React Native",
+      "TypeScript",
+      "ASP.NET Core",
+      "PostgreSQL",
+      "SQLite",
+      "End-to-end encryption",
+    ],
+  },
+  {
     title: "Driftboard",
     description:
       "Multiplayer whiteboard with live cursors, presence, and conflict-free sync built on CRDTs (Yjs) over WebSockets. Infinite canvas with sticky notes, shapes, and freehand drawing; offline-ready via IndexedDB with per-user undo/redo. Custom Node.js sync server implementing the y-websocket protocol.",

@@ -1,7 +1,7 @@
 export interface Project {
   title: string;
   description: string;
-  repo: string;
+  repo?: string;
   liveUrl?: string;
   image: string;
   imageAspectRatio: `${number} / ${number}`;
