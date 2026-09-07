@@ -28,12 +28,11 @@ export function About() {
           </div>
         </Reveal>
 
-        <Reveal
-          delay={0.08}
+        <div
           className="flex justify-center md:col-start-1 md:row-span-2 md:row-start-1 md:justify-start"
         >
           <PortraitCard />
-        </Reveal>
+        </div>
 
         <Reveal delay={0.12} className="md:col-start-2 md:row-start-2">
           <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">

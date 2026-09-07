@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { PointerGlow } from "@/components/ui/pointer-glow";
 import { site } from "@/content/site";
+import portrait from "@/public/images/portrait-crop.jpg";
 
 export function PortraitCard() {
   const ref = useRef<HTMLDivElement>(null);
@@ -25,24 +26,25 @@ export function PortraitCard() {
   }, []);
 
   return (
-    <div ref={ref} className="group relative aspect-[4/5] w-full max-w-[440px]">
+    <div ref={ref} className="group relative w-full max-w-[440px]">
       <div
         aria-hidden
         className="accent-bloom absolute inset-6 -z-10 translate-x-5 translate-y-5 rounded-[2rem] opacity-[0.14] transition-transform duration-500 group-hover:translate-x-3 group-hover:translate-y-3"
       />
       <PointerGlow
         size={420}
-        className="h-full overflow-hidden rounded-[2rem] bg-card shadow-xl ring-1 ring-foreground/8 transition-[transform,box-shadow] duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-2xl"
+        className="aspect-[4/5] w-full overflow-hidden rounded-[2rem] bg-card shadow-xl ring-1 ring-foreground/8 transition-[transform,box-shadow] duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-2xl"
       >
         <motion.div
           style={shouldReduceMotion || !canParallax ? undefined : { y: imageY }}
           className="absolute inset-0"
         >
           <Image
-            src="/images/portrait-crop.avif"
+            src={portrait}
             alt={`Portrait of ${site.name}`}
             fill
-            sizes="(min-width: 1024px) 440px, (min-width: 768px) 36vw, (min-width: 640px) 55vw, calc(100vw - 48px)"
+            placeholder="blur"
+            sizes="(min-width: 1280px) 440px, (min-width: 768px) 40vw, (min-width: 488px) 440px, calc(100vw - 48px)"
             className="pointer-shift origin-[center_55%] scale-[1.08] object-cover transition-[transform,translate] duration-700 ease-out group-hover:scale-[1.11]"
           />
         </motion.div>

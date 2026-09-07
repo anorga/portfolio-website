@@ -53,14 +53,13 @@ export const projects: Project[] = [
     tags: ["React", "React Router", "Bootstrap"],
   },
   {
-    title: "Weather App",
+    title: "Atmos",
     description:
-      "Single Page Application that displays the daily forecast in cities of choice, powered by the Open Weather API.",
+      "A calm weather dashboard with worldwide city search, hourly and seven-day forecasts, and landscapes that change with the weather. Save favorite places and find the best time outside with a forecast-based recommendation.",
     repo: "https://github.com/anorga/weather-app",
-    liveUrl: "https://master.d1g2odaawq5ejv.amplifyapp.com/",
-    image: "/images/weatherapp.webp",
-    imageAspectRatio: "2 / 1",
-    imageFocalPoint: "42% 34%",
-    tags: ["React", "TypeScript", "Bootstrap", "OpenWeather API"],
+    image: "/images/atmos.webp",
+    imageAspectRatio: "36 / 25",
+    imageFocalPoint: "50% 50%",
+    tags: ["React", "TypeScript", "Vite", "Open-Meteo", "SVG"],
   },
 ];

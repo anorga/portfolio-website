@@ -1,24 +1,35 @@
 "use client";
 
-import { useRef, useState, type MouseEvent } from "react";
+import { useRef, useState, useSyncExternalStore, type MouseEvent } from "react";
 import { flushSync } from "react-dom";
 import { useTheme } from "next-themes";
 import { motion, useReducedMotion } from "motion/react";
 import { Moon, Sun } from "lucide-react";
 
+const subscribeToMount = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
+  const mounted = useSyncExternalStore(
+    subscribeToMount,
+    getClientSnapshot,
+    getServerSnapshot,
+  );
   const shouldReduceMotion = useReducedMotion();
   const transitionPending = useRef(false);
   const [transitioning, setTransitioning] = useState(false);
 
-  const actionLabel = transitioning
-    ? "Changing color theme"
-    : resolvedTheme === "dark"
-      ? "Switch to light theme"
-      : resolvedTheme === "light"
-        ? "Switch to dark theme"
-        : "Change color theme";
+  const actionLabel = !mounted
+    ? "Change color theme"
+    : transitioning
+      ? "Changing color theme"
+      : resolvedTheme === "dark"
+        ? "Switch to light theme"
+        : resolvedTheme === "light"
+          ? "Switch to dark theme"
+          : "Change color theme";
 
   function toggleTheme(event: MouseEvent<HTMLButtonElement>) {
     if (transitionPending.current) return;
