@@ -273,43 +273,18 @@ export function Projects() {
             <PointerGlow
               size={620}
               pressable
-              className="w-full rounded-[2rem] border border-border/70 bg-card shadow-2xl"
+              className="w-full rounded-2xl border border-border/70 bg-card shadow-xl shadow-foreground/[0.06]"
             >
               <a
                 href={getProjectDestination(activeProject)}
                 target="_blank"
                 rel="noreferrer"
                 aria-label={getProjectLinkLabel(activeProject)}
-                className="group/preview block overflow-hidden rounded-[inherit]"
+                className="group/preview block overflow-hidden rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background"
               >
-                <div className="flex h-11 items-center gap-3 border-b border-border/70 bg-background/80 px-4 text-muted">
-                  <div aria-hidden className="flex shrink-0 items-center gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-red-400/90" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-amber-400/90" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/90" />
-                  </div>
-                  <AnimatePresence initial={false} mode="wait">
-                    <motion.span
-                      key={activeProject.title}
-                      initial={
-                        shouldReduceMotion ? false : { opacity: 0, y: 3 }
-                      }
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={shouldReduceMotion ? undefined : { opacity: 0, y: -3 }}
-                      transition={{ duration: shouldReduceMotion ? 0 : 0.18 }}
-                      className="min-w-0 flex-1 truncate rounded-full border border-border/70 bg-card/80 px-3 py-1 text-center text-[11px] font-medium sm:text-xs"
-                    >
-                      {getProjectHost(activeProject)}
-                    </motion.span>
-                  </AnimatePresence>
-                  <ExternalLink
-                    aria-hidden
-                    className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover/preview:-translate-y-0.5 group-hover/preview:translate-x-0.5"
-                  />
-                </div>
-
                 <div
-                  className="relative aspect-[8/5] overflow-hidden bg-stone-950"
+                  className="relative overflow-hidden bg-card"
+                  style={{ aspectRatio: activeProject.imageAspectRatio }}
                 >
                   <AnimatePresence initial={false}>
                     <motion.div
@@ -329,7 +304,7 @@ export function Projects() {
                         duration: shouldReduceMotion ? 0 : 0.3,
                         ease: [0.22, 1, 0.36, 1],
                       }}
-                      className="pointer-shift absolute -inset-2"
+                      className="absolute inset-0"
                     >
                       <Image
                         src={activeProject.image}
@@ -341,37 +316,33 @@ export function Projects() {
                       />
                     </motion.div>
                   </AnimatePresence>
-                  <div
-                    aria-hidden
-                    className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-white/5"
-                  />
-                  <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 text-white sm:p-6">
-                    <AnimatePresence initial={false} mode="wait">
-                      <motion.p
-                        key={activeProject.title}
-                        initial={
-                          shouldReduceMotion ? false : { opacity: 0, y: 5 }
-                        }
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={shouldReduceMotion ? undefined : { opacity: 0, y: -5 }}
-                        transition={{ duration: shouldReduceMotion ? 0 : 0.2 }}
-                        className="font-semibold"
-                      >
-                        {activeProject.title}
-                      </motion.p>
-                    </AnimatePresence>
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/40 px-3 py-1.5 text-xs font-medium backdrop-blur-md transition-[transform,background-color] duration-200 group-hover/preview:-translate-y-0.5 group-hover/preview:bg-black/65 group-focus-visible/preview:-translate-y-0.5 group-focus-visible/preview:bg-black/65">
-                      <ExternalLink aria-hidden className="h-3.5 w-3.5" />
-                      {activeProject.liveUrl ? "Open live" : "Open code"}
-                    </span>
-                  </div>
+                </div>
+                <div className="flex min-h-14 items-center justify-between gap-4 border-t border-border/60 px-5 py-3">
+                  <AnimatePresence initial={false} mode="wait">
+                    <motion.p
+                      key={activeProject.title}
+                      initial={
+                        shouldReduceMotion ? false : { opacity: 0, y: 5 }
+                      }
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={shouldReduceMotion ? undefined : { opacity: 0, y: -5 }}
+                      transition={{ duration: shouldReduceMotion ? 0 : 0.2 }}
+                      className="truncate text-sm font-medium"
+                    >
+                      {activeProject.title}
+                    </motion.p>
+                  </AnimatePresence>
+                  <span className="inline-flex shrink-0 items-center gap-1.5 text-xs font-medium text-muted transition-colors group-hover/preview:text-accent group-focus-visible/preview:text-accent">
+                    <ExternalLink aria-hidden className="h-3.5 w-3.5" />
+                    {activeProject.liveUrl ? "Open live" : "Open code"}
+                  </span>
                 </div>
               </a>
             </PointerGlow>
 
             <nav
               aria-label="Choose a project preview"
-              className="mt-4 flex items-center justify-center gap-1"
+              className="mt-2 flex items-center justify-center gap-1"
             >
               {projects.map((project, index) => {
                 const isActive = index === activeIndex;
@@ -741,12 +712,4 @@ function getProjectLinkLabel(project: Project) {
   return project.liveUrl
     ? `Open ${project.title} live project in a new tab`
     : `Open ${project.title} source code on GitHub in a new tab`;
-}
-
-function getProjectHost(project: Project) {
-  try {
-    return new URL(getProjectDestination(project)).hostname.replace(/^www\./, "");
-  } catch {
-    return project.title;
-  }
 }
