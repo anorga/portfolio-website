@@ -57,6 +57,7 @@ export const projects: Project[] = [
     description:
       "A calm weather dashboard with worldwide city search, hourly and seven-day forecasts, and landscapes that change with the weather. Save favorite places and find the best time outside with a forecast-based recommendation.",
     repo: "https://github.com/anorga/weather-app",
+    liveUrl: "https://atmos-weather-phi.vercel.app/",
     image: "/images/atmos.webp",
     imageAspectRatio: "36 / 25",
     imageFocalPoint: "50% 50%",
