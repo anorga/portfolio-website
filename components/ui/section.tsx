@@ -4,12 +4,13 @@ interface SectionProps {
   id?: string;
   children: ReactNode;
   className?: string;
+  wide?: boolean;
 }
 
-export function Section({ id, children, className = "" }: SectionProps) {
+export function Section({ id, children, className = "", wide = false }: SectionProps) {
   return (
     <section id={id} className={`scroll-mt-20 py-20 sm:py-28 ${className}`}>
-      <div className="safe-section-x mx-auto w-full max-w-6xl 2xl:max-w-7xl">
+      <div className={`safe-section-x mx-auto w-full max-w-6xl ${wide ? "2xl:max-w-[88rem]" : "2xl:max-w-7xl"}`}>
         {children}
       </div>
     </section>

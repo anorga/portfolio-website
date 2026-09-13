@@ -212,9 +212,10 @@ export function Projects() {
   return (
     <Section
       id="projects"
+      wide
       className="relative !pb-12 !pt-16 sm:!pb-16 sm:!pt-20"
     >
-      <Reveal>
+      <Reveal className="xl:pl-6">
         <SectionIntro
           eyebrow="Selected work"
           title="Projects"
@@ -227,7 +228,7 @@ export function Projects() {
         />
       </Reveal>
 
-      <div className="mt-10 hidden gap-14 xl:grid xl:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] xl:gap-20 2xl:-ml-16 2xl:w-[calc(100%+8rem)] 2xl:max-w-[calc(100vw-4rem)] 2xl:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] 2xl:gap-24">
+      <div className="mt-10 hidden gap-14 xl:grid xl:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] xl:gap-20 2xl:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] 2xl:gap-24">
         <div>
           {projects.map((project, index) => {
             const isActive = activeIndex === index;
@@ -242,8 +243,6 @@ export function Projects() {
                 onViewportEnter={() => setActiveIndex(index)}
                 onFocusCapture={() => setActiveIndex(index)}
                 viewport={{ amount: 0.55, margin: "-20% 0px -20% 0px" }}
-                animate={{ x: !shouldReduceMotion && isActive ? 4 : 0 }}
-                transition={{ duration: shouldReduceMotion ? 0 : 0.3 }}
                 className="relative flex min-h-[58vh] flex-col justify-center rounded-xl border-b border-border/60 py-16 pl-6 outline-none first:pt-4 last:border-b-0 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background"
               >
                 <motion.span
