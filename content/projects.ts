@@ -47,9 +47,9 @@ export const projects: Project[] = [
       "Application for manga enthusiasts that aggregates external links to read popular manga, kept constantly updated. Best viewed on mobile.",
     repo: "https://github.com/anorga/manga-react-app",
     liveUrl: "https://manga-react-app.vercel.app/",
-    image: "/images/readmangas.webp",
-    imageAspectRatio: "2 / 1",
-    imageFocalPoint: "50% 28%",
+    image: "/images/read-manga-collection.webp",
+    imageAspectRatio: "36 / 25",
+    imageFocalPoint: "50% 50%",
     tags: ["React", "React Router", "Bootstrap"],
   },
   {
