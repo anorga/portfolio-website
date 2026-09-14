@@ -6,7 +6,7 @@ Personal portfolio website, built with **Next.js**, **TypeScript**, and **Tailwi
 
 ## Tech Stack
 
-- [Next.js 15](https://nextjs.org/) (App Router) + React 19
+- [Next.js 16](https://nextjs.org/) (App Router) + React 19
 - TypeScript
 - Tailwind CSS v4 with light/dark themes ([next-themes](https://github.com/pacocoursey/next-themes))
 - [Motion](https://motion.dev/) for animation

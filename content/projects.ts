@@ -4,7 +4,7 @@ export const projects: Project[] = [
   {
     title: "Ambient Notes",
     description:
-      "Local-first sticky notes for iPhone, iPad, and the web. Notes work offline and can sync as an encrypted private space, with photos, doodles, reminders, widgets, and real-time sharing for individual notes.",
+      "Local-first sticky notes for iPhone, iPad, and the web. Work offline, organize notes by place, and optionally sync an end-to-end encrypted private space. Supports photos, doodles, reminders, widgets, and real-time collaboration on individual notes.",
     liveUrl: "https://ambientnotes.app/",
     image: "/images/ambient-notes.png",
     imageAspectRatio: "40 / 21",
@@ -22,7 +22,7 @@ export const projects: Project[] = [
   {
     title: "Driftboard",
     description:
-      "Multiplayer whiteboard with live cursors, presence, and conflict-free sync built on CRDTs (Yjs) over WebSockets. Infinite canvas with sticky notes, shapes, and freehand drawing; offline-ready via IndexedDB with per-user undo/redo. Custom Node.js sync server implementing the y-websocket protocol.",
+      "Real-time collaborative whiteboard with an infinite canvas, live cursors, presence, and conflict-free Yjs sync over WebSockets. Create notes, shapes, connected arrows, images, and pressure-sensitive drawings; work offline, follow collaborators, present with cursor chat and a laser pointer, and export boards as PNGs.",
     repo: "https://github.com/anorga/driftboard",
     liveUrl: "https://driftboard-waem.onrender.com",
     image: "/images/driftboard.png",
@@ -33,7 +33,7 @@ export const projects: Project[] = [
   {
     title: "Pokédex App",
     description:
-      "A fast, installable Pokédex (PWA) powered by the PokéAPI. Browse 1,000+ Pokémon with search and filters, detailed stat and evolution pages, side-by-side comparison, favorites, and light/dark mode.",
+      "A fast, installable Pokédex powered by the PokéAPI. Browse all 1,025 Pokémon with search, generation and type filters, detailed stats and evolution pages, favorites, and light/dark mode. Build teams of up to six to compare stats, weaknesses, and type coverage.",
     repo: "https://github.com/anorga/pokedex",
     liveUrl: "https://pokedex-navy-delta.vercel.app/",
     image: "/images/pokedex.png",
@@ -44,18 +44,18 @@ export const projects: Project[] = [
   {
     title: "Read Manga App",
     description:
-      "Application for manga enthusiasts that aggregates external links to read popular manga, kept constantly updated. Best viewed on mobile.",
+      "A responsive manga discovery app with a curated library, title and genre search, reusable series pages, and chapter filtering with clear links to independent reading sites.",
     repo: "https://github.com/anorga/manga-react-app",
     liveUrl: "https://manga-react-app.vercel.app/",
     image: "/images/read-manga-collection.webp",
     imageAspectRatio: "36 / 25",
     imageFocalPoint: "50% 50%",
-    tags: ["React", "React Router", "Bootstrap"],
+    tags: ["React", "TypeScript", "React Router", "Vite"],
   },
   {
     title: "Atmos",
     description:
-      "A calm weather dashboard with worldwide city search, hourly and seven-day forecasts, and landscapes that change with the weather. Save favorite places and find the best time outside with a forecast-based recommendation.",
+      "A calm weather dashboard with worldwide city search, current conditions, hourly and seven-day forecasts, and landscapes that adapt to the weather and time of day. Save favorite places and find the best time outside with a transparent forecast-based recommendation.",
     repo: "https://github.com/anorga/weather-app",
     liveUrl: "https://atmos-weather-phi.vercel.app/",
     image: "/images/atmos.webp",
