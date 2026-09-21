@@ -174,6 +174,18 @@ export function Contact() {
                     </p>
                   </div>
 
+                  <div className="sr-only">
+                    <label htmlFor="website">Website</label>
+                    <input
+                      id="website"
+                      name="_gotcha"
+                      type="text"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      disabled={isSubmitting}
+                    />
+                  </div>
+
                   <div className="flex flex-col gap-3 sm:col-span-2 sm:flex-row sm:items-center sm:gap-4">
                     <button
                       type="submit"
