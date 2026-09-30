@@ -4,6 +4,7 @@
 
 :root {
   color-scheme: light;
+  --anchor-offset: calc(5rem + env(safe-area-inset-top));
   --background: #fafaf9;
   --foreground: #1c1917;
   --muted: #57534e;
@@ -48,7 +49,7 @@
 html {
   background: var(--background);
   scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
+  scroll-padding-top: var(--anchor-offset);
 }
 
 body {
