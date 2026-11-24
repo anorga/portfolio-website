@@ -1,18 +1,24 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { Geist, Bricolage_Grotesque, Geist_Mono } from "next/font/google";
 import { GoogleTagManager } from "@next/third-parties/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { AmbientBackdrop } from "@/components/ui/ambient-backdrop";
 import { HashNavigation } from "@/components/ui/hash-navigation";
 import { site } from "@/content/site";
+import { ScrollMeter } from "@/components/ui/motion-system";
 import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
+
+const displayFont = Bricolage_Grotesque({
+  variable: "--font-display",
+  subsets: ["latin"],
+});
+const monoFont = Geist_Mono({ variable: "--font-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -44,7 +50,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   colorScheme: "light dark",
-  themeColor: "#fafaf9",
+  themeColor: "#ecf3e0",
 };
 
 export default function RootLayout({
@@ -53,15 +59,17 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <GoogleTagManager gtmId="GTM-5KLL5VQ" />
-      <body className={`${geistSans.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${displayFont.variable} ${monoFont.variable} antialiased`}
+      >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
           <HashNavigation />
-          <AmbientBackdrop />
+          <ScrollMeter />
           <a
             href="#main-content"
             className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-accent-solid focus:px-4 focus:py-2 focus:text-accent-fg"

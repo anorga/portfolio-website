@@ -3,48 +3,46 @@ import type { Project } from "@/lib/types";
 export const projects: Project[] = [
   {
     title: "Ambient Notes",
+    category: "Notes & everyday creativity",
     description:
-      "Local-first sticky notes for iPhone, iPad, and the web. Work offline, organize notes by place, and optionally sync an end-to-end encrypted private space. Supports photos, doodles, reminders, widgets, and real-time collaboration on individual notes.",
+      "Colorful notes, doodles, photos, and reminders for iPhone, iPad, and the web. Built to work offline, with optional encrypted sync and real-time collaboration on individual notes.",
     liveUrl: "https://ambientnotes.app/",
-    image: "/images/ambient-notes.png",
-    imageAspectRatio: "40 / 21",
+    image: "/images/ambient-notes-cover.webp",
+    imageAlt:
+      "Ambient Notes: A little note. A lot of you. Rounded blue lettering surrounded by Pip the pinned note, Dudley the dog, colorful stickers, and pastel paper notes, with the sage-green app icon.",
+    imageAspectRatio: "8 / 5",
     imageFocalPoint: "50% 50%",
-    tags: [
-      "Expo",
-      "React Native",
-      "TypeScript",
-      "ASP.NET Core",
-      "PostgreSQL",
-      "SQLite",
-      "End-to-end encryption",
-    ],
+    tags: ["React Native", "ASP.NET Core", "PostgreSQL", "SQLite"],
   },
   {
     title: "Driftboard",
+    category: "Real-time collaboration",
     description:
-      "Real-time collaborative whiteboard with an infinite canvas, live cursors, presence, and conflict-free Yjs sync over WebSockets. Create notes, shapes, connected arrows, images, and pressure-sensitive drawings; work offline, follow collaborators, present with cursor chat and a laser pointer, and export boards as PNGs.",
+      "A shared canvas for thinking together. Live cursors, drawing, and an infinite whiteboard, with Yjs and WebSockets keeping concurrent edits in sync—even after working offline.",
     repo: "https://github.com/anorga/driftboard",
     liveUrl: "https://driftboard-waem.onrender.com",
     image: "/images/driftboard.png",
     imageAspectRatio: "8 / 5",
     imageFocalPoint: "50% 48%",
-    tags: ["React", "TypeScript", "Yjs (CRDTs)", "WebSockets", "Node.js", "Vite", "Tailwind CSS"],
+    tags: ["React", "TypeScript", "Yjs", "WebSockets"],
   },
   {
     title: "Pokédex App",
+    category: "Search & discovery",
     description:
-      "A fast, installable Pokédex powered by the PokéAPI. Browse all 1,025 Pokémon with search, generation and type filters, detailed stats and evolution pages, favorites, and light/dark mode. Build teams of up to six to compare stats, weaknesses, and type coverage.",
+      "Explore 1,025 Pokémon, trace evolutions, and build a team. An installable web app that turns PokéAPI data into fast search, useful filters, and clear comparisons.",
     repo: "https://github.com/anorga/pokedex",
     liveUrl: "https://pokedex-navy-delta.vercel.app/",
     image: "/images/pokedex.png",
     imageAspectRatio: "8 / 5",
     imageFocalPoint: "50% 38%",
-    tags: ["React", "TypeScript", "Vite", "Tailwind CSS", "TanStack Query", "PWA", "PokéAPI"],
+    tags: ["React", "TypeScript", "TanStack Query", "PWA"],
   },
   {
     title: "Read Manga App",
+    category: "Content & discovery",
     description:
-      "A responsive manga discovery app with a curated library, title and genre search, reusable series pages, and chapter filtering with clear links to independent reading sites.",
+      "A manga library with title and genre search, reusable series pages, and chapter filtering.",
     repo: "https://github.com/anorga/manga-react-app",
     liveUrl: "https://manga-react-app.vercel.app/",
     image: "/images/read-manga-collection.webp",
@@ -54,8 +52,9 @@ export const projects: Project[] = [
   },
   {
     title: "Atmos",
+    category: "Weather & data visualization",
     description:
-      "A calm weather dashboard with worldwide city search, current conditions, hourly and seven-day forecasts, and landscapes that adapt to the weather and time of day. Save favorite places and find the best time outside with a transparent forecast-based recommendation.",
+      "A calm weather dashboard with worldwide forecasts and landscapes that change with the weather and time of day.",
     repo: "https://github.com/anorga/weather-app",
     liveUrl: "https://atmos-weather-phi.vercel.app/",
     image: "/images/atmos.webp",

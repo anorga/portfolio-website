@@ -1,171 +1,52 @@
-"use client";
+import { ThinkingForm } from "@/components/ui/thinking-form";
+import { MotionTitle } from "@/components/ui/motion-system";
 
-import {
-  useRef,
-  useState,
-  type CSSProperties,
-  type PointerEvent,
-} from "react";
-import { Pause, Play } from "lucide-react";
-import { useInView } from "motion/react";
-import { Section, SectionIntro } from "@/components/ui/section";
-import { Reveal } from "@/components/ui/reveal";
-import { skills, type Skill } from "@/content/skills";
-
-const skillRows = [skills.slice(0, 6), skills.slice(6)];
+const capabilities = [
+  {
+    title: "Interfaces & interactions",
+    description:
+      "Responsive websites, accessible interfaces, and apps that feel at home on their screen.",
+    tools: "React · Next.js · React Native · TypeScript",
+  },
+  {
+    title: "Systems & data",
+    description:
+      "APIs, databases, and synchronization that support the experience from behind the scenes.",
+    tools: "C# · ASP.NET Core · PostgreSQL · SQLite",
+  },
+  {
+    title: "From idea to delivery",
+    description:
+      "Turning requirements into maintainable software, with care for performance and the people using it.",
+    tools: "Git · Vercel · Expo · Node.js",
+  },
+];
 
 export function Skills() {
-  const [paused, setPaused] = useState(false);
-  const marqueeRef = useRef<HTMLDivElement>(null);
-  const marqueeIsVisible = useInView(marqueeRef, { margin: "150px" });
-
   return (
-    <Section
+    <section
       id="skills"
-      className="relative mx-3 overflow-hidden rounded-[2.5rem] border border-border/60 bg-card/55 !py-20 shadow-sm sm:mx-6 sm:rounded-[3rem] sm:!py-24"
+      className="skills-section page-width"
+      aria-labelledby="skills-title"
     >
-      <div
-        aria-hidden
-        className="accent-bloom pointer-events-none absolute -left-24 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full opacity-[0.08]"
+      <p className="eyebrow">How I work</p>
+      <MotionTitle
+        id="skills-title"
+        lines={["from the pixels", "to the plumbing."]}
       />
-
-      <div className="relative">
-        <Reveal>
-          <SectionIntro
-            title="Technologies"
-            description="Tools and frameworks I use to build modern web experiences."
-            align="center"
-            descriptionClassName="max-w-xl"
-          />
-        </Reveal>
-        <div className="skill-pause-slot mt-5 flex justify-center sm:absolute sm:right-0 sm:top-0 sm:mt-0">
-          <button
-            type="button"
-            aria-pressed={paused}
-            aria-label={
-              paused
-                ? "Resume technology animation"
-                : "Pause technology animation"
-            }
-            onClick={() => setPaused((value) => !value)}
-            className="skill-pause inline-flex h-11 w-11 touch-manipulation items-center justify-center rounded-full border border-border bg-background/70 text-muted shadow-sm transition-[transform,border-color,color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-accent hover:text-accent hover:shadow-md active:translate-y-0 active:scale-95"
-          >
-            {paused ? (
-              <Play className="h-4 w-4" aria-hidden />
-            ) : (
-              <Pause className="h-4 w-4" aria-hidden />
-            )}
-          </button>
-        </div>
-      </div>
-
-      <div ref={marqueeRef} className="relative mt-12">
-        <Reveal delay={0.08} className="space-y-4">
-          {skillRows.map((row, index) => (
-            <SkillMarquee
-              key={index}
-              skills={row}
-              reverse={index === 1}
-              paused={paused || !marqueeIsVisible}
+      <div className="capability-grid">
+        {capabilities.map((item, index) => (
+          <article key={item.title} className="capability">
+            <ThinkingForm
+              className="capability-form"
+              initial={(["shaping", "connecting", "solving"] as const)[index]}
             />
-          ))}
-        </Reveal>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+            <p className="capability-tools">{item.tools}</p>
+          </article>
+        ))}
       </div>
-    </Section>
-  );
-}
-
-function SkillMarquee({
-  skills: row,
-  reverse = false,
-  paused = false,
-}: {
-  skills: Skill[];
-  reverse?: boolean;
-  paused?: boolean;
-}) {
-  const penChip = useRef<HTMLDivElement | null>(null);
-
-  function clearPenHover() {
-    if (!penChip.current) return;
-    delete penChip.current.dataset.penHover;
-    penChip.current.style.removeProperty("--pen-shift-x");
-    penChip.current.style.removeProperty("--pen-shift-y");
-    penChip.current = null;
-  }
-
-  function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
-    if (event.pointerType !== "pen") {
-      clearPenHover();
-      return;
-    }
-
-    if (!(event.target instanceof Element)) {
-      clearPenHover();
-      return;
-    }
-
-    const chip = event.target.closest<HTMLDivElement>(".skill-chip");
-    if (!chip || !event.currentTarget.contains(chip)) {
-      clearPenHover();
-      return;
-    }
-
-    if (penChip.current !== chip) {
-      clearPenHover();
-      penChip.current = chip;
-      chip.dataset.penHover = "";
-    }
-
-    const rect = chip.getBoundingClientRect();
-    const x = rect.width ? (event.clientX - rect.left) / rect.width - 0.5 : 0;
-    const y = rect.height ? (event.clientY - rect.top) / rect.height - 0.5 : 0;
-    chip.style.setProperty("--pen-shift-x", `${x * 5}px`);
-    chip.style.setProperty("--pen-shift-y", `${y * 5}px`);
-  }
-
-  return (
-    <div
-      onPointerMove={handlePointerMove}
-      onPointerLeave={clearPenHover}
-      onPointerCancel={clearPenHover}
-      className="skill-marquee overflow-hidden py-1 [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
-    >
-      <div
-        className={`skill-track ${reverse ? "skill-track-reverse" : ""} ${paused ? "skill-track-paused" : ""}`}
-      >
-        <SkillGroup skills={row} />
-        <SkillGroup skills={row} duplicate />
-      </div>
-    </div>
-  );
-}
-
-function SkillGroup({
-  skills: row,
-  duplicate = false,
-}: {
-  skills: Skill[];
-  duplicate?: boolean;
-}) {
-  return (
-    <div
-      aria-hidden={duplicate || undefined}
-      className="flex shrink-0 gap-4"
-    >
-      {row.map(({ name, Icon, color }) => (
-        <div
-          key={name}
-          className="skill-chip group flex min-w-44 cursor-default items-center justify-center gap-3 overflow-hidden rounded-2xl border border-border/80 bg-background/80 px-6 py-5 shadow-sm transition-[transform,translate,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-foreground/20 hover:shadow-md"
-        >
-          <Icon
-            className="h-7 w-7 shrink-0 transition duration-300 ease-out group-hover:-rotate-3 group-hover:scale-110 group-hover:[filter:drop-shadow(0_0_10px_var(--brand))]"
-            style={{ color, "--brand": color } as CSSProperties}
-            aria-hidden
-          />
-          <span className="font-semibold">{name}</span>
-        </div>
-      ))}
-    </div>
+    </section>
   );
 }

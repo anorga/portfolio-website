@@ -1,25 +1,26 @@
 "use client";
 
 import { useEffect } from "react";
-import {
-  ThemeProvider as NextThemesProvider,
-  useTheme,
-} from "next-themes";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { MotionConfig } from "motion/react";
 import type { ComponentProps } from "react";
 
 function ThemeColorSync() {
-  const { resolvedTheme } = useTheme();
-
   useEffect(() => {
-    if (resolvedTheme !== "light" && resolvedTheme !== "dark") return;
-
-    const color = resolvedTheme === "dark" ? "#0c0a09" : "#fafaf9";
-    document.documentElement.style.colorScheme = resolvedTheme;
-    document
-      .querySelector<HTMLMetaElement>('meta[name="theme-color"]')
-      ?.setAttribute("content", color);
-  }, [resolvedTheme]);
+    const root = document.documentElement;
+    const sync = () => {
+      const color = getComputedStyle(root)
+        .getPropertyValue("--background")
+        .trim();
+      document
+        .querySelector<HTMLMetaElement>('meta[name="theme-color"]')
+        ?.setAttribute("content", color);
+    };
+    const observer = new MutationObserver(sync);
+    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
+    sync();
+    return () => observer.disconnect();
+  }, []);
 
   return null;
 }

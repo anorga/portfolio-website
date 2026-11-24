@@ -1,9 +1,11 @@
 export interface Project {
   title: string;
+  category: string;
   description: string;
   repo?: string;
   liveUrl?: string;
   image: string;
+  imageAlt?: string;
   imageAspectRatio: `${number} / ${number}`;
   imageFocalPoint: `${number}% ${number}%`;
   tags: string[];
