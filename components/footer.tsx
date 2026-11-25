@@ -8,7 +8,20 @@ export function Footer() {
         href="#main-content"
         aria-label="Chris Anorga, return to top"
       >
-        CHRIS ANORGA<span aria-hidden>+</span>
+        <span className="footer-name" aria-hidden>
+          {Array.from(site.name.toUpperCase(), (letter, index) => (
+            <span
+              className="footer-letter"
+              key={index}
+              style={{ animationDelay: `${index * 22}ms` }}
+            >
+              {letter}
+            </span>
+          ))}
+        </span>
+        <span className="return-arrow" aria-hidden>
+          ↑
+        </span>
       </a>
       <p>
         © {new Date().getFullYear()} {site.name}

@@ -1,10 +1,10 @@
-import Image from "next/image";
+import { PreviewGlass, ThemedImage } from "@/components/ui/themed-image";
 import { ChevronDown, Globe, Code2 } from "lucide-react";
 import { projects } from "@/content/projects";
 import type { Project } from "@/lib/types";
 import { PlaySurface } from "@/components/ui/play-surface";
 import { MotionTitle } from "@/components/ui/motion-system";
-import { ThinkingForm } from "@/components/ui/thinking-form";
+import { ProjectIndex } from "@/components/ui/project-index";
 import { Reveal } from "@/components/ui/reveal";
 
 export function Projects() {
@@ -20,15 +20,13 @@ export function Projects() {
           <p className="eyebrow">Selected work / Independent projects</p>
           <MotionTitle id="work-title" lines={["things I’ve", "made."]} />
         </div>
-        <div className="work-intro">
-          <ThinkingForm initial="solving" className="work-form" />
-          <p>
-            Real products. Different problems.
-            <br className="desktop-break" /> Designed and developed by me.
-          </p>
-        </div>
+        <ProjectIndex />
       </div>
-      <article className="featured-project" aria-labelledby="featured-title">
+      <article
+        id={featured.id}
+        className="featured-project"
+        aria-labelledby="featured-title"
+      >
         <div className="featured-copy">
           <div className="featured-title-group">
             <p className="eyebrow">Featured product · iOS & web</p>
@@ -90,7 +88,7 @@ export function Projects() {
       <div className="project-grid">
         {otherProjects.slice(0, 2).map((project) => (
           <Reveal className="project-reveal" key={project.title}>
-            <article className="project-card">
+            <article id={project.id} className="project-card">
               <PlaySurface className="project-art">
                 <div className="project-frame-label">
                   <span>{project.title}</span>
@@ -113,7 +111,7 @@ export function Projects() {
         <h3>More things I’ve built</h3>
         <div className="more-work-grid">
           {otherProjects.slice(2).map((project) => (
-            <article key={project.title} className="small-project">
+            <article id={project.id} key={project.id} className="small-project">
               <ProjectImage project={project} compact />
               <div>
                 <p className="project-category">{project.category}</p>
@@ -145,23 +143,34 @@ function ProjectImage({
       target="_blank"
       rel="noreferrer"
       aria-label={`Explore ${project.title} in a new tab`}
-      style={{ aspectRatio: project.imageAspectRatio }}
+      draggable={false}
     >
-      <Image
-        src={project.image}
-        quality={featured ? 90 : undefined}
-        loading={featured ? "eager" : "lazy"}
-        alt={project.imageAlt ?? `${project.title} app screenshot`}
-        fill
-        sizes={
-          compact
-            ? "(min-width: 600px) 160px, 112px"
-            : featured
-              ? "(min-width: 1440px) 1334px, 100vw"
-              : "(min-width: 760px) 560px, 100vw"
-        }
-        style={{ objectFit: "cover", objectPosition: project.imageFocalPoint }}
-      />
+      <PreviewGlass src={project.image} darkSrc={project.darkImage} />
+      <span
+        className="project-image-viewport"
+        style={{ aspectRatio: project.imageAspectRatio }}
+      >
+        <ThemedImage
+          draggable={false}
+          src={project.image}
+          darkSrc={project.darkImage}
+          quality={featured ? 90 : undefined}
+          fetchPriority={featured ? "high" : undefined}
+          alt={project.imageAlt ?? `${project.title} app screenshot`}
+          fill
+          sizes={
+            compact
+              ? "(min-width: 600px) 160px, 112px"
+              : featured
+                ? "(min-width: 1440px) 1334px, 100vw"
+                : "(min-width: 760px) 560px, 100vw"
+          }
+          style={{
+            objectFit: "cover",
+            objectPosition: project.imageFocalPoint,
+          }}
+        />
+      </span>
       <span className="image-link-label">Explore project</span>
     </a>
   );

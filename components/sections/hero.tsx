@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ThemedImage } from "@/components/ui/themed-image";
 import { SiGithub } from "react-icons/si";
 import { KineticType } from "@/components/ui/kinetic-type";
 import { ThinkingForm } from "@/components/ui/thinking-form";
@@ -49,8 +49,9 @@ export function Hero() {
         <div className="hero-aside">
           <ThinkingForm className="hero-form" interactive />
           <a href="#projects" className="current-build">
-            <Image
+            <ThemedImage
               src="/images/ambient-notes-icon.png"
+              darkSrc="/images/ambient-notes-icon-dark.webp"
               alt=""
               width={58}
               height={58}

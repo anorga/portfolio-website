@@ -62,46 +62,43 @@ export function CodePlayground() {
         </div>
         <div className="code-art-controls">
           <p>
-            {reducedMotion ? (
-              "A little imagination, written in code."
-            ) : (
-              <>
-                <span className="hint-mouse">
-                  Move your cursor through the bird.
-                </span>
-                <span className="hint-touch">
-                  Move your finger through the bird.
-                </span>
-              </>
-            )}
+            <span className="crane-still-caption">
+              An origami crane drawn with code.
+            </span>
+            <span className="crane-motion-hint">
+              <span className="hint-mouse">
+                Move your cursor through the bird.
+              </span>
+              <span className="hint-touch">
+                Move your finger through the bird.
+              </span>
+            </span>
           </p>
-          {!reducedMotion && (
-            <div>
-              <button
-                className="button button-primary"
-                type="button"
-                disabled={paused}
-                onClick={() => controller.current?.scatter()}
-              >
-                <RotateCcw size={15} aria-hidden /> Scatter & reform
-              </button>
-              <button
-                className="icon-button"
-                type="button"
-                onClick={() => setPaused((value) => !value)}
-                aria-label={
-                  paused ? "Play code animation" : "Pause code animation"
-                }
-                aria-pressed={paused}
-              >
-                {paused ? (
-                  <Play size={18} aria-hidden />
-                ) : (
-                  <Pause size={18} aria-hidden />
-                )}
-              </button>
-            </div>
-          )}
+          <div className="crane-motion-actions">
+            <button
+              className="button button-primary"
+              type="button"
+              disabled={paused}
+              onClick={() => controller.current?.scatter()}
+            >
+              <RotateCcw size={15} aria-hidden /> Scatter & reform
+            </button>
+            <button
+              className="icon-button"
+              type="button"
+              onClick={() => setPaused((value) => !value)}
+              aria-label={
+                paused ? "Play code animation" : "Pause code animation"
+              }
+              aria-pressed={paused}
+            >
+              {paused ? (
+                <Play size={18} aria-hidden />
+              ) : (
+                <Pause size={18} aria-hidden />
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </section>
