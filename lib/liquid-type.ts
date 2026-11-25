@@ -14,19 +14,17 @@ export function createLiquidType(
     void main(){ uv = position * .5 + .5; gl_Position=vec4(position,0.,1.); }`;
   const fragment = `precision highp float;
     varying vec2 uv; uniform sampler2D ink; uniform sampler2D flow;
-    uniform vec3 face; uniform vec3 ember; uniform vec2 bendLimit;
+    uniform vec3 face; uniform vec3 ember; uniform vec2 reach;
     float maskAt(vec2 point) { return texture2D(ink, point).a; }
     void main(){
       vec2 velocity=(texture2D(flow,uv).rg-vec2(128./255.))*2.;
       float energy=length(velocity);
-      vec2 pull=velocity*.18;
-      vec2 bend=pull/(1.+abs(pull)/bendLimit);
-      vec2 p=uv-bend;
-      float front=maskAt(p);
-      float trail=(maskAt(p-bend*.24)*.38+maskAt(p-bend*.52)*.28+
-                   maskAt(p-bend*.85)*.19+maskAt(p-bend*1.2)*.15)
-                  *smoothstep(.012,.18,energy)*(1.-front);
-      vec3 colour=mix(face,ember,smoothstep(.08,.65,energy)*.8);
+      vec2 bend=reach*velocity/(.48+energy);
+      float front=maskAt(uv-bend);
+      float wake=max(maskAt(uv-bend*.76)*.78,
+                 max(maskAt(uv-bend*.50)*.49, maskAt(uv-bend*.23)*.24));
+      float trail=wake*smoothstep(.025,.35,energy)*(1.-front);
+      vec3 colour=mix(face,ember,smoothstep(.06,.68,energy));
       gl_FragColor=vec4(colour*front+ember*trail,front+trail);
     }`;
   function compile(type: number, source: string) {
@@ -114,6 +112,9 @@ export function createLiquidType(
     pendingY = 0,
     pointerX = 0,
     pointerY = 0;
+  let strokeStartX = 0,
+    strokeStartY = 0,
+    brushRadius = 48;
   let energy = 0;
   let touchPointer: number | null = null;
   function colours() {
@@ -172,13 +173,20 @@ export function createLiquidType(
       width = Math.round(bounds.width * dpr),
       height = Math.round(bounds.height * dpr);
     if (!width || !height) return;
-    // The furthest sample travels 2.2 times the bend. Leave a transparent
-    // pixel border even at maximum velocity and on narrow screens.
-    const bleed = Math.max(1, (bounds.width - stage.offsetWidth) / 2 - 2);
+    const word = stage.querySelector<HTMLElement>(".liquid-word")!;
+    const em = parseFloat(getComputedStyle(word).fontSize);
+    brushRadius = Math.max(32, Math.min(146, em * 0.83));
+    // All ink samples stay inside the transparent gutter, even on a diagonal flick.
+    const gutter =
+      Math.min(
+        bounds.width - stage.offsetWidth,
+        bounds.height - stage.offsetHeight,
+      ) / 2;
+    const reach = Math.max(1, Math.min(gutter - 3, em * 0.78));
     gl!.uniform2f(
-      gl!.getUniformLocation(program, "bendLimit"),
-      bleed / (2.2 * bounds.width),
-      bleed / (2.2 * bounds.height),
+      gl!.getUniformLocation(program, "reach"),
+      reach / bounds.width,
+      reach / bounds.height,
     );
     canvas.width = sheet.width = width;
     canvas.height = sheet.height = height;
@@ -216,6 +224,7 @@ export function createLiquidType(
     );
     colours();
     ready = true;
+    stage.dataset.inkReady = "";
   }
   function rest() {
     cancelAnimationFrame(frame);
@@ -230,17 +239,26 @@ export function createLiquidType(
   function tick(now: number) {
     frame = 0;
     if (!active || disposed || !ready) return;
-    const dt = Math.min((now - previousFrame) / 16.667 || 1, 2);
+    const dt = Math.max(0, Math.min((now - previousFrame) / 16.667, 3));
     previousFrame = now;
-    const aspect = bounds.width / bounds.height;
-    const damping = Math.pow(0.925, dt);
+    const damping = Math.pow(0.94, dt);
     const inject = pendingX !== 0 || pendingY !== 0;
+    // Measure the whole stroke in brush radii. A fast swipe can cross several
+    // letters between frames, and horizontal and vertical motion should feel alike.
+    const unitsX = bounds.width / brushRadius,
+      unitsY = bounds.height / brushRadius;
+    const strokeX = (pointerX - strokeStartX) * unitsX,
+      strokeY = (pointerY - strokeStartY) * unitsY;
+    const lengthSquared = strokeX * strokeX + strokeY * strokeY;
+    const pressure = Math.min(1.2, Math.hypot(pendingX, pendingY)) * 0.55;
+    const travelX = ((0.14 * columns) / unitsX) * dt,
+      travelY = ((0.14 * rows) / unitsY) * dt;
     energy = 0;
     for (let y = 0; y < rows; y++)
       for (let x = 0; x < columns; x++) {
         const i = y * columns + x;
-        const sx = clamp(x - vx[i] * 2.5 * dt, columns - 1),
-          sy = clamp(y - vy[i] * 2.5 * dt, rows - 1);
+        const sx = clamp(x - vx[i] * travelX, columns - 1),
+          sy = clamp(y - vy[i] * travelY, rows - 1);
         const x0 = Math.floor(sx),
           y0 = Math.floor(sy),
           x1 = Math.min(x0 + 1, columns - 1),
@@ -255,15 +273,24 @@ export function createLiquidType(
           wb = fx * (1 - fy),
           wc = (1 - fx) * fy,
           wd = fx * fy;
-        const dx = (x / columns - pointerX) * aspect,
-          dy = y / rows - pointerY;
-        const weight = inject ? Math.exp(-(dx * dx + dy * dy) / 0.017) : 0;
-        nextX[i] =
-          (vx[a] * wa + vx[b] * wb + vx[c] * wc + vx[d] * wd) * damping +
-          pendingX * weight;
-        nextY[i] =
-          (vy[a] * wa + vy[b] * wb + vy[c] * wc + vy[d] * wd) * damping +
-          pendingY * weight;
+        let flowX =
+          (vx[a] * wa + vx[b] * wb + vx[c] * wc + vx[d] * wd) * damping;
+        let flowY =
+          (vy[a] * wa + vy[b] * wb + vy[c] * wc + vy[d] * wd) * damping;
+        if (inject) {
+          const px = ((x + 0.5) / columns - strokeStartX) * unitsX;
+          const py = ((y + 0.5) / rows - strokeStartY) * unitsY;
+          const along = lengthSquared
+            ? clamp((px * strokeX + py * strokeY) / lengthSquared, 1)
+            : 0;
+          const dx = px - along * strokeX,
+            dy = py - along * strokeY;
+          const weight = Math.exp(-1.6 * (dx * dx + dy * dy));
+          flowX += (pendingX + dx * pressure) * weight;
+          flowY += (pendingY + dy * pressure) * weight;
+        }
+        nextX[i] = Math.max(-1.35, Math.min(1.35, flowX));
+        nextY[i] = Math.max(-1.35, Math.min(1.35, flowY));
         energy = Math.max(energy, Math.abs(nextX[i]), Math.abs(nextY[i]));
       }
     [vx, nextX] = [nextX, vx];
@@ -298,8 +325,24 @@ export function createLiquidType(
       return;
     }
     if (lastX >= 0 && now - lastTime < 180) {
-      pendingX = Math.max(-0.5, Math.min(0.5, pendingX + (x - lastX) * 12));
-      pendingY = Math.max(-0.5, Math.min(0.5, pendingY + (y - lastY) * 12));
+      if (!pendingX && !pendingY) {
+        strokeStartX = lastX;
+        strokeStartY = lastY;
+      }
+      pendingX = Math.max(
+        -1.25,
+        Math.min(
+          1.25,
+          pendingX + ((x - lastX) * bounds.width * 2.4) / brushRadius,
+        ),
+      );
+      pendingY = Math.max(
+        -1.25,
+        Math.min(
+          1.25,
+          pendingY + ((y - lastY) * bounds.height * 2.4) / brushRadius,
+        ),
+      );
     }
     pointerX = x;
     pointerY = y;
@@ -309,13 +352,13 @@ export function createLiquidType(
     wake();
   }
   function touchStart(event: PointerEvent) {
-    if (event.pointerType !== "touch") return;
+    if (event.pointerType !== "touch" || !event.isPrimary) return;
     bounds = canvas.getBoundingClientRect();
     touchPointer = event.pointerId;
     pointerX = (event.clientX - bounds.left) / bounds.width;
     pointerY = 1 - (event.clientY - bounds.top) / bounds.height;
-    lastX = pointerX;
-    lastY = pointerY;
+    strokeStartX = lastX = pointerX;
+    strokeStartY = lastY = pointerY;
     lastTime = performance.now();
     pendingX = 0.12;
     pendingY = 0.06;
@@ -338,6 +381,7 @@ export function createLiquidType(
   function contextLost() {
     rest();
     ready = false;
+    delete stage.dataset.inkReady;
   }
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(stage);
@@ -373,6 +417,7 @@ export function createLiquidType(
     window.removeEventListener("pointercancel", touchEnd);
     canvas.removeEventListener("webglcontextlost", contextLost);
     stage.removeAttribute("data-liquid");
+    delete stage.dataset.inkReady;
     textures.forEach((t) => gl.deleteTexture(t));
     gl.deleteBuffer(buffer);
     gl.deleteProgram(program);

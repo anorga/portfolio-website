@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import { RotateCw } from "lucide-react";
 import {
   motion,
   useMotionValue,
@@ -35,6 +36,7 @@ export function ThinkingForm({
 }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [form, setForm] = useState(initial);
+  const statusId = useId();
   const reduced = useReducedMotion();
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
@@ -128,29 +130,53 @@ export function ThinkingForm({
         {artwork}
       </div>
     );
+  const position = forms.indexOf(form) + 1;
   return (
-    <button
-      className={`thinking-form thinking-form-interactive ${className}`}
-      aria-label={`Change orb shape. Current shape: ${form}`}
-      onClick={() => setForm(forms[(forms.indexOf(form) + 1) % forms.length])}
-      onPointerMove={(event) => {
-        if (event.pointerType !== "mouse") return;
-        const box = event.currentTarget.getBoundingClientRect();
-        mx.set((event.clientX - box.left - box.width / 2) * 0.14);
-        my.set((event.clientY - box.top - box.height / 2) * 0.14);
-      }}
-      onPointerLeave={() => {
-        mx.set(0);
-        my.set(0);
-      }}
-    >
-      {artwork}
-      <span className="orb-invitation">
-        Change shape <span aria-hidden>↗</span>
+    <div className={`thinking-form ${className}`}>
+      <button
+        type="button"
+        className="orb-switch"
+        aria-label="Morph it into the next orb shape"
+        aria-describedby={statusId}
+        onClick={() =>
+          setForm(
+            (current) => forms[(forms.indexOf(current) + 1) % forms.length],
+          )
+        }
+      >
+        <span
+          className="orb-art"
+          onPointerMove={(event) => {
+            if (reduced || event.pointerType !== "mouse") return;
+            const box = event.currentTarget.getBoundingClientRect();
+            mx.set((event.clientX - box.left - box.width / 2) * 0.14);
+            my.set((event.clientY - box.top - box.height / 2) * 0.14);
+          }}
+          onPointerLeave={() => {
+            mx.set(0);
+            my.set(0);
+          }}
+        >
+          {artwork}
+        </span>
+        <span className="orb-controls">
+          <span className="orb-readout" aria-hidden>
+            <span className="orb-count">
+              {String(position).padStart(2, "0")} /{" "}
+              {String(forms.length).padStart(2, "0")}
+            </span>
+            <span className="orb-name" key={form}>
+              {form}
+            </span>
+          </span>
+          <span className="orb-trigger">
+            Morph it <RotateCw size={16} aria-hidden />
+          </span>
+        </span>
+      </button>
+      <span id={statusId} className="sr-only" role="status" aria-atomic="true">
+        {form}, shape {position} of {forms.length}
       </span>
-      <span className="orb-state" aria-live="polite">
-        {String(forms.indexOf(form) + 1).padStart(2, "0")} / 09 · {form}
-      </span>
-    </button>
+    </div>
   );
 }

@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { useReducedMotion } from "motion/react";
 import { createLiquidType } from "@/lib/liquid-type";
 
 export function KineticType({
@@ -12,11 +11,25 @@ export function KineticType({
 }) {
   const stage = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
-  const reducedMotion = useReducedMotion();
   useEffect(() => {
-    if (reducedMotion !== false || !stage.current || !canvas.current) return;
-    return createLiquidType(stage.current, canvas.current);
-  }, [reducedMotion, text]);
+    const element = stage.current;
+    const surface = canvas.current;
+    if (!element || !surface) return;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let dispose: (() => void) | undefined;
+    const syncMotion = () => {
+      dispose?.();
+      dispose = reducedMotion.matches
+        ? undefined
+        : createLiquidType(element, surface);
+    };
+    syncMotion();
+    reducedMotion.addEventListener("change", syncMotion);
+    return () => {
+      reducedMotion.removeEventListener("change", syncMotion);
+      dispose?.();
+    };
+  }, [text]);
   const Tag = closing ? "h2" : "h1";
   return (
     <div className={`liquid-stage${closing ? " liquid-closing" : ""}`}>
@@ -42,10 +55,8 @@ export function KineticType({
         <p className="liquid-hint">
           <span className="hint-spark" aria-hidden>
             +
-          </span>{" "}
-          <span className="hint-mouse">Move your cursor.</span>
-          <span className="hint-touch">Move your finger.</span> This type is
-          alive.
+          </span>
+          Stir the ink.
         </p>
       )}
     </div>

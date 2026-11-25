@@ -1,5 +1,6 @@
 import { ThemedImage } from "@/components/ui/themed-image";
 import { SiGithub } from "react-icons/si";
+import { ArrowDownRight } from "lucide-react";
 import { KineticType } from "@/components/ui/kinetic-type";
 import { ThinkingForm } from "@/components/ui/thinking-form";
 import { site } from "@/content/site";
@@ -45,25 +46,28 @@ export function Hero() {
               <SiGithub size={22} aria-hidden />
             </a>
           </div>
-        </div>
-        <div className="hero-aside">
-          <ThinkingForm className="hero-form" interactive />
-          <a href="#projects" className="current-build">
+          <a id="now-shipping" href="#ambient-notes" className="current-build">
             <ThemedImage
               src="/images/ambient-notes-icon.png"
               darkSrc="/images/ambient-notes-icon-dark.webp"
               alt=""
-              width={58}
-              height={58}
+              width={52}
+              height={52}
             />
-            <span>
-              <span className="current-build-label">Currently shipping</span>
+            <span className="current-build-copy">
+              <span className="current-build-label">Now shipping</span>
               <strong>Ambient Notes</strong>
               <span className="current-build-platforms">
                 iPhone, iPad & web
               </span>
             </span>
+            <span className="current-build-stub" aria-hidden>
+              <ArrowDownRight size={24} />
+            </span>
           </a>
+        </div>
+        <div className="hero-aside">
+          <ThinkingForm className="hero-form" interactive />
         </div>
       </div>
       <div className="hero-bottom-line page-width">

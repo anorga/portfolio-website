@@ -134,8 +134,8 @@ export function ProjectIndex() {
       </div>
       <div className="index-controls">
         <span aria-hidden>
-          <span className="hint-mouse">Drag to flip</span>
-          <span className="hint-touch">Swipe to flip</span>
+          <span className="hint-mouse">Drag the deck</span>
+          <span className="hint-touch">Swipe the deck</span>
         </span>
         <button
           type="button"
