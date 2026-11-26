@@ -1,4 +1,5 @@
-import { PreviewGlass, ThemedImage } from "@/components/ui/themed-image";
+import { ThemedImage } from "@/components/ui/themed-image";
+import { GlassInteraction } from "@/components/ui/glass-interaction";
 import { ChevronDown, Globe, Code2 } from "lucide-react";
 import { projects } from "@/content/projects";
 import type { Project } from "@/lib/types";
@@ -41,7 +42,7 @@ export function Projects() {
             <ProjectLinks project={featured} />
           </div>
         </div>
-        <PlaySurface className="featured-art">
+        <PlaySurface className="featured-art" intensity={0.25}>
           <div className="project-frame-label">
             <span>Ambient Notes</span>
             <span>Product / iOS + Web</span>
@@ -89,7 +90,7 @@ export function Projects() {
         {otherProjects.slice(0, 2).map((project) => (
           <Reveal className="project-reveal" key={project.title}>
             <article id={project.id} className="project-card">
-              <PlaySurface className="project-art">
+              <PlaySurface className="project-art" intensity={0.25}>
                 <div className="project-frame-label">
                   <span>{project.title}</span>
                   <span>Web application</span>
@@ -145,7 +146,7 @@ function ProjectImage({
       aria-label={`Explore ${project.title} in a new tab`}
       draggable={false}
     >
-      <PreviewGlass src={project.image} darkSrc={project.darkImage} />
+      <GlassInteraction />
       <span
         className="project-image-viewport"
         style={{ aspectRatio: project.imageAspectRatio }}

@@ -3,7 +3,8 @@
 import { useRef, useState } from "react";
 import { ArrowDownRight, ArrowLeft, ArrowRight } from "lucide-react";
 import { projects } from "@/content/projects";
-import { PreviewGlass, ThemedImage } from "./themed-image";
+import { ThemedImage } from "./themed-image";
+import { GlassInteraction } from "./glass-interaction";
 
 export function ProjectIndex() {
   const [card, setCard] = useState({ index: 0, direction: 0 });
@@ -113,7 +114,7 @@ export function ProjectIndex() {
             <div className="index-project">
               <span className="index-name">{project.title}</span>
               <span className="index-thumbnail">
-                <PreviewGlass src={project.image} darkSrc={project.darkImage} />
+                <GlassInteraction />
                 <span className="project-image-viewport">
                   <ThemedImage
                     src={project.image}

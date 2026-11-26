@@ -11,9 +11,11 @@ import {
 export function PlaySurface({
   children,
   className = "",
+  intensity = 1,
 }: {
   children: ReactNode;
   className?: string;
+  intensity?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
@@ -23,8 +25,16 @@ export function PlaySurface({
     target: ref,
     offset: ["start end", "end start"],
   });
-  const scrollTilt = useTransform(scrollYProgress, [0, 0.4, 1], [12, 0, -5]);
-  const y = useTransform(scrollYProgress, [0, 0.4, 1], [70, 0, -30]);
+  const scrollTilt = useTransform(
+    scrollYProgress,
+    [0, 0.4, 1],
+    [12 * intensity, 0, -5 * intensity],
+  );
+  const y = useTransform(
+    scrollYProgress,
+    [0, 0.4, 1],
+    [70 * intensity, 0, -30 * intensity],
+  );
   const rotateX = useTransform(
     [tiltX, scrollTilt],
     (values) => Number(values[0]) + Number(values[1]),
@@ -42,8 +52,12 @@ export function PlaySurface({
       onPointerMove={(event) => {
         if (reduced || event.pointerType !== "mouse") return;
         const box = event.currentTarget.getBoundingClientRect();
-        rotateY.set(((event.clientX - box.left) / box.width - 0.5) * 10);
-        tiltX.set(-((event.clientY - box.top) / box.height - 0.5) * 10);
+        rotateY.set(
+          ((event.clientX - box.left) / box.width - 0.5) * 10 * intensity,
+        );
+        tiltX.set(
+          -((event.clientY - box.top) / box.height - 0.5) * 10 * intensity,
+        );
       }}
       onPointerLeave={() => {
         tiltX.set(0);

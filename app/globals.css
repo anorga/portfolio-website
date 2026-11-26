@@ -655,7 +655,7 @@ em {
 }
 .index-thumbnail .project-image-viewport {
   position: absolute;
-  inset: var(--glass-rim);
+  inset: 0;
 }
 .index-thumbnail img {
   object-fit: cover;
@@ -752,12 +752,11 @@ em {
   color: var(--muted);
 }
 .project-image {
-  --glass-rim: clamp(6px, 0.75vw, 10px);
+  --glass-rim: clamp(11px, 1.25vw, 18px);
   --frame-radius: 22px;
   position: relative;
   display: block;
   overflow: hidden;
-  padding: var(--glass-rim);
   border-radius: var(--frame-radius);
   isolation: isolate;
   touch-action: pan-y pinch-zoom;
@@ -767,80 +766,48 @@ em {
   position: relative;
   display: block;
   overflow: hidden;
-  border-radius: calc(var(--frame-radius) - var(--glass-rim));
-  box-shadow: 0 0 0 1px #0d25281f, 0 1px 1px #ffffff57;
+  border-radius: inherit;
+  /* Keep WebKit's filtered photo painted when the visible theme image changes. */
+  transform: translateZ(0);
   pointer-events: none;
-}
-.glass-contour {
-  position: absolute;
-  top: var(--glass-rim);
-  left: var(--glass-rim);
-  width: calc(100% - 2 * var(--glass-rim));
-  height: calc(100% - 2 * var(--glass-rim));
-  z-index: 1;
-  overflow: visible;
-  pointer-events: none;
-  stroke: light-dark(#28555270, #defffbc9);
-  stroke-width: 1.25px;
 }
 .preview-glass {
   position: absolute;
   inset: 0;
+  z-index: 1;
+  padding: var(--glass-rim);
+  border-radius: inherit;
   pointer-events: none;
-  /* Compress the screenshot's edges into the curved rim and let the page show through. */
-  border: var(--glass-rim) solid transparent;
-  border-image: var(--glass-light) 8% 5% fill / var(--glass-rim) stretch;
-  filter: blur(1.2px) saturate(1.15);
-  opacity: 0.52;
-  transition: opacity 180ms ease-out;
+  box-shadow: inset 0 1px 1px light-dark(#ffffffe0, #ffffff59),
+    inset 0 -2px 3px light-dark(#17231532, #0008);
 }
-.dark .preview-glass {
-  border-image-source: var(--glass-dark, var(--glass-light));
-}
-[data-bending] > .preview-glass {
-  opacity: 0.75;
-}
-[data-bending] > .preview-glass::after {
-  content: "";
-  position: absolute;
-  inset: calc(-1 * var(--glass-rim));
-  background: radial-gradient(ellipse 30% 38% at var(--glint-position), #e1fffc9c, transparent);
-}
-.project-image::after,
-.index-thumbnail::after {
+.preview-glass::before,
+.preview-glass::after {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 1;
-  pointer-events: none;
   border-radius: inherit;
-  box-shadow:
-    inset 0 0 0 1px #e9ffff4d, inset 0 1px 1px #ffffff94,
-    inset 0 -1px 2px #1434312b;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
 }
-@supports (mask-composite: exclude) {
-  .project-image::after,
-  .index-thumbnail::after {
-    padding: var(--glass-rim);
-    background:
-      radial-gradient(ellipse 23% 95% at 16% 0%, #ffffff85, transparent 78%),
-      radial-gradient(ellipse 20% 80% at 88% 100%, #d8fffb63, transparent 80%)
-      #d4f7ff0f;
-    background-size: 120% 100%;
-    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    mask-composite: exclude;
-  }
-  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-    .project-image::after {
-      transition: background-position 600ms ease-out;
-    }
-    .project-image:is(:hover, :focus-visible)::after {
-      background-position: 100% 0;
-    }
-  }
+.preview-glass::before {
+  mask: none;
+  --band: var(--sheen-position, 45%);
+  background:
+    linear-gradient(var(--sheen-angle, 111deg),
+      transparent calc(var(--band) - 32%),
+      rgb(255 255 255 / calc(var(--glass-light, 0) * 0.035)) calc(var(--band) - 13%),
+      light-dark(rgb(255 255 255 / calc(var(--glass-light, 0) * 0.14)),
+        rgb(255 255 255 / calc(var(--glass-light, 0) * 0.09))) var(--band),
+      transparent calc(var(--band) + 23%)),
+    linear-gradient(to bottom, #ffffff26, transparent var(--glass-rim)),
+    linear-gradient(to top, light-dark(#29372c21, #0005), transparent var(--glass-rim));
 }
-.project-image img {
-  transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+.preview-glass::after {
+  padding: min(2px, var(--glass-rim));
+  background: linear-gradient(var(--rim-bearing, -35deg),
+    #ffffff2e, transparent 22% 50%, #ffffff55 78%, #fffffff0);
+  opacity: var(--glass-light, 0);
 }
 .preview-dark,
 .dark .preview-light {
@@ -848,10 +815,6 @@ em {
 }
 .dark .preview-dark {
   display: block;
-}
-.project-image:hover img,
-.project-image:focus-visible img {
-  transform: scale(1.045);
 }
 .featured-image {
   width: 100%;
@@ -1048,13 +1011,13 @@ em {
   border-top: 1px solid var(--border);
 }
 .small-project-image {
-  --glass-rim: 4px;
+  --glass-rim: 5px;
   --frame-radius: 12px;
   align-self: start;
   transition: transform 0.4s;
 }
 .small-project:hover .small-project-image {
-  transform: translateY(-8px);
+  transform: translateY(-2px);
 }
 .small-project h4 {
   font-size: 27px;
@@ -1971,7 +1934,6 @@ em {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  .project-image:hover img,
   .button:hover {
     transform: none;
   }
