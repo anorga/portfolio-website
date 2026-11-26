@@ -1052,11 +1052,6 @@ em {
   height: 390px;
   object-fit: cover;
   object-position: 50% 35%;
-  filter: saturate(0.55);
-  transition: filter 0.5s;
-}
-.about-portrait:hover img {
-  filter: saturate(1);
 }
 .portrait-sticker > span {
   display: block;

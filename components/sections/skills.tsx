@@ -32,7 +32,7 @@ export function Skills() {
       <p className="eyebrow">How I work</p>
       <MotionTitle
         id="skills-title"
-        lines={["from the pixels", "to the plumbing."]}
+        lines={["what you see.", "how it works."]}
       />
       <div className="capability-grid">
         {capabilities.map((item, index) => (
