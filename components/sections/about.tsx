@@ -10,7 +10,7 @@ export function About() {
         <p className="eyebrow">The person behind the work</p>
         <MotionTitle
           id="about-title"
-          lines={["curious mind.", "busy hands."]}
+          lines={["i like figuring", "things out."]}
         />
         <div className="about-grid">
           <PlaySurface className="about-portrait">
