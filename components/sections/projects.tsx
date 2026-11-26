@@ -1,666 +1,187 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ExternalLink } from "lucide-react";
-import { SiGithub as Github } from "react-icons/si";
-import { Section, SectionIntro } from "@/components/ui/section";
-import { PointerGlow } from "@/components/ui/pointer-glow";
-import { Reveal } from "@/components/ui/reveal";
+import { ThemedImage } from "@/components/ui/themed-image";
+import { GlassInteraction } from "@/components/ui/glass-interaction";
+import { ChevronDown, Globe, Code2 } from "lucide-react";
 import { projects } from "@/content/projects";
 import type { Project } from "@/lib/types";
+import { PlaySurface } from "@/components/ui/play-surface";
+import { MotionTitle } from "@/components/ui/motion-system";
+import { ProjectIndex } from "@/components/ui/project-index";
+import { Reveal } from "@/components/ui/reveal";
 
 export function Projects() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const projectRefs = useRef<Array<HTMLElement | null>>([]);
-  const compactProjectRefs = useRef<Array<HTMLElement | null>>([]);
-  const compactScrollTargetRef = useRef<number | null>(null);
-  const compactScrollTargetTimeoutRef = useRef<number | null>(null);
-  const updateCompactActiveRef = useRef<() => void>(() => undefined);
-  const shouldReduceMotion = useReducedMotion();
-  const activeProject = projects[activeIndex];
-
-  useEffect(() => {
-    const compactLayout = window.matchMedia("(max-width: 1279px)");
-    let frame = 0;
-
-    const cancelScrollTarget = () => {
-      compactScrollTargetRef.current = null;
-
-      if (compactScrollTargetTimeoutRef.current !== null) {
-        window.clearTimeout(compactScrollTargetTimeoutRef.current);
-        compactScrollTargetTimeoutRef.current = null;
-      }
-    };
-
-    const updateActiveProject = () => {
-      if (!compactLayout.matches) return;
-
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        const viewportTop = window.scrollY;
-        const viewportBottom = viewportTop + window.innerHeight;
-        const focusLine = viewportTop + window.innerHeight * 0.46;
-        const measurements = getCompactProjectMeasurements(
-          compactProjectRefs.current,
-        );
-
-        const hasVisibleProject = measurements.some((project) => {
-          const visibleHeight = Math.max(
-            0,
-            Math.min(project.bottom, viewportBottom) -
-              Math.max(project.top, viewportTop),
-          );
-
-          return (
-            visibleHeight >= Math.min(80, (project.bottom - project.top) * 0.16)
-          );
-        });
-
-        if (!hasVisibleProject) return;
-
-        const anchors = getOrderedProjectAnchors(measurements);
-        const scrollTarget = compactScrollTargetRef.current;
-
-        if (scrollTarget !== null) {
-          const targetAnchor = anchors.find(
-            (anchor) => anchor.index === scrollTarget,
-          );
-          const targetReached =
-            targetAnchor &&
-            Math.abs(targetAnchor.position - focusLine) <=
-              Math.max(48, window.innerHeight * 0.07);
-
-          if (!targetReached) {
-            setActiveIndex(scrollTarget);
-            return;
-          }
-
-          cancelScrollTarget();
-        }
-
-        setActiveIndex((current) =>
-          getActiveProjectIndex(anchors, focusLine, current),
-        );
-      });
-    };
-
-    const cancelScrollTargetFromKeyboard = (event: KeyboardEvent) => {
-      if (
-        [
-          "ArrowUp",
-          "ArrowDown",
-          "PageUp",
-          "PageDown",
-          "Home",
-          "End",
-          " ",
-        ].includes(event.key)
-      ) {
-        cancelScrollTarget();
-      }
-    };
-
-    let compactListenersAttached = false;
-
-    const attachCompactListeners = () => {
-      if (compactListenersAttached) return;
-
-      compactListenersAttached = true;
-      window.addEventListener("scroll", updateActiveProject, { passive: true });
-      window.addEventListener("resize", updateActiveProject);
-      window.addEventListener("pointerdown", cancelScrollTarget, true);
-      window.addEventListener("wheel", cancelScrollTarget, { passive: true });
-      window.addEventListener("keydown", cancelScrollTargetFromKeyboard);
-      updateActiveProject();
-    };
-
-    const detachCompactListeners = () => {
-      if (!compactListenersAttached) return;
-
-      compactListenersAttached = false;
-      cancelAnimationFrame(frame);
-      cancelScrollTarget();
-      window.removeEventListener("scroll", updateActiveProject);
-      window.removeEventListener("resize", updateActiveProject);
-      window.removeEventListener("pointerdown", cancelScrollTarget, true);
-      window.removeEventListener("wheel", cancelScrollTarget);
-      window.removeEventListener("keydown", cancelScrollTargetFromKeyboard);
-    };
-
-    const syncCompactListeners = () => {
-      if (compactLayout.matches) {
-        attachCompactListeners();
-      } else {
-        detachCompactListeners();
-      }
-    };
-
-    updateCompactActiveRef.current = updateActiveProject;
-    compactLayout.addEventListener("change", syncCompactListeners);
-    syncCompactListeners();
-
-    return () => {
-      compactLayout.removeEventListener("change", syncCompactListeners);
-      detachCompactListeners();
-      updateCompactActiveRef.current = () => undefined;
-    };
-  }, []);
-
-  function selectProject(index: number, focusProject = false) {
-    setActiveIndex(index);
-
-    const project = projectRefs.current[index];
-    if (!project) return;
-
-    project.scrollIntoView({
-      behavior: shouldReduceMotion ? "auto" : "smooth",
-      block: "center",
-    });
-
-    if (focusProject) {
-      project.focus({ preventScroll: true });
-    }
-  }
-
-  function selectCompactProject(
-    index: number,
-    focusProject = false,
-  ) {
-    if (compactScrollTargetTimeoutRef.current !== null) {
-      window.clearTimeout(compactScrollTargetTimeoutRef.current);
-      compactScrollTargetTimeoutRef.current = null;
-    }
-
-    compactScrollTargetRef.current = shouldReduceMotion ? null : index;
-
-    if (!shouldReduceMotion) {
-      compactScrollTargetTimeoutRef.current = window.setTimeout(() => {
-        if (compactScrollTargetRef.current === index) {
-          compactScrollTargetRef.current = null;
-          updateCompactActiveRef.current();
-        }
-
-        compactScrollTargetTimeoutRef.current = null;
-      }, 1200);
-    }
-
-    setActiveIndex(index);
-
-    const project = compactProjectRefs.current[index];
-    if (!project) return;
-
-    const targetAnchor = getOrderedProjectAnchors(
-      getCompactProjectMeasurements(compactProjectRefs.current),
-    ).find((anchor) => anchor.index === index);
-
-    window.scrollTo({
-      top: targetAnchor
-        ? Math.max(0, targetAnchor.position - window.innerHeight * 0.46)
-        : getLayoutTop(project),
-      behavior: shouldReduceMotion ? "auto" : "smooth",
-    });
-
-    if (focusProject) {
-      project
-        .querySelector<HTMLElement>("article")
-        ?.focus({ preventScroll: true });
-    }
-  }
-
+  const [featured, ...otherProjects] = projects;
   return (
-    <Section
+    <section
       id="projects"
-      wide
-      className="relative !pb-12 !pt-16 sm:!pb-16 sm:!pt-20"
+      className="work-section page-width"
+      aria-labelledby="work-title"
     >
-      <Reveal className="xl:pl-6">
-        <SectionIntro
-          eyebrow="Selected work"
-          title="Projects"
-          description={
-            <>
-              A sample of projects I&apos;ve built. Links to the live apps and
-              public source repositories are included.
-            </>
-          }
-        />
-      </Reveal>
-
-      <div className="mt-10 hidden gap-14 xl:grid xl:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] xl:gap-20 2xl:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] 2xl:gap-24">
+      <div className="section-heading">
         <div>
-          {projects.map((project, index) => {
-            const isActive = activeIndex === index;
-
-            return (
-              <motion.article
-                key={project.title}
-                ref={(node) => {
-                  projectRefs.current[index] = node;
-                }}
-                tabIndex={-1}
-                onViewportEnter={() => setActiveIndex(index)}
-                onFocusCapture={() => setActiveIndex(index)}
-                viewport={{ amount: 0.55, margin: "-20% 0px -20% 0px" }}
-                className="relative flex min-h-[58vh] flex-col justify-center rounded-xl border-b border-border/60 py-16 pl-6 outline-none first:pt-4 last:border-b-0 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background"
-              >
-                <motion.span
-                  aria-hidden
-                  animate={{ scaleY: isActive ? 1 : 0 }}
-                  transition={{ duration: shouldReduceMotion ? 0 : 0.25 }}
-                  className="absolute inset-y-16 left-0 w-0.5 origin-center rounded-full bg-accent"
-                />
-                <span className="text-sm font-semibold tabular-nums text-accent">
-                  {String(index + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
-                </span>
-                <h3 className="mt-4 text-3xl font-bold tracking-tight xl:text-4xl">
-                  {project.title}
-                </h3>
-                <p className="mt-4 max-w-xl leading-relaxed text-muted">
-                  {project.description}
-                </p>
+          <p className="eyebrow">Selected work / Independent projects</p>
+          <MotionTitle id="work-title" lines={["things I’ve", "made."]} />
+        </div>
+        <ProjectIndex />
+      </div>
+      <article
+        id={featured.id}
+        className="featured-project"
+        aria-labelledby="featured-title"
+      >
+        <div className="featured-copy">
+          <div className="featured-title-group">
+            <p className="eyebrow">Featured product · iOS & web</p>
+            <h3 id="featured-title">{featured.title}</h3>
+            <p className="project-deck">
+              A little space for everyday thoughts.
+            </p>
+          </div>
+          <div className="featured-detail-group">
+            <p className="project-description">{featured.description}</p>
+            <ProjectTags project={featured} />
+            <ProjectLinks project={featured} />
+          </div>
+        </div>
+        <PlaySurface className="featured-art" scrollIntensity={0.25}>
+          <div className="project-frame-label">
+            <span>Ambient Notes</span>
+            <span>Product / iOS + Web</span>
+          </div>
+          <ProjectImage project={featured} featured />
+        </PlaySurface>
+        <details className="engineering-details">
+          <summary>
+            <span>
+              Behind the build{" "}
+              <span className="detail-hint">
+                The decisions that make it work
+              </span>
+            </span>
+            <ChevronDown size={18} aria-hidden />
+          </summary>
+          <div className="engineering-grid">
+            <div>
+              <h4>Capture first</h4>
+              <p>
+                Notes save on the device first. SQLite and a durable sync outbox
+                keep writing available offline and carry changes to linked
+                devices.
+              </p>
+            </div>
+            <div>
+              <h4>Privacy in the architecture</h4>
+              <p>
+                Note content is encrypted before it syncs. The ASP.NET Core API
+                and PostgreSQL handle storage without receiving the content key.
+              </p>
+            </div>
+            <div>
+              <h4>Built for each screen</h4>
+              <p>
+                One Expo and React Native client adapts to quick capture on a
+                phone, a spatial board on larger screens, and keyboard
+                navigation on the web.
+              </p>
+            </div>
+          </div>
+        </details>
+      </article>
+      <div className="project-grid">
+        {otherProjects.slice(0, 2).map((project) => (
+          <Reveal className="project-reveal" key={project.title}>
+            <article id={project.id} className="project-card">
+              <PlaySurface className="project-art" scrollIntensity={0.25}>
+                <div className="project-frame-label">
+                  <span>{project.title}</span>
+                  <span>Web application</span>
+                </div>
+                <ProjectImage project={project} />
+              </PlaySurface>
+              <div className="project-card-copy">
+                <p className="project-category">{project.category}</p>
+                <h3>{project.title}</h3>
+                <p className="project-description">{project.description}</p>
                 <ProjectTags project={project} />
                 <ProjectLinks project={project} />
-              </motion.article>
-            );
-          })}
-        </div>
-
-        <div className="relative">
-          <div className="sticky top-24 flex h-[calc(100svh-7rem)] flex-col justify-center">
-            <PointerGlow
-              size={620}
-              pressable
-              className="w-full rounded-2xl border border-border/70 bg-card shadow-xl shadow-foreground/[0.06]"
-            >
-              <a
-                href={getProjectDestination(activeProject)}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={getProjectLinkLabel(activeProject)}
-                className="group/preview block overflow-hidden rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background"
-              >
-                <div
-                  className="relative overflow-hidden bg-card"
-                  style={{ aspectRatio: activeProject.imageAspectRatio }}
-                >
-                  <AnimatePresence initial={false}>
-                    <motion.div
-                      key={activeProject.title}
-                      initial={
-                        shouldReduceMotion
-                          ? { opacity: 1 }
-                          : { opacity: 0, scale: 1.018 }
-                      }
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={
-                        shouldReduceMotion
-                          ? { opacity: 0 }
-                          : { opacity: 0, scale: 0.99 }
-                      }
-                      transition={{
-                        duration: shouldReduceMotion ? 0 : 0.3,
-                        ease: [0.22, 1, 0.36, 1],
-                      }}
-                      className="absolute inset-0"
-                    >
-                      <Image
-                        src={activeProject.image}
-                        alt={`${activeProject.title} project screenshot`}
-                        fill
-                        sizes="(min-width: 1536px) 760px, (min-width: 1280px) 52vw, 1px"
-                        className="object-cover"
-                        style={{ objectPosition: activeProject.imageFocalPoint }}
-                      />
-                    </motion.div>
-                  </AnimatePresence>
-                </div>
-                <div className="flex min-h-14 items-center justify-between gap-4 border-t border-border/60 px-5 py-3">
-                  <AnimatePresence initial={false} mode="wait">
-                    <motion.p
-                      key={activeProject.title}
-                      initial={
-                        shouldReduceMotion ? false : { opacity: 0, y: 5 }
-                      }
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={shouldReduceMotion ? undefined : { opacity: 0, y: -5 }}
-                      transition={{ duration: shouldReduceMotion ? 0 : 0.2 }}
-                      className="truncate text-sm font-medium"
-                    >
-                      {activeProject.title}
-                    </motion.p>
-                  </AnimatePresence>
-                  <span className="inline-flex shrink-0 items-center gap-1.5 text-xs font-medium text-muted transition-colors group-hover/preview:text-accent group-focus-visible/preview:text-accent">
-                    <ExternalLink aria-hidden className="h-3.5 w-3.5" />
-                    {activeProject.liveUrl ? "Open live" : "Open code"}
-                  </span>
-                </div>
-              </a>
-            </PointerGlow>
-
-            <nav
-              aria-label="Choose a project preview"
-              className="mt-2 flex items-center justify-center gap-1"
-            >
-              {projects.map((project, index) => {
-                const isActive = index === activeIndex;
-
-                return (
-                  <button
-                    key={project.title}
-                    type="button"
-                    aria-label={`Show ${project.title}`}
-                    aria-current={isActive ? "true" : undefined}
-                    onPointerEnter={(event) => {
-                      if (event.pointerType !== "touch") setActiveIndex(index);
-                    }}
-                    onFocus={() => setActiveIndex(index)}
-                    onClick={(event) => selectProject(index, event.detail === 0)}
-                    className="group/dot inline-flex h-11 w-11 touch-manipulation items-center justify-center rounded-full transition-transform duration-200 hover:scale-110 active:scale-95"
-                  >
-                    <span
-                      aria-hidden
-                      className={`h-2 rounded-full transition-[width,background-color,transform] duration-300 group-hover/dot:scale-125 ${
-                        isActive ? "w-6 bg-accent" : "w-2 bg-muted/45"
-                      }`}
-                    />
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
-        </div>
-      </div>
-
-      <nav
-        aria-label="Project progress"
-        className="project-rail sticky z-20 mt-8 xl:hidden"
-      >
-        <div className="mx-auto flex min-h-12 max-w-md items-center gap-2 rounded-2xl border border-border/75 bg-background/90 px-2 shadow-lg shadow-foreground/[0.04] backdrop-blur-xl supports-[backdrop-filter]:bg-background/75">
-          <div className="flex min-w-0 flex-1 items-center pl-2 text-sm font-medium">
-            <span className="mr-2 shrink-0 tabular-nums text-accent">
-              {String(activeIndex + 1).padStart(2, "0")}
-            </span>
-            <span className="min-w-0 truncate text-foreground">
-              {activeProject.title}
-            </span>
-          </div>
-          <div className="flex shrink-0 items-center">
-            {projects.map((project, index) => {
-              const isActive = index === activeIndex;
-
-              return (
-                <button
-                  key={project.title}
-                  type="button"
-                  aria-label={`Go to ${project.title}`}
-                  aria-current={isActive ? "true" : undefined}
-                  onPointerEnter={(event) => {
-                    if (event.pointerType !== "touch") setActiveIndex(index);
-                  }}
-                  onFocus={() => setActiveIndex(index)}
-                  onClick={(event) =>
-                    selectCompactProject(index, event.detail === 0)
-                  }
-                  className="group/rail inline-flex h-11 w-11 touch-manipulation items-center justify-center rounded-xl outline-none transition-transform duration-200 hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 focus-visible:ring-offset-background"
-                >
-                  <span
-                    aria-hidden
-                    className={`h-1.5 rounded-full transition-[width,background-color,transform] duration-300 group-hover/rail:scale-y-125 ${
-                      isActive ? "w-7 bg-accent" : "w-3 bg-muted/35"
-                    }`}
-                  />
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </nav>
-
-      <div className="mt-6 grid gap-7 md:grid-cols-2 lg:grid-cols-12 lg:gap-8 xl:hidden">
-        {projects.map((project, index) => {
-          const isActive = index === activeIndex;
-          const isWideTabletCard =
-            index === 0 || index === projects.length - 1;
-
-          return (
-            <Reveal
-              key={project.title}
-              delay={index * 0.06}
-              className={`h-full ${
-                isWideTabletCard ? "lg:col-span-7" : "lg:col-span-5"
-              }`}
-            >
-              <div
-                ref={(node) => {
-                  compactProjectRefs.current[index] = node;
-                }}
-                className="h-full"
-              >
-                <PointerGlow
-                  pressable
-                  className={`group/project h-full rounded-2xl border bg-card transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-accent/70 hover:shadow-xl focus-within:-translate-y-1 focus-within:border-accent/70 focus-within:shadow-xl ${
-                    isActive
-                      ? "border-accent/55 shadow-lg shadow-accent/[0.07]"
-                      : "border-border shadow-sm"
-                  }`}
-                >
-                  <motion.article
-                    aria-labelledby={`project-card-title-${index}`}
-                    tabIndex={-1}
-                    onPointerEnter={(event) => {
-                      if (event.pointerType !== "touch") setActiveIndex(index);
-                    }}
-                    onFocusCapture={() => setActiveIndex(index)}
-                    animate={{ y: !shouldReduceMotion && isActive ? -2 : 0 }}
-                    transition={{ duration: shouldReduceMotion ? 0 : 0.24 }}
-                    className="relative flex h-full flex-col overflow-hidden rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
-                  >
-                    <motion.span
-                      aria-hidden
-                      animate={{ scaleX: isActive ? 1 : 0 }}
-                      transition={{ duration: shouldReduceMotion ? 0 : 0.24 }}
-                      className="absolute inset-x-6 top-0 z-10 h-0.5 origin-left rounded-full bg-accent"
-                    />
-                    <a
-                      href={getProjectDestination(project)}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={getProjectLinkLabel(project)}
-                      className="group/media relative block touch-manipulation overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
-                      style={{ aspectRatio: project.imageAspectRatio }}
-                    >
-                      <div className="pointer-shift absolute -inset-2">
-                        <Image
-                          src={project.image}
-                          alt={`${project.title} project screenshot`}
-                          fill
-                          sizes="(min-width: 1280px) 1px, (min-width: 768px) calc(50vw - 3.5rem), calc(100vw - 3rem)"
-                          className="object-cover transition-transform duration-500 ease-out group-hover/project:scale-[1.035] group-focus-within/project:scale-[1.035]"
-                          style={{ objectPosition: project.imageFocalPoint }}
-                        />
-                      </div>
-                      <div
-                        aria-hidden
-                        className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent opacity-80 transition-opacity duration-300 group-hover/media:opacity-100 group-focus-visible/media:opacity-100"
-                      />
-                      <span
-                        className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/55 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-[transform,background-color] duration-200 group-hover/media:-translate-y-0.5 group-hover/media:bg-black/75 group-focus-visible/media:-translate-y-0.5 group-focus-visible/media:bg-black/75"
-                      >
-                        <ExternalLink aria-hidden className="h-3.5 w-3.5" />
-                        {project.liveUrl ? "Open live" : "Open code"}
-                      </span>
-                    </a>
-                    <div className="flex flex-1 flex-col p-6">
-                      <div className="flex items-center justify-between gap-4">
-                        <span className="text-xs font-semibold tabular-nums text-accent">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                        <span
-                          aria-hidden
-                          className={`h-px flex-1 transition-colors duration-300 ${
-                            isActive ? "bg-accent/45" : "bg-border/70"
-                          }`}
-                        />
-                      </div>
-                      <h3
-                        id={`project-card-title-${index}`}
-                        className="mt-2 text-xl font-semibold"
-                      >
-                        {project.title}
-                      </h3>
-                      <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
-                        {project.description}
-                      </p>
-                      <ProjectTags project={project} />
-                      <ProjectLinks project={project} />
-                    </div>
-                  </motion.article>
-                </PointerGlow>
               </div>
-            </Reveal>
-          );
-        })}
+            </article>
+          </Reveal>
+        ))}
       </div>
-    </Section>
+      <div className="more-work">
+        <h3>More things I’ve built</h3>
+        <div className="more-work-grid">
+          {otherProjects.slice(2).map((project) => (
+            <article id={project.id} key={project.id} className="small-project">
+              <ProjectImage project={project} compact />
+              <div>
+                <p className="project-category">{project.category}</p>
+                <h4>{project.title}</h4>
+                <p className="project-description">{project.description}</p>
+                <ProjectLinks project={project} />
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
-interface CompactProjectMeasurement {
-  index: number;
-  top: number;
-  bottom: number;
-}
-
-interface CompactProjectAnchor {
-  index: number;
-  position: number;
-}
-
-function getCompactProjectMeasurements(
-  projectElements: Array<HTMLElement | null>,
-): CompactProjectMeasurement[] {
-  return projectElements
-    .flatMap((project, index) => {
-      if (!project) return [];
-
-      const top = getLayoutTop(project);
-
-      return [{ index, top, bottom: top + project.offsetHeight }];
-    })
-    .sort((a, b) => a.top - b.top || a.index - b.index);
-}
-
-function getLayoutTop(element: HTMLElement) {
-  let top = 0;
-  let current: HTMLElement | null = element;
-
-  while (current) {
-    top += current.offsetTop;
-    current =
-      current.offsetParent instanceof HTMLElement
-        ? current.offsetParent
-        : null;
-  }
-
-  return top;
-}
-
-function getOrderedProjectAnchors(
-  measurements: CompactProjectMeasurement[],
-): CompactProjectAnchor[] {
-  const rows: Array<{
-    top: number;
-    bottom: number;
-    projects: CompactProjectMeasurement[];
-  }> = [];
-
-  measurements.forEach((project) => {
-    const currentRow = rows.at(-1);
-
-    if (!currentRow || Math.abs(project.top - currentRow.top) > 8) {
-      rows.push({
-        top: project.top,
-        bottom: project.bottom,
-        projects: [project],
-      });
-      return;
-    }
-
-    currentRow.top = Math.min(currentRow.top, project.top);
-    currentRow.bottom = Math.max(currentRow.bottom, project.bottom);
-    currentRow.projects.push(project);
-  });
-
-  return rows.flatMap((row) => {
-    const rowHeight = row.bottom - row.top;
-    const orderedProjects = row.projects.sort((a, b) => a.index - b.index);
-
-    return orderedProjects.map((project, projectIndex) => ({
-      index: project.index,
-      position:
-        row.top +
-        rowHeight * ((projectIndex + 1) / (orderedProjects.length + 1)),
-    }));
-  });
-}
-
-function getActiveProjectIndex(
-  anchors: CompactProjectAnchor[],
-  focusLine: number,
-  currentIndex: number,
-) {
-  if (!anchors.length) return currentIndex;
-
-  let nextAnchorIndex = 0;
-
-  for (let index = 0; index < anchors.length - 1; index += 1) {
-    const boundary = (anchors[index].position + anchors[index + 1].position) / 2;
-
-    if (focusLine < boundary) break;
-    nextAnchorIndex = index + 1;
-  }
-
-  const currentAnchorIndex = anchors.findIndex(
-    (anchor) => anchor.index === currentIndex,
+function ProjectImage({
+  project,
+  featured = false,
+  compact = false,
+}: {
+  project: Project;
+  featured?: boolean;
+  compact?: boolean;
+}) {
+  return (
+    <a
+      className={`project-image${featured ? " featured-image" : ""}${compact ? " small-project-image" : ""}`}
+      href={project.liveUrl ?? project.repo}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={`Explore ${project.title} in a new tab`}
+      draggable={false}
+    >
+      <GlassInteraction />
+      <span
+        className="project-image-viewport"
+        style={{ aspectRatio: project.imageAspectRatio }}
+      >
+        <ThemedImage
+          draggable={false}
+          src={project.image}
+          darkSrc={project.darkImage}
+          quality={featured ? 90 : undefined}
+          fetchPriority={featured ? "high" : undefined}
+          alt={project.imageAlt ?? `${project.title} app screenshot`}
+          fill
+          sizes={
+            compact
+              ? "(min-width: 600px) 160px, 112px"
+              : featured
+                ? "(min-width: 1440px) 1334px, 100vw"
+                : "(min-width: 760px) 560px, 100vw"
+          }
+          style={{
+            objectFit: "cover",
+            objectPosition: project.imageFocalPoint,
+          }}
+        />
+      </span>
+      <span className="image-link-label">Explore project</span>
+    </a>
   );
-
-  if (currentAnchorIndex === -1 || currentAnchorIndex === nextAnchorIndex) {
-    return anchors[nextAnchorIndex].index;
-  }
-
-  const hysteresis = 18;
-
-  if (nextAnchorIndex > currentAnchorIndex) {
-    const forwardBoundary =
-      (anchors[currentAnchorIndex].position +
-        anchors[currentAnchorIndex + 1].position) /
-      2;
-
-    if (focusLine < forwardBoundary + hysteresis) return currentIndex;
-  } else {
-    const backwardBoundary =
-      (anchors[currentAnchorIndex - 1].position +
-        anchors[currentAnchorIndex].position) /
-      2;
-
-    if (focusLine > backwardBoundary - hysteresis) return currentIndex;
-  }
-
-  return anchors[nextAnchorIndex].index;
 }
 
 function ProjectTags({ project }: { project: Project }) {
   return (
-    <ul className="mt-5 flex flex-wrap gap-2">
+    <ul className="project-tags" aria-label={`${project.title} technologies`}>
       {project.tags.map((tag) => (
-        <li
-          key={tag}
-          className="rounded-full border border-border px-2.5 py-0.5 text-xs text-muted transition-colors duration-300 group-hover/project:border-foreground/15"
-        >
-          {tag}
-        </li>
+        <li key={tag}>{tag}</li>
       ))}
     </ul>
   );
@@ -668,17 +189,16 @@ function ProjectTags({ project }: { project: Project }) {
 
 function ProjectLinks({ project }: { project: Project }) {
   return (
-    <div className="mt-6 flex items-center gap-5 text-sm font-medium">
+    <div className="project-links">
       {project.liveUrl && (
         <a
           href={project.liveUrl}
           target="_blank"
           rel="noreferrer"
-          aria-label={`View ${project.title} live project in a new tab`}
-          className="group/live inline-flex min-h-11 touch-manipulation items-center gap-1.5 rounded-md text-accent transition-opacity hover:opacity-80"
+          aria-label={`Visit ${project.title} in a new tab`}
         >
-          <ExternalLink className="h-4 w-4 transition-transform duration-200 group-hover/live:-translate-y-0.5 group-hover/live:translate-x-0.5" />
-          Live
+          <Globe size={16} aria-hidden />
+          Visit project
         </a>
       )}
       {project.repo && (
@@ -686,29 +206,12 @@ function ProjectLinks({ project }: { project: Project }) {
           href={project.repo}
           target="_blank"
           rel="noreferrer"
-          aria-label={`View ${project.title} source code on GitHub in a new tab`}
-          className="group/code inline-flex min-h-11 touch-manipulation items-center gap-1.5 rounded-md text-muted transition-colors hover:text-foreground"
+          aria-label={`Read ${project.title} source code on GitHub in a new tab`}
         >
-          <Github className="h-4 w-4 transition-transform duration-200 group-hover/code:-translate-y-0.5" />
-          Code
+          <Code2 size={17} aria-hidden />
+          Source code
         </a>
       )}
     </div>
   );
-}
-
-function getProjectDestination(project: Project) {
-  const destination = project.liveUrl ?? project.repo;
-
-  if (!destination) {
-    throw new Error(`${project.title} must include a live or repository URL.`);
-  }
-
-  return destination;
-}
-
-function getProjectLinkLabel(project: Project) {
-  return project.liveUrl
-    ? `Open ${project.title} live project in a new tab`
-    : `Open ${project.title} source code on GitHub in a new tab`;
 }

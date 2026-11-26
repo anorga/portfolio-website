@@ -1,9 +1,14 @@
 export interface Project {
+  id: string;
+  cardColor: "cobalt" | "orange" | "mocha" | "sky";
   title: string;
+  category: string;
   description: string;
   repo?: string;
   liveUrl?: string;
   image: string;
+  darkImage?: string;
+  imageAlt?: string;
   imageAspectRatio: `${number} / ${number}`;
   imageFocalPoint: `${number}% ${number}%`;
   tags: string[];

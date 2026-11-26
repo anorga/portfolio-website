@@ -1,69 +1,64 @@
-import { Code2, RefreshCw, TrendingUp } from "lucide-react";
-import { PortraitCard } from "@/components/sections/portrait-card";
-import { Section, SectionHeading } from "@/components/ui/section";
-import { PointerGlow } from "@/components/ui/pointer-glow";
-import { Reveal } from "@/components/ui/reveal";
+import Image from "next/image";
 import { site } from "@/content/site";
-
-const highlightIcons = [Code2, RefreshCw, TrendingUp] as const;
+import { PlaySurface } from "@/components/ui/play-surface";
+import { MotionTitle } from "@/components/ui/motion-system";
 
 export function About() {
   return (
-    <Section
-      id="about"
-      className="relative isolate -mt-6 overflow-hidden rounded-t-[2.5rem] bg-background !py-16 shadow-[0_-24px_70px_-55px_rgba(0,0,0,0.45)] ring-1 ring-border/40 sm:-mt-10 sm:rounded-t-[3.5rem] sm:!py-24"
-    >
-      <div
-        aria-hidden
-        className="accent-bloom pointer-events-none absolute -right-48 top-1/2 -z-10 h-96 w-96 -translate-y-1/2 rounded-full opacity-[0.08]"
-      />
-
-      <div className="grid gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:items-start md:gap-x-10 md:gap-y-8 lg:gap-x-16 xl:gap-x-20">
-        <Reveal className="md:col-start-2 md:row-start-1">
-          <SectionHeading>About Me</SectionHeading>
-          <div className="mt-6 space-y-4 text-lg leading-relaxed text-muted">
-            {site.bio.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
+    <section id="about" className="about-section" aria-labelledby="about-title">
+      <div className="page-width">
+        <p className="eyebrow">The person behind the work</p>
+        <MotionTitle
+          id="about-title"
+          lines={["curious mind.", "busy hands."]}
+        />
+        <div className="about-grid">
+          <PlaySurface className="about-portrait">
+            <div className="portrait-sticker">
+              <Image
+                src="/images/portrait-crop.jpg"
+                alt="Chris Anorga"
+                width={420}
+                height={470}
+                sizes="(max-width: 759px) 70vw, 360px"
+                style={{ objectFit: "cover" }}
+              />
+              <span>Chris, away from the keyboard.</span>
+            </div>
+            <span className="portrait-note">Based in San Diego, CA</span>
+          </PlaySurface>
+          <div className="about-copy">
+            <h3>
+              I care about how it feels.
+              <br />
+              And how it works.
+            </h3>
+            <p>
+              I’m Chris, a full-stack developer and Web Systems Analyst in San
+              Diego. I work across customer-facing websites, internal tools,
+              content architecture, and API integrations.
+            </p>
+            <p>
+              I like taking a problem from “what do people need?” through to a
+              working product: making the interface clear, the underlying
+              systems reliable, and the next change easier to make.
+            </p>
+            <p>
+              My independent projects are where I explore those ideas further,
+              from offline-first mobile apps to real-time collaboration on the
+              web.
+            </p>
+            <a
+              className="button button-secondary"
+              href={site.resumeUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              A little more about me — resume
+            </a>
           </div>
-        </Reveal>
-
-        <div
-          className="flex justify-center md:col-start-1 md:row-span-2 md:row-start-1 md:justify-start"
-        >
-          <PortraitCard />
         </div>
-
-        <Reveal delay={0.12} className="md:col-start-2 md:row-start-2">
-          <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-            {site.aboutHighlights.map((item, i) => {
-              const Icon = highlightIcons[i];
-
-              return (
-                <li
-                  key={item.title}
-                  className={i === 2 ? "sm:col-span-2 xl:col-span-1" : undefined}
-                >
-                  <PointerGlow
-                    size={240}
-                    className="h-full rounded-2xl transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:shadow-md"
-                  >
-                    <div className="group h-full rounded-2xl border border-border/70 bg-card/60 p-4 transition-[border-color] duration-300 ease-out group-hover/pointer:border-accent/40">
-                      <span className="pointer-shift mb-3 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-accent/10 text-accent transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3">
-                        <Icon className="h-4.5 w-4.5" aria-hidden />
-                      </span>
-                      <h3 className="font-semibold leading-snug">{item.title}</h3>
-                      <p className="mt-1.5 text-sm leading-relaxed text-muted">
-                        {item.description}
-                      </p>
-                    </div>
-                  </PointerGlow>
-                </li>
-              );
-            })}
-          </ul>
-        </Reveal>
       </div>
-    </Section>
+    </section>
   );
 }
