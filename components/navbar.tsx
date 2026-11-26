@@ -158,7 +158,7 @@ export function Navbar() {
               rel="noreferrer"
               onClick={() => setOpen(false)}
             >
-              View résumé
+              View resume
             </a>
           </nav>
         )}

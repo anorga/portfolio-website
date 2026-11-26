@@ -54,7 +54,7 @@ export function About() {
               target="_blank"
               rel="noreferrer"
             >
-              A little more about me — résumé
+              A little more about me — resume
             </a>
           </div>
         </div>

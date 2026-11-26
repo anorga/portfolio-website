@@ -1,5 +1,5 @@
 "use client";
-import { useRef, type ReactNode } from "react";
+import { useRef, type PointerEvent, type ReactNode } from "react";
 import {
   motion,
   useSpring,
@@ -11,16 +11,16 @@ import {
 export function PlaySurface({
   children,
   className = "",
-  intensity = 1,
+  scrollIntensity = 1,
 }: {
   children: ReactNode;
   className?: string;
-  intensity?: number;
+  scrollIntensity?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
-  const tiltX = useSpring(0, { stiffness: 130, damping: 22 });
-  const rotateY = useSpring(0, { stiffness: 130, damping: 22 });
+  const tiltX = useSpring(0, { stiffness: 220, damping: 25 });
+  const rotateY = useSpring(0, { stiffness: 220, damping: 25 });
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
@@ -28,43 +28,60 @@ export function PlaySurface({
   const scrollTilt = useTransform(
     scrollYProgress,
     [0, 0.4, 1],
-    [12 * intensity, 0, -5 * intensity],
+    [12 * scrollIntensity, 0, -5 * scrollIntensity],
   );
   const y = useTransform(
     scrollYProgress,
     [0, 0.4, 1],
-    [70 * intensity, 0, -30 * intensity],
+    [70 * scrollIntensity, 0, -30 * scrollIntensity],
   );
   const rotateX = useTransform(
     [tiltX, scrollTilt],
     (values) => Number(values[0]) + Number(values[1]),
   );
+  function tiltToPointer(event: PointerEvent<HTMLDivElement>) {
+    if (reduced || !event.isPrimary) return;
+    const touch = event.pointerType === "touch";
+    if (touch && !event.buttons) return;
+
+    // Measure the stationary wrapper so the moving face cannot steer its own tilt.
+    const box = event.currentTarget.getBoundingClientRect();
+    if (!box.width || !box.height) return;
+    const x = Math.max(-1, Math.min(1, 2 * (event.clientX - box.left) / box.width - 1));
+    const y = Math.max(-1, Math.min(1, 2 * (event.clientY - box.top) / box.height - 1));
+    rotateY.set(x * (touch ? 11 : 9));
+    tiltX.set(-y * (touch ? 8 : 7));
+  }
+
+  function settle() {
+    tiltX.set(0);
+    rotateY.set(0);
+  }
+
   return (
-    <motion.div
+    <div
       ref={ref}
       className={`play-surface ${className}`}
-      style={{
-        rotateX: reduced ? 0 : rotateX,
-        rotateY: reduced ? 0 : rotateY,
-        y: reduced ? 0 : y,
-        transformPerspective: 1200,
+      onPointerEnter={tiltToPointer}
+      onPointerDown={tiltToPointer}
+      onPointerMove={tiltToPointer}
+      onPointerUp={(event) => {
+        if (event.isPrimary && event.pointerType !== "mouse") settle();
       }}
-      onPointerMove={(event) => {
-        if (reduced || event.pointerType !== "mouse") return;
-        const box = event.currentTarget.getBoundingClientRect();
-        rotateY.set(
-          ((event.clientX - box.left) / box.width - 0.5) * 10 * intensity,
-        );
-        tiltX.set(
-          -((event.clientY - box.top) / box.height - 0.5) * 10 * intensity,
-        );
-      }}
-      onPointerLeave={() => {
-        tiltX.set(0);
-        rotateY.set(0);
-      }}
+      onPointerCancel={settle}
+      onPointerLeave={settle}
     >
-      {children}
-    </motion.div>
+      <motion.div
+        className="play-surface-face"
+        style={{
+          rotateX: reduced ? 0 : rotateX,
+          rotateY: reduced ? 0 : rotateY,
+          y: reduced ? 0 : y,
+          transformPerspective: 1200,
+        }}
+      >
+        {children}
+      </motion.div>
+    </div>
   );
 }

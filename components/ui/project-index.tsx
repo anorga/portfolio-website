@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { ArrowDownRight, ArrowLeft, ArrowRight } from "lucide-react";
 import { projects } from "@/content/projects";
 import { ThemedImage } from "./themed-image";
@@ -8,6 +8,7 @@ import { GlassInteraction } from "./glass-interaction";
 
 export function ProjectIndex() {
   const [card, setCard] = useState({ index: 0, direction: 0 });
+  const print = useRef<HTMLDivElement>(null);
   const drag = useRef<{
     x: number;
     y: number;
@@ -16,6 +17,24 @@ export function ProjectIndex() {
   } | null>(null);
   const suppressClick = useRef(false);
   const project = projects[card.index];
+
+  useLayoutEffect(() => {
+    if (
+      !card.direction ||
+      matchMedia("(prefers-reduced-motion: reduce)").matches
+    )
+      return;
+    const animation = print.current?.animate(
+      [
+        {
+          transform: `perspective(720px) rotateX(-22deg) rotate(${card.direction * 9}deg) translateY(-9px)`,
+        },
+        { transform: "none" },
+      ],
+      { duration: 350, easing: "cubic-bezier(0.17, 0.75, 0.22, 1.12)" },
+    );
+    return () => animation?.cancel();
+  }, [card]);
 
   function flip(direction: 1 | -1) {
     setCard(({ index }) => ({
@@ -87,6 +106,9 @@ export function ProjectIndex() {
               suppressClick.current = true;
             }
           }}
+          onPointerCancel={() => {
+            drag.current = null;
+          }}
           onLostPointerCapture={() => {
             drag.current = null;
           }}
@@ -100,9 +122,8 @@ export function ProjectIndex() {
         >
           <div
             className="index-print"
-            key={project.id}
+            ref={print}
             data-project-color={project.cardColor}
-            data-direction={card.direction}
           >
             <div className="index-legend">
               <span>Project index</span>

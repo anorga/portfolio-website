@@ -42,7 +42,7 @@ export function Projects() {
             <ProjectLinks project={featured} />
           </div>
         </div>
-        <PlaySurface className="featured-art" intensity={0.25}>
+        <PlaySurface className="featured-art" scrollIntensity={0.25}>
           <div className="project-frame-label">
             <span>Ambient Notes</span>
             <span>Product / iOS + Web</span>
@@ -90,7 +90,7 @@ export function Projects() {
         {otherProjects.slice(0, 2).map((project) => (
           <Reveal className="project-reveal" key={project.title}>
             <article id={project.id} className="project-card">
-              <PlaySurface className="project-art" intensity={0.25}>
+              <PlaySurface className="project-art" scrollIntensity={0.25}>
                 <div className="project-frame-label">
                   <span>{project.title}</span>
                   <span>Web application</span>

@@ -59,7 +59,7 @@ export function Contact() {
               GitHub
             </a>
             <a href={site.resumeUrl} target="_blank" rel="noreferrer">
-              Résumé
+              Resume
             </a>
           </div>
         </div>

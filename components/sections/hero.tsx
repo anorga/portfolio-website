@@ -34,7 +34,7 @@ export function Hero() {
               rel="noreferrer"
               className="button button-secondary"
             >
-              Résumé
+              Resume
             </a>
             <a
               href={site.github}
